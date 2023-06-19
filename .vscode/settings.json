@@ -1,0 +1,14 @@
+{
+    "java.project.referencedLibraries": [
+        "lib/**/*.jar",
+        "appointments/lib/javafx-swt.jar",
+        "appointments/lib/javafx.base.jar",
+        "appointments/lib/javafx.controls.jar",
+        "appointments/lib/javafx.fxml.jar",
+        "appointments/lib/javafx.graphics.jar",
+        "appointments/lib/javafx.media.jar",
+        "appointments/lib/javafx.swing.jar",
+        "appointments/lib/javafx.web.jar"
+    ],
+    "cmake.configureOnOpen": false
+}
