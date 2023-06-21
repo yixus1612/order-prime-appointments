@@ -4,7 +4,7 @@ public class User {
     private int iD;
     private String userEmail;
 
-    public void User(String name, int iD, String userEmail){
+    public void user(String name, int iD, String userEmail){
         this.name = name;
         this.iD = iD;
         this.userEmail = userEmail;
@@ -22,4 +22,15 @@ public class User {
         return userEmail;
     }
     
+    public void setID(int newID){
+        this.iD = newID;
+    }
+
+    public void setName(String newName){
+        this.name = newName;
+    }
+
+    public void setEmail(String newEmail){
+        this.userEmail = newEmail;
+    }
 }
