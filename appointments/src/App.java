@@ -1,9 +1,12 @@
+
+import javafx.event.EventHandler;
 import javafx.application.Application;
 import javafx.geometry.Pos;
 import javafx.stage.Stage;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.TextField;
+import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.BackgroundFill;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
@@ -25,6 +28,9 @@ public class App extends Application {
     Scene createAccountScene;
     Scene loginScene;
     Scene homeScene;
+
+    EventHandler<MouseEvent> signUpHandler;
+
     public static void main(String[] args) throws Exception {
         launch(args);
     }
@@ -90,6 +96,8 @@ public class App extends Application {
         backButton.setPrefWidth(97.5);
         backButton.minWidth(97.5);
         backButton.setOnAction(e -> primaryStage.setScene(loginScene));
+
+        signUpButton.addEventHandler(null, null);
 
         hButtonsCreateAcc.getChildren().addAll(backButton, signUpButton);
         hButtonsCreateAcc.setAlignment(Pos.CENTER);
