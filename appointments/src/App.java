@@ -22,9 +22,9 @@ public class App extends Application {
     TextField newPasswordField;
     TextField confirmPasswordField;
 
-    Scene createAccount;
+    Scene createAccountScene;
     Scene loginScene;
-
+    Scene homeScene;
     public static void main(String[] args) throws Exception {
         launch(args);
     }
@@ -51,7 +51,7 @@ public class App extends Application {
         loginButton.setMinWidth(97.5);
         createAccButton.setMinWidth(97.5);
 
-        createAccButton.setOnAction(e -> primaryStage.setScene(createAccount)); // may have to move to event handler
+        createAccButton.setOnAction(e -> primaryStage.setScene(createAccountScene)); // may have to move to event handler
 
         // placing buttons in an HBox and spacing them by 5 pixels
         hButtonsLogin.getChildren().addAll(createAccButton, loginButton);
@@ -101,10 +101,9 @@ public class App extends Application {
         createAccColumn.setSpacing(5);
         createAccColumn.getChildren().addAll(newEmailField, newPasswordField, confirmPasswordField, hButtonsCreateAcc);
 
-        createAccount = new Scene(createAccColumn, 600, 500);
+        createAccountScene = new Scene(createAccColumn, 600, 500);
 /*--------------------------------------------------------------------------------------------------------------*/
         primaryStage.setScene(loginScene);
         primaryStage.show();
     }
-
 }
