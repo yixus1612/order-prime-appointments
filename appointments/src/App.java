@@ -9,6 +9,11 @@ import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import javafx.scene.layout.Background;
+import java.io.FileReader;
+import java.io.FileWriter;
+import java.io.File;
+import java.lang.Math.*;
+
 
 public class App extends Application {
 
@@ -16,6 +21,7 @@ public class App extends Application {
     Button createAccButton;
     Button signUpButton;
     Button backButton;
+    TextField newNameField;
     TextField emailField;
     TextField newEmailField;
     TextField passwordField;
@@ -32,6 +38,13 @@ public class App extends Application {
     @Override
     public void start(Stage primaryStage) throws Exception{
         primaryStage.setTitle("Appointments");
+
+        File inputFile = new File("encrypt.txt");
+        //call decrypting function with info passed
+
+
+        
+        
 
 /*-----------------------LOGIN PAGE-----------------------*/
         loginButton = new Button("Login");
@@ -69,9 +82,21 @@ public class App extends Application {
         signUpButton = new Button("Sign Up");
         backButton = new Button("Back");
 
+        newNameField = new TextField();
+        String newName = newNameField.getText();
         newEmailField = new TextField();
+        String newEmail = newEmailField.getText();
         newPasswordField = new TextField();
+        String newPassword = newPasswordField.getText();
         confirmPasswordField = new TextField();
+        String confirmPassword = confirmPassword.getText();
+
+        if(newPassword == confirmPassword){
+            double idNumber = Math.random() * 999999999 + 1;//convert to long
+            User newAccount = new User(newName, idNumber, newEmail, newPassword);
+            
+        }
+
 
         newEmailField.setPromptText("Email");
         newPasswordField.setPromptText("Password");
@@ -99,7 +124,7 @@ public class App extends Application {
         createAccColumn.setBackground(new Background(new BackgroundFill(Color.web("#4681e0"), null, null)));
         createAccColumn.setAlignment(Pos.CENTER);
         createAccColumn.setSpacing(5);
-        createAccColumn.getChildren().addAll(newEmailField, newPasswordField, confirmPasswordField, hButtonsCreateAcc);
+        createAccColumn.getChildren().addAll(newNameField, newEmailField, newPasswordField, confirmPasswordField, hButtonsCreateAcc);
 
         createAccount = new Scene(createAccColumn, 600, 500);
 /*--------------------------------------------------------------------------------------------------------------*/
