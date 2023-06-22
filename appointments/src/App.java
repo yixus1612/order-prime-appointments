@@ -1,4 +1,5 @@
 
+import javafx.event.Event;
 import javafx.event.EventHandler;
 import javafx.application.Application;
 import javafx.geometry.Pos;
@@ -96,6 +97,14 @@ public class App extends Application {
         backButton.setPrefWidth(97.5);
         backButton.minWidth(97.5);
         backButton.setOnAction(e -> primaryStage.setScene(loginScene));
+
+        signUpHandler = new EventHandler<MouseEvent>() {
+            @Override
+            public void handle(MouseEvent e){
+                // insert code here
+            }
+            
+        };
 
         signUpButton.addEventHandler(null, null);
 
