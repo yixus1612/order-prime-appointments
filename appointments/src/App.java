@@ -9,6 +9,12 @@ import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import javafx.scene.layout.Background;
+import java.io.FileReader;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.io.File;
+import java.util.Random;
+
 
 public class App extends Application {
 
@@ -16,6 +22,7 @@ public class App extends Application {
     Button createAccButton;
     Button signUpButton;
     Button backButton;
+    TextField newNameField;
     TextField emailField;
     TextField newEmailField;
     TextField passwordField;
@@ -33,14 +40,31 @@ public class App extends Application {
     public void start(Stage primaryStage) throws Exception{
         primaryStage.setTitle("Appointments");
 
+        /*try{
+            File encryptedFile = new File("encrypt.txt");
+            FileReader fileReader = new FileReader(encryptedFile);
+            FileWriter fileWriter = new FileWriter(encryptedFile);
+        }catch(IOException e){
+            System.out.println(e);
+        }*/
+        
+        //call decrypting function with info passed
+
+
+        
+        
+
 /*-----------------------LOGIN PAGE-----------------------*/
         loginButton = new Button("Login");
         createAccButton = new Button("Create Account");
         emailField = new TextField();
+        String email = emailField.getText();
         passwordField = new TextField();
+        String password = passwordField.getText();
         HBox hButtonsLogin = new HBox();
         VBox loginColumn = new VBox();
 
+        
 
         emailField.setPromptText("Email");
         passwordField.setPromptText("Password");
@@ -69,14 +93,28 @@ public class App extends Application {
         signUpButton = new Button("Sign Up");
         backButton = new Button("Back");
 
+        newNameField = new TextField();
+        String newName = newNameField.getText();
         newEmailField = new TextField();
+        String newEmail = newEmailField.getText();
         newPasswordField = new TextField();
+        String newPassword = newPasswordField.getText();
         confirmPasswordField = new TextField();
+        String confirmPassword = confirmPasswordField.getText();
 
+        if(newPassword.equals(confirmPassword)){
+            Random rand = new Random();
+            int randomID = rand.nextInt(1000000000);
+            User newAccount = new User(newName, randomID, newEmail, newPassword);
+            System.out.println("Account Created");
+        }
+
+        newNameField.setPromptText("Name");
         newEmailField.setPromptText("Email");
         newPasswordField.setPromptText("Password");
         confirmPasswordField.setPromptText("Confirm Password");
         
+        newNameField.setMaxWidth(200);
         newEmailField.setMaxWidth(200);
         newPasswordField.setMaxWidth(200);
         confirmPasswordField.setMaxWidth(200);
@@ -99,7 +137,7 @@ public class App extends Application {
         createAccColumn.setBackground(new Background(new BackgroundFill(Color.web("#4681e0"), null, null)));
         createAccColumn.setAlignment(Pos.CENTER);
         createAccColumn.setSpacing(5);
-        createAccColumn.getChildren().addAll(newEmailField, newPasswordField, confirmPasswordField, hButtonsCreateAcc);
+        createAccColumn.getChildren().addAll(newNameField, newEmailField, newPasswordField, confirmPasswordField, hButtonsCreateAcc);
 
         createAccount = new Scene(createAccColumn, 600, 500);
 /*--------------------------------------------------------------------------------------------------------------*/
