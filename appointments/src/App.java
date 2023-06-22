@@ -58,10 +58,13 @@ public class App extends Application {
         loginButton = new Button("Login");
         createAccButton = new Button("Create Account");
         emailField = new TextField();
+        String email = emailField.getText();
         passwordField = new TextField();
+        String password = passwordField.getText();
         HBox hButtonsLogin = new HBox();
         VBox loginColumn = new VBox();
 
+        
 
         emailField.setPromptText("Email");
         passwordField.setPromptText("Password");
