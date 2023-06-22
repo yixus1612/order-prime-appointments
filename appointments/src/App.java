@@ -11,8 +11,9 @@ import javafx.scene.paint.Color;
 import javafx.scene.layout.Background;
 import java.io.FileReader;
 import java.io.FileWriter;
+import java.io.IOException;
 import java.io.File;
-import java.lang.Math.*;
+import java.util.Random;
 
 
 public class App extends Application {
@@ -39,7 +40,14 @@ public class App extends Application {
     public void start(Stage primaryStage) throws Exception{
         primaryStage.setTitle("Appointments");
 
-        File inputFile = new File("encrypt.txt");
+        /*try{
+            File encryptedFile = new File("encrypt.txt");
+            FileReader fileReader = new FileReader(encryptedFile);
+            FileWriter fileWriter = new FileWriter(encryptedFile);
+        }catch(IOException e){
+            System.out.println(e);
+        }*/
+        
         //call decrypting function with info passed
 
 
@@ -89,19 +97,21 @@ public class App extends Application {
         newPasswordField = new TextField();
         String newPassword = newPasswordField.getText();
         confirmPasswordField = new TextField();
-        String confirmPassword = confirmPassword.getText();
+        String confirmPassword = confirmPasswordField.getText();
 
-        if(newPassword == confirmPassword){
-            double idNumber = Math.random() * 999999999 + 1;//convert to long
-            User newAccount = new User(newName, idNumber, newEmail, newPassword);
-            
+        if(newPassword.equals(confirmPassword)){
+            Random rand = new Random();
+            int randomID = rand.nextInt(1000000000);
+            User newAccount = new User(newName, randomID, newEmail, newPassword);
+            System.out.println("Account Created");
         }
 
-
+        newNameField.setPromptText("Name");
         newEmailField.setPromptText("Email");
         newPasswordField.setPromptText("Password");
         confirmPasswordField.setPromptText("Confirm Password");
         
+        newNameField.setMaxWidth(200);
         newEmailField.setMaxWidth(200);
         newPasswordField.setMaxWidth(200);
         confirmPasswordField.setMaxWidth(200);
