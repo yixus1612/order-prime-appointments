@@ -46,7 +46,7 @@ public class App extends Application {
             FileWriter fileWriter = new FileWriter(encryptedFile);
         }catch(IOException e){
             System.out.println(e);
-        }*/
+        } */
         
         //call decrypting function with info passed
 
