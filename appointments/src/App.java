@@ -18,14 +18,7 @@ public class App extends Application{
 
         Login.createAccButton.setOnAction(e-> primaryStage.setScene(CreateAccount.createAccountPage));
         CreateAccount.backButton.setOnAction(e-> primaryStage.setScene(Login.loginPage));
-        CreateAccount.signUpButton.setOnAction(e-> {
-            String name = CreateAccount.nameField.getText();
-            String email = CreateAccount.newEmailField.getText();
-            String password = CreateAccount.newPasswordField.getText();
-            String confirmPassword = CreateAccount.confirmPasswordField.getText();
-
-            System.out.println("Name: " + name + "\nEmail: " + email + "\nPassword: " + password + "\nConfirm: " + confirmPassword);
-        });
+        
 
         primaryStage.setScene(Login.loginPage);
         primaryStage.show();
