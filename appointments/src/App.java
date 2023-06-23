@@ -105,7 +105,7 @@ public class App extends Application {
         if(newPassword.equals(confirmPassword)){
             Random rand = new Random();
             int randomID = rand.nextInt(1000000000);
-            User newAccount = new User(newName, randomID, newEmail, newPassword);
+            User newAccount = new User(newName, randomID);
             System.out.println("Account Created");
         }
 
