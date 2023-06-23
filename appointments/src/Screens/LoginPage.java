@@ -36,8 +36,6 @@ public class LoginPage{
         loginButton.setMinWidth(97.5);
         createAccButton.setMinWidth(97.5);
 
-        //createAccButton.setOnAction(e -> primaryStage.setScene(createAccountScene)); // may have to move to event handler
-
         // placing buttons in an HBox and spacing them by 5 pixels
         hButtonsLogin.getChildren().addAll(createAccButton, loginButton);
         hButtonsLogin.setSpacing(5);
@@ -48,6 +46,7 @@ public class LoginPage{
         loginColumn.setAlignment(Pos.CENTER);
         loginColumn.setBackground(new Background( new BackgroundFill(Color.web("#4681e0"), null, null)));
 
-        loginPage = new Scene(loginColumn, 600, 500); 
+        loginPage = new Scene(loginColumn, 600, 500);
+
     }
 };
