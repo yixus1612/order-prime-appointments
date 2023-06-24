@@ -61,11 +61,14 @@ public class LoginPage{
         loginColumn.setBackground(new Background( new BackgroundFill(Color.web("#4681e0"), null, null)));
 
         loginButton.setOnAction(e->{
+            //get text from fields
             String email = emailField.getText();
             String password = passwordField.getText();
             Boolean login = false;
 
+            //read in file and check if info is correct
             try{
+               //set up fileReader
                FileReader fileReaderAccount = new FileReader("accountList.csv");
                BufferedReader br = new BufferedReader(fileReaderAccount);
                String line = "";
@@ -73,10 +76,13 @@ public class LoginPage{
                String tempEmail;
                String tempPassword;
 
+               //read account file
                while((line = br.readLine()) != null){
                   tempArr = line.split(",");
                   tempEmail = tempArr[0];
                   tempPassword = tempArr[1];
+
+                  //check to see if email and password are correctly inputted
                   if(tempEmail.equals(email)){
                      if(tempPassword.equals(password)){
                         login = true;
@@ -88,8 +94,11 @@ public class LoginPage{
                System.out.println(except);
             }
 
+            //if login info is correct, log in user
             if(login){
                 note.setText("Logging In");
+
+            //if not, make them try again and update label
             }else{
                 note.setText("Username or password incorrect");
             }

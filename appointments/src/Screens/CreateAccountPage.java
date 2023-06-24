@@ -81,23 +81,33 @@ public class CreateAccountPage {
 
       //create action for sign up button
       signUpButton.setOnAction(e-> {
+            //get variables from text fields
             String name = nameField.getText();
             String email = newEmailField.getText();
             String password = newPasswordField.getText();
             String confirmPassword = confirmPasswordField.getText();
+
+            //create random id for account
             Random random = new Random();
             int id = random.nextInt(1000000000);
             Boolean alreadyExists = false;
 
+            //read in csv file for saved accounts
             try{
+               
+               //set up FileReader
                FileReader fileReaderAccount = new FileReader("accountList.csv");
                BufferedReader br = new BufferedReader(fileReaderAccount);
                String line = "";
                String[] tempArr;
                String tempEmail;
+
+               //read in data and determine if an email already exists
                while((line = br.readLine()) != null){
                   tempArr = line.split(",");
                   tempEmail = tempArr[0];
+
+                  //keep note if email is found
                   if(tempEmail.equals(email)){
                      alreadyExists = true;
                   }
@@ -107,24 +117,34 @@ public class CreateAccountPage {
                System.out.println(except);
             }
 
+            //write to file if password is correct and the email doesn't already exist
             if(password.equals(confirmPassword) && !alreadyExists){
+               //test code
                System.out.println("Name: " + name + "\nEmail: " + email + "\nPassword: " + password + "\nConfirm: " + confirmPassword);
 
                //create new file output for account
                try{
+                  //write to account file
                   FileWriter fileWriterAccount = new FileWriter("accountList.csv", true);
                   fileWriterAccount.write(email + "," + password + "\n");
                   fileWriterAccount.close();
 
+                  //write to user file
                   FileWriter fileWriterUser = new FileWriter("userList.csv", true);
                   fileWriterUser.write(name + "," + email + "," + id + "\n");
                   fileWriterUser.close();
                }catch(IOException except){
                   System.out.println(except);
                }
+
+               //update bottom text
                accountCreation.setText("Account Created!");
+
+            //if the email already exists, print message saying so
             }else if(alreadyExists){
                accountCreation.setText("Account already exists.");
+
+            //last condition is passwords not matching
             }else{
                accountCreation.setText("Passwords do not match.");
             }
