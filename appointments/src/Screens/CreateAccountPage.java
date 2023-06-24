@@ -161,8 +161,12 @@ public class CreateAccountPage {
             //create new file output for account
             try{
                //write to account file
+               Encryption encrypt = new Encryption();
+               
+               String hashedPassword = encrypt.hash(password);
+
                FileWriter fileWriterAccount = new FileWriter("accountList.csv", true);
-               fileWriterAccount.write(email + "," + password + "\n");
+               fileWriterAccount.write(email + "," + hashedPassword + "\n");
                fileWriterAccount.close();
 
                //write to user file
