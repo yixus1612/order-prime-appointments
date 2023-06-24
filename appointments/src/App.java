@@ -14,7 +14,8 @@ public class App extends Application{
 
         LoginPage Login = new LoginPage();
         CreateAccountPage CreateAccount = new CreateAccountPage();
-        //HomePage home = new HomePage();
+        HomePage home = new HomePage();
+        Encryption encrypt = new Encryption();
 
         Login.createAccButton.setOnAction(e-> primaryStage.setScene(CreateAccount.createAccountPage));
         CreateAccount.backButton.setOnAction(e-> primaryStage.setScene(Login.loginPage));
@@ -24,7 +25,9 @@ public class App extends Application{
             String password = CreateAccount.newPasswordField.getText();
             String confirmPassword = CreateAccount.confirmPasswordField.getText();
 
-            System.out.println("Name: " + name + "\nEmail: " + email + "\nPassword: " + password + "\nConfirm: " + confirmPassword);
+            String hash = encrypt.hash(confirmPassword);
+
+            System.out.println("Name: " + name + "\nEmail: " + email + "\nPassword: " + password + "\nConfirm: " + confirmPassword + "\nHash: " + hash);
         });
 
         primaryStage.setScene(Login.loginPage);
