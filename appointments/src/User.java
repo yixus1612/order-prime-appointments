@@ -1,7 +1,10 @@
+import java.util.Vector;
+
 public class User extends Account{
     
     private String name;
     private int iD;
+    public Vector <Appointment> appointmentList = new Vector <Appointment>();
     //when appointment class is created, declare an appointment vector here
 
     User(String name, int iD){
