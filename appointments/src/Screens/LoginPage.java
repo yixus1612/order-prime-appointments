@@ -1,8 +1,6 @@
 package Screens;
 
-import java.io.BufferedReader;
-import java.io.FileReader;
-import java.io.IOException;
+import java.io.*;
 
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
@@ -118,6 +116,7 @@ public class LoginPage{
                 note.setText("Username or password incorrect");
             }
 
+            //clear textfields after attempt
             emailField.clear();
             passwordField.clear();
         });
