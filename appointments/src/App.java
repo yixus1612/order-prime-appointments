@@ -14,11 +14,11 @@ public class App extends Application{
 
         LoginPage Login = new LoginPage();
         CreateAccountPage CreateAccount = new CreateAccountPage();
-        //HomePage home = new HomePage();
+        HomePage Home = new HomePage();
 
-        Login.createAccButton.setOnAction(e-> primaryStage.setScene(CreateAccount.createAccountPage));
-        CreateAccount.backButton.setOnAction(e-> primaryStage.setScene(Login.loginPage));
-        
+        Login.switchToAccount(primaryStage, CreateAccount);
+        CreateAccount.switchToLogin(primaryStage, Login);
+        Login.loginUser(primaryStage, Home);
 
         primaryStage.setScene(Login.loginPage);
         primaryStage.show();

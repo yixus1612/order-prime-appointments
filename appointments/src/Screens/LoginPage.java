@@ -17,6 +17,7 @@ import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
 import javafx.scene.text.FontWeight;
+import javafx.stage.Stage;
 
 public class LoginPage{
     public Scene loginPage;
@@ -24,13 +25,14 @@ public class LoginPage{
     public Button loginButton, createAccButton;
     public TextField emailField;
     public PasswordField passwordField;
+    public Label note, title;
 
     public LoginPage(){
 
-        Label title = new Label("Login");
+        title = new Label("Login");
         title.setTextFill(Color.WHITE);
         title.setFont(Font.font ("Arial", FontWeight.BOLD, 12));
-        Label note = new Label("");
+        note = new Label("");
         note.setTextFill(Color.WHITE);
 
         loginButton = new Button("Login");
@@ -60,6 +62,17 @@ public class LoginPage{
         loginColumn.setAlignment(Pos.CENTER);
         loginColumn.setBackground(new Background( new BackgroundFill(Color.web("#4681e0"), null, null)));
 
+        loginPage = new Scene(loginColumn, 600, 500);
+            
+    }
+
+    //switches to Account with click of button
+    public void switchToAccount(Stage primaryStage, CreateAccountPage createAccount){
+        createAccButton.setOnAction(e-> primaryStage.setScene(createAccount.createAccountPage));
+    }
+
+    //login feature
+    public void loginUser(Stage primaryStage, HomePage home){
         loginButton.setOnAction(e->{
             //get text from fields
             String email = emailField.getText();
@@ -68,43 +81,46 @@ public class LoginPage{
 
             //read in file and check if info is correct
             try{
-               //set up fileReader
-               FileReader fileReaderAccount = new FileReader("accountList.csv");
-               BufferedReader br = new BufferedReader(fileReaderAccount);
-               String line = "";
-               String[] tempArr;
-               String tempEmail;
-               String tempPassword;
+                //set up fileReader
+                FileReader fileReaderAccount = new FileReader("accountList.csv");
+                BufferedReader br = new BufferedReader(fileReaderAccount);
+                String line = "";
+                String[] tempArr;
+                String tempEmail;
+                String tempPassword;
 
-               //read account file
-               while((line = br.readLine()) != null){
-                  tempArr = line.split(",");
-                  tempEmail = tempArr[0];
-                  tempPassword = tempArr[1];
+            //read account file
+                while((line = br.readLine()) != null){
+                    tempArr = line.split(",");
+                    tempEmail = tempArr[0];
+                    tempPassword = tempArr[1];
 
-                  //check to see if email and password are correctly inputted
-                  if(tempEmail.equals(email)){
-                     if(tempPassword.equals(password)){
-                        login = true;
-                     }
-                  }
-               }
-               br.close();
+                    //check to see if email and password are correctly inputted
+                    if(tempEmail.equals(email)){
+                        if(tempPassword.equals(password)){
+                            login = true;
+                        }
+                    }
+                }
+
+                br.close();
+
             }catch(IOException except){
-               System.out.println(except);
+                System.out.println(except);
             }
 
             //if login info is correct, log in user
             if(login){
-                note.setText("Logging In");
+                primaryStage.setScene(home.homePage);
 
             //if not, make them try again and update label
             }else{
                 note.setText("Username or password incorrect");
             }
-        });
 
-        loginPage = new Scene(loginColumn, 600, 500);
+            emailField.clear();
+            passwordField.clear();
+        });
 
     }
 };
