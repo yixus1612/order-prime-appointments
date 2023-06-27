@@ -44,7 +44,7 @@ public class CreateAccountPage {
    public CreateAccountPage(){
 
       //Set up labels
-      Label title = new Label("Create Account");
+      Label title = new Label("Create User Account");
       title.setTextFill(Color.WHITE);
       title.setFont(Font.font ("Arial", FontWeight.BOLD, 12));
       Label accountCreation = new Label("");
@@ -102,8 +102,8 @@ public class CreateAccountPage {
 
    }
 
-   public void switchToLogin(Stage primaryStage, LoginPage login){
-      backButton.setOnAction(e-> primaryStage.setScene(login.loginPage));
+   public void switchToChooseAccount(Stage primaryStage, ChooseAccountType accountType){
+      backButton.setOnAction(e-> primaryStage.setScene(accountType.chooseAccountType));
    }
 
    public void validateAccountCreation(Label note){
@@ -130,7 +130,7 @@ public class CreateAccountPage {
       try{
                
          //set up FileReader
-         FileReader fileReaderAccount = new FileReader("accountList.csv");
+         FileReader fileReaderAccount = new FileReader("accountUserList.csv");
          BufferedReader br = new BufferedReader(fileReaderAccount);
          String line = "";
          String[] tempArr;
@@ -161,12 +161,8 @@ public class CreateAccountPage {
             //create new file output for account
             try{
                //write to account file
-               Encryption encrypt = new Encryption();
-               
-               String hashedPassword = encrypt.hash(password);
-
-               FileWriter fileWriterAccount = new FileWriter("accountList.csv", true);
-               fileWriterAccount.write(email + "," + hashedPassword + "\n");
+               FileWriter fileWriterAccount = new FileWriter("accountUserList.csv", true);
+               fileWriterAccount.write(email + "," + password + "\n");
                fileWriterAccount.close();
 
                //write to user file
