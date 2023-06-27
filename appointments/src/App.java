@@ -13,12 +13,18 @@ public class App extends Application{
         primaryStage.setTitle("Appointments");
 
         LoginPage Login = new LoginPage();
-        CreateAccountPage CreateAccount = new CreateAccountPage();
+        ChooseAccountType chooseAccount = new ChooseAccountType();
+        CreateAccountPage CreateUserAccount = new CreateAccountPage();
+        CreateAccountBusiness CreateBusinessAccount = new CreateAccountBusiness();
         HomePage Home = new HomePage();
 
-        Login.switchToAccount(primaryStage, CreateAccount);
-        CreateAccount.switchToLogin(primaryStage, Login);
+        Login.switchToAccountType(primaryStage, chooseAccount);
+        CreateUserAccount.switchToChooseAccount(primaryStage, chooseAccount);
         Login.loginUser(primaryStage, Home);
+        chooseAccount.switchToUserAccount(primaryStage, CreateUserAccount);
+        chooseAccount.switchToBusinessAccount(primaryStage, CreateBusinessAccount);
+        CreateBusinessAccount.switchToChooseAccount(primaryStage, chooseAccount);
+        chooseAccount.switchToLogin(primaryStage, Login);
 
         primaryStage.setScene(Login.loginPage);
         primaryStage.show();

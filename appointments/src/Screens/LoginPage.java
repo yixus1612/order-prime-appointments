@@ -37,6 +37,7 @@ public class LoginPage{
         createAccButton = new Button("Create Account");
         emailField = new TextField();
         passwordField = new PasswordField();
+
         HBox hButtonsLogin = new HBox();
         VBox loginColumn = new VBox();
 
@@ -65,8 +66,8 @@ public class LoginPage{
     }
 
     //switches to Account with click of button
-    public void switchToAccount(Stage primaryStage, CreateAccountPage createAccount){
-        createAccButton.setOnAction(e-> primaryStage.setScene(createAccount.createAccountPage));
+    public void switchToAccountType(Stage primaryStage, ChooseAccountType createAccountType){
+        createAccButton.setOnAction(e-> primaryStage.setScene(createAccountType.chooseAccountType));
     }
 
     //login feature
@@ -86,8 +87,6 @@ public class LoginPage{
                 String[] tempArr;
                 String tempEmail;
                 String tempPassword;
-                Encryption encrypt = new Encryption();
-                password = encrypt.hash(password);
 
             //read account file
                 while((line = br.readLine()) != null){
