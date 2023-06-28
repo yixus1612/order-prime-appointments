@@ -16,16 +16,16 @@ import javafx.stage.Stage;
 import javafx.scene.text.Font;
 import javafx.scene.text.FontWeight;
 
-public class HomePage {
-    public Scene homePage;
-    Rectangle homeTabRectangle, calendarTabRectangle, profileTabRectangle, placesTabRectangle, paymentTabRectangle, settingsTabRectangle;
+public class CalendarPage {
+
+    public Scene calendarPage;
+    public Rectangle homeTabRectangle, calendarTabRectangle, profileTabRectangle, placesTabRectangle, paymentTabRectangle, settingsTabRectangle;
     Text homeTabText, profileTabText, calendarTabText, placesTabText, paymentTabText, settingsTabText;
     Rectangle profilePicture;
     Rectangle buffer1, buffer2;
 
-    public HomePage(){
-
-        // FIXME this should display the user's profile picture
+    public CalendarPage(){
+    // FIXME this should display the user's profile picture
         profilePicture = new Rectangle(65, 65, Color.CORAL);
         StackPane pfp = new StackPane(profilePicture);
         pfp.setAlignment(Pos.CENTER);
@@ -36,8 +36,9 @@ public class HomePage {
         name.setAlignment(Pos.CENTER);
 
         homeTabText = new Text("  Home");
+        homeTabText.setFill(Color.WHITE);
         homeTabText.setFont(Font.font ("Arial", FontWeight.BOLD, 12));
-        homeTabRectangle = new Rectangle(110,25, Color.web("#f2efd0"));
+        homeTabRectangle = new Rectangle(110,25, Color.web("#3064b8"));
         StackPane homeTab = new StackPane();
         homeTab.getChildren().addAll(homeTabRectangle, homeTabText);
         homeTab.setAlignment(Pos.CENTER_LEFT);
@@ -51,9 +52,8 @@ public class HomePage {
         profileTab.setAlignment(Pos.CENTER_LEFT);
 
         calendarTabText = new Text("  Calendar");
-        calendarTabText.setFill(Color.WHITE);
         calendarTabText.setFont(Font.font ("Arial", FontWeight.BOLD, 12));
-        calendarTabRectangle = new Rectangle(110,25, Color.web("#3064b8"));
+        calendarTabRectangle = new Rectangle(110,25, Color.web("#f2efd0"));
         StackPane calendarTab = new StackPane();
         calendarTab.getChildren().addAll(calendarTabRectangle, calendarTabText);
         calendarTab.setAlignment(Pos.CENTER_LEFT);
@@ -99,20 +99,20 @@ public class HomePage {
 
         // tab switching events. the text also needs to be set to switch to different pages since it blocks parts of the rectangles
         // FIXME actually make the tabs switch pages
+        profileTabRectangle.setOnMouseClicked(e -> System.out.println("Profile!"));
+        profileTabText.setOnMouseClicked(e -> System.out.println("Profile Text!"));
 
-        homePage = new Scene(layout, 600, 500);
-
+        calendarPage = new Scene(layout, 600, 500);
     }
-
-    //Text homeTabText, profileTabText, calendarTabText, placesTabText, paymentTabText, settingsTabText;
+    
     // this function sets up page switching between all the other pages in the sidebar
-    public void SetupPageSwitching(Stage primaryStage, ProfilePage Profile, CalendarPage Calendar, PlacesPage Places, PaymentPage Payment, SettingsPage Settings){
+    public void SetupPageSwitching(Stage primaryStage, HomePage Home, ProfilePage Profile, PlacesPage Places, PaymentPage Payment, SettingsPage Settings){
+
+        homeTabRectangle.setOnMouseClicked(e -> primaryStage.setScene(Home.homePage));
+        homeTabText.setOnMouseClicked(e -> primaryStage.setScene(Home.homePage));
 
         profileTabRectangle.setOnMouseClicked(e -> primaryStage.setScene(Profile.profilePage));
         profileTabText.setOnMouseClicked(e -> primaryStage.setScene(Profile.profilePage));
-
-        calendarTabRectangle.setOnMouseClicked(e -> primaryStage.setScene(Calendar.calendarPage));
-        calendarTabText.setOnMouseClicked(e -> primaryStage.setScene(Calendar.calendarPage));
 
         placesTabRectangle.setOnMouseClicked(e -> primaryStage.setScene(Places.placesPage));
         placesTabText.setOnMouseClicked(e -> primaryStage.setScene(Places.placesPage));
