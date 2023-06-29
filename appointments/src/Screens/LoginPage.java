@@ -81,7 +81,7 @@ public class LoginPage{
             //read in file and check if info is correct
             try{
                 //set up fileReader
-                FileReader fileReaderAccount = new FileReader("accountList.csv");
+                FileReader fileReaderAccount = new FileReader("accountUserList.csv");
                 BufferedReader br = new BufferedReader(fileReaderAccount);
                 String line = "";
                 String[] tempArr;
