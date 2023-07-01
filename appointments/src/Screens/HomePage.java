@@ -99,6 +99,8 @@ public class HomePage {
 
         // tab switching events. the text also needs to be set to switch to different pages since it blocks parts of the rectangles
         // FIXME actually make the tabs switch pages
+        profileTabRectangle.setOnMouseClicked(e -> System.out.println("Profile!"));
+        profileTabText.setOnMouseClicked(e -> System.out.println("Profile Text!"));
 
         homePage = new Scene(layout, 600, 500);
 

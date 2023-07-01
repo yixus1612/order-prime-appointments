@@ -20,7 +20,7 @@ public class App extends Application{
         CreateAccountBusiness CreateBusinessAccount = new CreateAccountBusiness();
         HomePage Home = new HomePage();
         ProfilePage Profile = new ProfilePage();
-        CalendarPage Calendar = new CalendarPage();
+        CalendarPage Calendar = new CalendarPage(primaryStage);
         PlacesPage Places = new PlacesPage();
         PaymentPage Payment = new PaymentPage();
         SettingsPage Settings = new SettingsPage();
