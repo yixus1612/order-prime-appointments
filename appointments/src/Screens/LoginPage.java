@@ -87,6 +87,8 @@ public class LoginPage{
                 String[] tempArr;
                 String tempEmail;
                 String tempPassword;
+                Encryption encrypt = new Encryption();
+                String encryptedPassword = encrypt.hash(password);
 
             //read account file
                 while((line = br.readLine()) != null){
@@ -96,7 +98,7 @@ public class LoginPage{
 
                     //check to see if email and password are correctly inputted
                     if(tempEmail.equals(email)){
-                        if(tempPassword.equals(password)){
+                        if(tempPassword.equals(encryptedPassword)){
                             login = true;
                         }
                     }
