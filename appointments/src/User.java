@@ -1,10 +1,10 @@
-import java.util.Vector;
+import java.util.ArrayList;
 
 public class User extends Account{
     
     private String name;
     private int iD;
-    public Vector <Appointment> appointmentList = new Vector <Appointment>();
+    public ArrayList <Appointment> appointmentList = new ArrayList<Appointment>();
     //when appointment class is created, declare an appointment vector here
 
     User(String name, int iD){
