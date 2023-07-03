@@ -1,3 +1,5 @@
+//import javax.swing.JFileChooser;
+
 import Screens.*;
 import javafx.application.Application;
 import javafx.stage.Stage;
@@ -13,12 +15,31 @@ public class App extends Application{
         primaryStage.setTitle("Appointments");
 
         LoginPage Login = new LoginPage();
-        CreateAccountPage CreateAccount = new CreateAccountPage();
+        ChooseAccountType chooseAccount = new ChooseAccountType();
+        CreateAccountPage CreateUserAccount = new CreateAccountPage();
+        CreateAccountBusiness CreateBusinessAccount = new CreateAccountBusiness();
         HomePage Home = new HomePage();
+        ProfilePage Profile = new ProfilePage();
+        CalendarPage Calendar = new CalendarPage(primaryStage);
+        PlacesPage Places = new PlacesPage();
+        PaymentPage Payment = new PaymentPage();
+        SettingsPage Settings = new SettingsPage();
 
-        Login.switchToAccount(primaryStage, CreateAccount);
-        CreateAccount.switchToLogin(primaryStage, Login);
+        Login.switchToAccountType(primaryStage, chooseAccount);
+        CreateUserAccount.switchToChooseAccount(primaryStage, chooseAccount);
         Login.loginUser(primaryStage, Home);
+        chooseAccount.switchToUserAccount(primaryStage, CreateUserAccount);
+        chooseAccount.switchToBusinessAccount(primaryStage, CreateBusinessAccount);
+        CreateBusinessAccount.switchToChooseAccount(primaryStage, chooseAccount);
+        chooseAccount.switchToLogin(primaryStage, Login);
+
+        Home.SetupPageSwitching(primaryStage, Profile, Calendar, Places, Payment, Settings);
+        Profile.SetupPageSwitching(primaryStage, Home, Calendar, Places, Payment, Settings);
+        Calendar.SetupPageSwitching(primaryStage, Home, Profile, Places, Payment, Settings);
+        Places.SetupPageSwitching(primaryStage, Home, Profile, Calendar, Payment, Settings);
+        Payment.SetupPageSwitching(primaryStage, Home, Profile, Calendar, Places, Settings);
+        Settings.SetupPageSwitching(primaryStage, Home, Profile, Calendar, Places, Payment);
+        Calendar.appointmentPage.SetupPageSwitching(primaryStage, Home, Profile, Places, Payment, Settings);
 
         primaryStage.setScene(Login.loginPage);
         primaryStage.show();
