@@ -37,6 +37,7 @@ public class LoginPage{
         createAccButton = new Button("Create Account");
         emailField = new TextField();
         passwordField = new PasswordField();
+
         HBox hButtonsLogin = new HBox();
         VBox loginColumn = new VBox();
 
@@ -65,8 +66,8 @@ public class LoginPage{
     }
 
     //switches to Account with click of button
-    public void switchToAccount(Stage primaryStage, CreateAccountPage createAccount){
-        createAccButton.setOnAction(e-> primaryStage.setScene(createAccount.createAccountPage));
+    public void switchToAccountType(Stage primaryStage, ChooseAccountType createAccountType){
+        createAccButton.setOnAction(e-> primaryStage.setScene(createAccountType.chooseAccountType));
     }
 
     //login feature
@@ -80,14 +81,14 @@ public class LoginPage{
             //read in file and check if info is correct
             try{
                 //set up fileReader
-                FileReader fileReaderAccount = new FileReader("accountList.csv");
+                FileReader fileReaderAccount = new FileReader("accountUserList.csv");
                 BufferedReader br = new BufferedReader(fileReaderAccount);
                 String line = "";
                 String[] tempArr;
                 String tempEmail;
                 String tempPassword;
                 Encryption encrypt = new Encryption();
-                password = encrypt.hash(password);
+                String encryptedPassword = encrypt.hash(password);
 
             //read account file
                 while((line = br.readLine()) != null){
@@ -97,7 +98,7 @@ public class LoginPage{
 
                     //check to see if email and password are correctly inputted
                     if(tempEmail.equals(email)){
-                        if(tempPassword.equals(password)){
+                        if(tempPassword.equals(encryptedPassword)){
                             login = true;
                         }
                     }
