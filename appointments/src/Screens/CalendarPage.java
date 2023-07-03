@@ -40,7 +40,7 @@ public class CalendarPage {
     private Text year = new Text(); 
     private Text month = new Text();
     private Button leftButton, rightButton;
-    private AppointmentCreationPage appointmentPage = new AppointmentCreationPage();
+    public AppointmentCreationPage appointmentPage = new AppointmentCreationPage();
 
 
     public CalendarPage(Stage primaryStage){
