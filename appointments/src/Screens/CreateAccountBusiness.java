@@ -21,7 +21,7 @@ public class CreateAccountBusiness {
    public Scene createAccountPage;
 
    public Button signUpButton, backButton;
-   public TextField nameField, newEmailField;
+   public TextField nameField, newEmailField, businessField;
    public PasswordField newPasswordField, confirmPasswordField;
 
    /*
@@ -55,21 +55,24 @@ public class CreateAccountBusiness {
        backButton = new Button("Back");
 
        //set up textfields
+       businessField = new TextField();
        newEmailField = new TextField();
        newPasswordField = new PasswordField();
        confirmPasswordField = new PasswordField();
        nameField = new TextField();
 
        //set prompt text for each textfield
+       businessField.setPromptText("Business Name");
        newEmailField.setPromptText("Email");
        newPasswordField.setPromptText("Password");
        confirmPasswordField.setPromptText("Confirm Password");
-       nameField.setPromptText("Brand Name");
+       nameField.setPromptText("Name");
        
        newEmailField.setMaxWidth(200);
        newPasswordField.setMaxWidth(200);
        confirmPasswordField.setMaxWidth(200);
        nameField.setMaxWidth(200);
+       businessField.setMaxWidth(200);
 
       HBox hButtonsCreateAcc = new HBox();
       VBox createAccColumn = new VBox();
@@ -89,7 +92,7 @@ public class CreateAccountBusiness {
       createAccColumn.setBackground(new Background(new BackgroundFill(Color.web("#4681e0"), null, null)));
       createAccColumn.setAlignment(Pos.CENTER);
       createAccColumn.setSpacing(5);
-      createAccColumn.getChildren().addAll(title, nameField, newEmailField, newPasswordField, confirmPasswordField, hButtonsCreateAcc, accountCreation);
+      createAccColumn.getChildren().addAll(title, businessField, nameField, newEmailField, newPasswordField, confirmPasswordField, hButtonsCreateAcc, accountCreation);
 
       createAccountPage = new Scene(createAccColumn, 600, 500);
 
@@ -108,6 +111,7 @@ public class CreateAccountBusiness {
 
    public void validateAccountCreation(Label note){
       //get variables from text fields
+      String business = businessField.getText();
       String name = nameField.getText();
       String email = newEmailField.getText();
       String password = newPasswordField.getText();
@@ -130,7 +134,7 @@ public class CreateAccountBusiness {
       try{
                
          //set up FileReader
-         FileReader fileReaderAccount = new FileReader("businessAccountList.csv");
+         FileReader fileReaderAccount = new FileReader("accountList.csv");
          BufferedReader br = new BufferedReader(fileReaderAccount);
          String line = "";
          String[] tempArr;
@@ -161,13 +165,13 @@ public class CreateAccountBusiness {
             //create new file output for account
             try{
                //write to account file
-               FileWriter fileWriterAccount = new FileWriter("businessAccountList.csv", true);
+               FileWriter fileWriterAccount = new FileWriter("accountList.csv", true);
                fileWriterAccount.write(email + "," + password + "\n");
                fileWriterAccount.close();
 
                //write to user file
                FileWriter fileWriterUser = new FileWriter("businessList.csv", true);
-               fileWriterUser.write(name + "," + email + "," + id + "\n");
+               fileWriterUser.write(business + "," + name + "," + email + "," + id + "\n");
                fileWriterUser.close();
 
                }catch(IOException except){
@@ -193,6 +197,8 @@ public class CreateAccountBusiness {
          note.setText("Please enter a valid email");
       }else if(!passwordMatcher.matches()){
          note.setText("Please enter a vaild password.");
+      }else if(business.isEmpty()){
+         note.setText("Please enter a business");
       }
 
       //clear text fields after attempt

@@ -130,7 +130,7 @@ public class CreateAccountPage {
       try{
                
          //set up FileReader
-         FileReader fileReaderAccount = new FileReader("accountUserList.csv");
+         FileReader fileReaderAccount = new FileReader("accountList.csv");
          BufferedReader br = new BufferedReader(fileReaderAccount);
          String line = "";
          String[] tempArr;
@@ -164,7 +164,7 @@ public class CreateAccountPage {
                Encryption encrypt = new Encryption();
                String encryptedPassword = encrypt.hash(confirmPassword, email);
 
-               FileWriter fileWriterAccount = new FileWriter("accountUserList.csv", true);
+               FileWriter fileWriterAccount = new FileWriter("accountList.csv", true);
                fileWriterAccount.write(email + "," + encryptedPassword + "\n");
                fileWriterAccount.close();
 

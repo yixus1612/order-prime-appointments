@@ -81,7 +81,7 @@ public class LoginPage{
             //read in file and check if info is correct
             try{
                 //set up fileReader
-                FileReader fileReaderAccount = new FileReader("accountUserList.csv");
+                FileReader fileReaderAccount = new FileReader("accountList.csv");
                 BufferedReader br = new BufferedReader(fileReaderAccount);
                 String line = "";
                 String[] tempArr;
@@ -94,6 +94,7 @@ public class LoginPage{
                 while((line = br.readLine()) != null){
                     tempArr = line.split(",");
                     tempEmail = tempArr[0];
+                    System.out.println(tempEmail);
                     tempPassword = tempArr[1];
 
                     //check to see if email and password are correctly inputted
