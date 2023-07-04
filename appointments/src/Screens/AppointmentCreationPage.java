@@ -26,8 +26,8 @@ public class AppointmentCreationPage {
 
     public Scene appointmentCreationPage;
 
-    public Rectangle homeTabRectangle, calendarTabRectangle, profileTabRectangle, placesTabRectangle, paymentTabRectangle, settingsTabRectangle;
-    Text homeTabText, profileTabText, calendarTabText, placesTabText, paymentTabText, settingsTabText;
+    public Rectangle homeTabRectangle, calendarTabRectangle, profileTabRectangle, placesTabRectangle, appointmentsTabRectangle, settingsTabRectangle;
+    Text homeTabText, profileTabText, calendarTabText, placesTabText, appointmentsTabText, settingsTabText;
     Rectangle profilePicture;
     Rectangle buffer1, buffer2;
 
@@ -45,7 +45,7 @@ public class AppointmentCreationPage {
         appointmentCreationPage = new Scene(layout, 600, 500);
     }
 
-    public void SetupPageSwitching(Stage primaryStage, HomePage Home, ProfilePage Profile, PlacesPage Places, PaymentPage Payment, SettingsPage Settings){
+    public void SetupPageSwitching(Stage primaryStage, HomePage Home, ProfilePage Profile, PlacesPage Places, AppointmentsPage Appointments, SettingsPage Settings){
 
         homeTabRectangle.setOnMouseClicked(e -> primaryStage.setScene(Home.homePage));
         homeTabText.setOnMouseClicked(e -> primaryStage.setScene(Home.homePage));
@@ -56,8 +56,8 @@ public class AppointmentCreationPage {
         placesTabRectangle.setOnMouseClicked(e -> primaryStage.setScene(Places.placesPage));
         placesTabText.setOnMouseClicked(e -> primaryStage.setScene(Places.placesPage));
 
-        paymentTabRectangle.setOnMouseClicked(e -> primaryStage.setScene(Payment.paymentPage));
-        paymentTabText.setOnMouseClicked(e -> primaryStage.setScene(Payment.paymentPage));
+        appointmentsTabRectangle.setOnMouseClicked(e -> primaryStage.setScene(Appointments.appointmentsPage));
+        appointmentsTabText.setOnMouseClicked(e -> primaryStage.setScene(Appointments.appointmentsPage));
         
         settingsTabRectangle.setOnMouseClicked(e -> primaryStage.setScene(Settings.settingsPage));
         settingsTabText.setOnMouseClicked(e -> primaryStage.setScene((Settings.settingsPage)));
@@ -106,13 +106,13 @@ public class AppointmentCreationPage {
         placesTab.getChildren().addAll(placesTabRectangle, placesTabText);
         placesTab.setAlignment(Pos.CENTER_LEFT);
 
-        paymentTabText = new Text("  Payment Options");
-        paymentTabText.setFill(Color.WHITE);
-        paymentTabText.setFont(Font.font ("Arial", FontWeight.BOLD, 12));
-        paymentTabRectangle = new Rectangle(110,25, Color.web("#3064b8"));
-        StackPane paymentTab = new StackPane();
-        paymentTab.getChildren().addAll(paymentTabRectangle, paymentTabText);
-        paymentTab.setAlignment(Pos.CENTER_LEFT);
+        appointmentsTabText = new Text("  Appointments");
+        appointmentsTabText.setFill(Color.WHITE);
+        appointmentsTabText.setFont(Font.font ("Arial", FontWeight.BOLD, 12));
+        appointmentsTabRectangle = new Rectangle(110,25, Color.web("#3064b8"));
+        StackPane appointmentsTab = new StackPane();
+        appointmentsTab.getChildren().addAll(appointmentsTabRectangle, appointmentsTabText);
+        appointmentsTab.setAlignment(Pos.CENTER_LEFT);
 
         settingsTabText = new Text("  Settings");
         settingsTabText.setFill(Color.WHITE);
@@ -129,7 +129,7 @@ public class AppointmentCreationPage {
         buffer2 = new Rectangle(5,5, Color.web("#4681e0"));
 
         VBox tabStack = new VBox();
-        tabStack.getChildren().addAll(buffer1, pfp, name, buffer2, homeTab, profileTab, calendarTab, placesTab, paymentTab, settingsTab);
+        tabStack.getChildren().addAll(buffer1, pfp, name, buffer2, homeTab, profileTab, calendarTab, placesTab, appointmentsTab, settingsTab);
         
         HBox sidebar = new HBox(tabStack, sidebarSeparator);
         sidebar.setBackground(new Background(new BackgroundFill(Color.web("#4681e0"), null, null)));

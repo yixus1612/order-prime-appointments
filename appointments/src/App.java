@@ -22,7 +22,7 @@ public class App extends Application{
         ProfilePage Profile = new ProfilePage();
         CalendarPage Calendar = new CalendarPage(primaryStage);
         PlacesPage Places = new PlacesPage();
-        PaymentPage Payment = new PaymentPage();
+        AppointmentsPage Appointments = new AppointmentsPage();
         SettingsPage Settings = new SettingsPage();
 
         Login.switchToAccountType(primaryStage, chooseAccount);
@@ -33,13 +33,13 @@ public class App extends Application{
         CreateBusinessAccount.switchToChooseAccount(primaryStage, chooseAccount);
         chooseAccount.switchToLogin(primaryStage, Login);
 
-        Home.SetupPageSwitching(primaryStage, Profile, Calendar, Places, Payment, Settings);
-        Profile.SetupPageSwitching(primaryStage, Home, Calendar, Places, Payment, Settings);
-        Calendar.SetupPageSwitching(primaryStage, Home, Profile, Places, Payment, Settings);
-        Places.SetupPageSwitching(primaryStage, Home, Profile, Calendar, Payment, Settings);
-        Payment.SetupPageSwitching(primaryStage, Home, Profile, Calendar, Places, Settings);
-        Settings.SetupPageSwitching(primaryStage, Home, Profile, Calendar, Places, Payment);
-        Calendar.appointmentPage.SetupPageSwitching(primaryStage, Home, Profile, Places, Payment, Settings);
+        Home.SetupPageSwitching(primaryStage, Profile, Calendar, Places, Appointments, Settings);
+        Profile.SetupPageSwitching(primaryStage, Home, Calendar, Places, Appointments, Settings);
+        Calendar.SetupPageSwitching(primaryStage, Home, Profile, Places, Appointments, Settings);
+        Places.SetupPageSwitching(primaryStage, Home, Profile, Calendar, Appointments, Settings);
+        Appointments.SetupPageSwitching(primaryStage, Home, Profile, Calendar, Places, Settings);
+        Settings.SetupPageSwitching(primaryStage, Home, Profile, Calendar, Places, Appointments);
+        Calendar.appointmentPage.SetupPageSwitching(primaryStage, Home, Profile, Places, Appointments, Settings);
 
         primaryStage.setScene(Login.loginPage);
         primaryStage.show();

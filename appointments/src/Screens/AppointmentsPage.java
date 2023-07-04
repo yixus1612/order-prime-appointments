@@ -16,15 +16,15 @@ import javafx.stage.Stage;
 import javafx.scene.text.Font;
 import javafx.scene.text.FontWeight;
 
-public class PaymentPage {
+public class AppointmentsPage {
 
-    public Scene paymentPage;
-    public Rectangle homeTabRectangle, calendarTabRectangle, profileTabRectangle, placesTabRectangle, paymentTabRectangle, settingsTabRectangle;
-    Text homeTabText, profileTabText, calendarTabText, placesTabText, paymentTabText, settingsTabText;
+    public Scene appointmentsPage;
+    public Rectangle homeTabRectangle, calendarTabRectangle, profileTabRectangle, placesTabRectangle, appointmentsTabRectangle, settingsTabRectangle;
+    Text homeTabText, profileTabText, calendarTabText, placesTabText, appointmentsTabText, settingsTabText;
     Rectangle profilePicture;
     Rectangle buffer1, buffer2;
 
-    public PaymentPage(){
+    public AppointmentsPage(){
     // FIXME this should display the user's profile picture
         profilePicture = new Rectangle(65, 65, Color.CORAL);
         StackPane pfp = new StackPane(profilePicture);
@@ -67,12 +67,12 @@ public class PaymentPage {
         placesTab.getChildren().addAll(placesTabRectangle, placesTabText);
         placesTab.setAlignment(Pos.CENTER_LEFT);
 
-        paymentTabText = new Text("  Payment Options");
-        paymentTabText.setFont(Font.font ("Arial", FontWeight.BOLD, 12));
-        paymentTabRectangle = new Rectangle(110,25, Color.web("#f2efd0"));
-        StackPane paymentTab = new StackPane();
-        paymentTab.getChildren().addAll(paymentTabRectangle, paymentTabText);
-        paymentTab.setAlignment(Pos.CENTER_LEFT);
+        appointmentsTabText = new Text("  Appointments");
+        appointmentsTabText.setFont(Font.font ("Arial", FontWeight.BOLD, 12));
+        appointmentsTabRectangle = new Rectangle(110,25, Color.web("#f2efd0"));
+        StackPane appointmentsTab = new StackPane();
+        appointmentsTab.getChildren().addAll(appointmentsTabRectangle, appointmentsTabText);
+        appointmentsTab.setAlignment(Pos.CENTER_LEFT);
 
         settingsTabText = new Text("  Settings");
         settingsTabText.setFill(Color.WHITE);
@@ -89,7 +89,7 @@ public class PaymentPage {
         buffer2 = new Rectangle(5,5, Color.web("#4681e0"));
 
         VBox tabStack = new VBox();
-        tabStack.getChildren().addAll(buffer1, pfp, name, buffer2, homeTab, profileTab, calendarTab, placesTab, paymentTab, settingsTab);
+        tabStack.getChildren().addAll(buffer1, pfp, name, buffer2, homeTab, profileTab, calendarTab, placesTab, appointmentsTab, settingsTab);
         
         HBox sidebar = new HBox(tabStack, sidebarSeparator);
         sidebar.setBackground(new Background(new BackgroundFill(Color.web("#4681e0"), null, null)));
@@ -102,7 +102,7 @@ public class PaymentPage {
         profileTabRectangle.setOnMouseClicked(e -> System.out.println("Profile!"));
         profileTabText.setOnMouseClicked(e -> System.out.println("Profile Text!"));
 
-        paymentPage = new Scene(layout, 600, 500);
+        appointmentsPage = new Scene(layout, 600, 500);
     }
     // this function sets up page switching between all the other pages in the sidebar
     public void SetupPageSwitching(Stage primaryStage, HomePage Home, ProfilePage Profile, CalendarPage Calendar, PlacesPage Places, SettingsPage Settings){
