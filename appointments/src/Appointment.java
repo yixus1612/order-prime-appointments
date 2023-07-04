@@ -12,7 +12,16 @@ public class Appointment {
     public void sendNotification(){
         //this function will inform the user they have an upcoming appointment
     }
-
+    
+    Appointment(String appointmentType, Date appointmentDate, Boolean availability, String businessName, String provider, User customer, float cost){
+            this.appointmentType = appointmentType;
+            this.appointmentDate = appointmentDate;
+            this.availability = availability;
+            this.businessName = businessName;
+            this.provider = provider;
+            this.customer = customer;
+            this.cost = cost;
+    }
     public String getType(){
             return appointmentType;
     }

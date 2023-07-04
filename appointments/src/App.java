@@ -39,6 +39,7 @@ public class App extends Application{
         Places.SetupPageSwitching(primaryStage, Home, Profile, Calendar, Payment, Settings);
         Payment.SetupPageSwitching(primaryStage, Home, Profile, Calendar, Places, Settings);
         Settings.SetupPageSwitching(primaryStage, Home, Profile, Calendar, Places, Payment);
+        Calendar.appointmentPage.SetupPageSwitching(primaryStage, Home, Profile, Places, Payment, Settings);
 
         primaryStage.setScene(Login.loginPage);
         primaryStage.show();
