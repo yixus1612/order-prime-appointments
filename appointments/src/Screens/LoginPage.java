@@ -88,7 +88,7 @@ public class LoginPage{
                 String tempEmail;
                 String tempPassword;
                 Encryption encrypt = new Encryption();
-                String encryptedPassword = encrypt.hash(password);
+                String encryptedPassword = encrypt.hash(password, email);
 
             //read account file
                 while((line = br.readLine()) != null){
