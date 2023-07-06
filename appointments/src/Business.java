@@ -30,7 +30,7 @@ public class Business extends Account{
         //meaning an appointment object has been created and passed as a parameter
 
         business.appointmentList.add(newAppointment);
-
+        
     }
 
     public void deleteAppointment(Date appointmentDate){
