@@ -3,6 +3,9 @@ public class Account {
     private String userEmail;
     private String password;
 
+    Account(String email){
+        userEmail = email;
+    }
 
     public void setEmail(String newEmail){
         this.userEmail = newEmail;

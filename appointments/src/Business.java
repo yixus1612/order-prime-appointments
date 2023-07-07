@@ -1,3 +1,4 @@
+
 import java.sql.Date;
 import java.util.ArrayList;
 import java.util.Scanner;
@@ -7,11 +8,20 @@ public class Business extends Account{
     public ArrayList <Appointment> appointmentList = new ArrayList <Appointment>();
     private String name;
     private String type;
+    private int id;
 
+    Business(){
+        super(null);
+        this.name = null;
+        this.type = null;
+        this.id = 0;
+    }
 
-    Business(String name, String type){
+    Business(String name, String email, String type, int id){
+        super(email);
         this.name = name;
         this.type = type;
+        this.id = id;
     }
 
     public void displayAppointments(Business business){
@@ -50,11 +60,19 @@ public class Business extends Account{
         return type;
     }
 
+    public int getID(){
+        return id;
+    }
+
     public void setName(String newName){
         this.name = newName;
     }
 
     public void setType(String newType){
         this.type = newType;
+    }
+
+    public void setID(int id){
+        this.id = id;
     }
 }
