@@ -174,7 +174,7 @@ public class CreateAccountPage {
 
                //write to user file
                FileWriter fileWriterUser = new FileWriter("userList.csv", true);
-               fileWriterUser.write(name + "," + email + "," + id + "\n");
+               fileWriterUser.write(name + "," + email + "," + id + "," + firstName + lastName + "," + "\n");
                fileWriterUser.close();
 
                }catch(IOException except){
