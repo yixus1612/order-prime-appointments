@@ -171,7 +171,7 @@ public class CreateAccountBusiness {
             try{
                //write to account file
                Encryption encrypt = new Encryption();
-               String encryptedPassword = encrypt.hash(confirmPassword);
+               String encryptedPassword = encrypt.hash(confirmPassword, email);
 
                FileWriter fileWriterAccount = new FileWriter("accountList.csv", true);
                fileWriterAccount.write(email + "," + encryptedPassword + "\n");
@@ -179,7 +179,7 @@ public class CreateAccountBusiness {
 
                //write to user file
                FileWriter fileWriterUser = new FileWriter("businessList.csv", true);
-               fileWriterUser.write(name + "," + email + "," + business + "," + id + "," + fristName + lastName + "Appointments.csv" + "\n");
+               fileWriterUser.write(name + "," + email + "," + business + "," + id + "," + firstName + lastName + "Appointments.csv" + "\n");
                fileWriterUser.close();
 
                }catch(IOException except){

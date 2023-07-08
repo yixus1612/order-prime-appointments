@@ -1,4 +1,3 @@
-package Screens;
 
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
