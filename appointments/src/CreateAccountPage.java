@@ -1,4 +1,3 @@
-
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
@@ -17,13 +16,11 @@ import java.io.*;
 import java.util.Random;
 import java.util.regex.*;
 
-import Screens.Encryption;
-
 public class CreateAccountPage {
    public Scene createAccountPage;
 
    public Button signUpButton, backButton;
-   public TextField firstNameField, lastNameField, newEmailField;
+   public TextField nameField, newEmailField;
    public PasswordField newPasswordField, confirmPasswordField;
 
    /*
@@ -60,21 +57,18 @@ public class CreateAccountPage {
        newEmailField = new TextField();
        newPasswordField = new PasswordField();
        confirmPasswordField = new PasswordField();
-       firstNameField = new TextField();
-       lastNameField = new TextField();
+       nameField = new TextField();
 
        //set prompt text for each textfield
        newEmailField.setPromptText("Email");
        newPasswordField.setPromptText("Password");
        confirmPasswordField.setPromptText("Confirm Password");
-       firstNameField.setPromptText("First Name");
-       lastNameField.setPromptText("Last Name");
+       nameField.setPromptText("Name");
        
        newEmailField.setMaxWidth(200);
        newPasswordField.setMaxWidth(200);
        confirmPasswordField.setMaxWidth(200);
-       firstNameField.setMaxWidth(200);
-       lastNameField.setMaxWidth(200);
+       nameField.setMaxWidth(200);
 
       HBox hButtonsCreateAcc = new HBox();
       VBox createAccColumn = new VBox();
@@ -94,7 +88,7 @@ public class CreateAccountPage {
       createAccColumn.setBackground(new Background(new BackgroundFill(Color.web("#4681e0"), null, null)));
       createAccColumn.setAlignment(Pos.CENTER);
       createAccColumn.setSpacing(5);
-      createAccColumn.getChildren().addAll(title, firstNameField, lastNameField, newEmailField, newPasswordField, confirmPasswordField, hButtonsCreateAcc, accountCreation);
+      createAccColumn.getChildren().addAll(title, nameField, newEmailField, newPasswordField, confirmPasswordField, hButtonsCreateAcc, accountCreation);
 
       createAccountPage = new Scene(createAccColumn, 600, 500);
 
@@ -113,9 +107,7 @@ public class CreateAccountPage {
 
    public void validateAccountCreation(Label note){
       //get variables from text fields
-      String firstName = firstNameField.getText();
-      String lastName = lastNameField.getText();
-      String name = firstName + " " + lastName;
+      String name = nameField.getText();
       String email = newEmailField.getText();
       String password = newPasswordField.getText();
       String confirmPassword = confirmPasswordField.getText();
@@ -177,7 +169,7 @@ public class CreateAccountPage {
 
                //write to user file
                FileWriter fileWriterUser = new FileWriter("userList.csv", true);
-               fileWriterUser.write(name + "," + email + "," + id + "," + firstName + lastName + "Appointments.csv" + "\n");
+               fileWriterUser.write(name + "," + email + "," + id + "\n");
                fileWriterUser.close();
 
                }catch(IOException except){
@@ -206,8 +198,7 @@ public class CreateAccountPage {
       }
 
       //clear text fields after attempt
-      firstNameField.clear();
-      lastNameField.clear();
+      nameField.clear();
       newEmailField.clear();
       newPasswordField.clear();
       confirmPasswordField.clear();

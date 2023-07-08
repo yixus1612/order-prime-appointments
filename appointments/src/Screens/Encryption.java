@@ -3,11 +3,11 @@ import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 
 public class Encryption {
-    public String hash(String password){
+    public String hash(String password, String email){
         try{
         MessageDigest md = MessageDigest.getInstance("SHA-512");
 
-        String salted = password + "CSCE3444";
+        String salted = password + email;
 
         md.update(salted.getBytes());
 
