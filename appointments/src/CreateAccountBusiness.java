@@ -21,7 +21,7 @@ public class CreateAccountBusiness {
    public Scene createAccountPage;
 
    public Button signUpButton, backButton;
-   public TextField nameField, newEmailField, businessField;
+   public TextField firstNameField, lastNameField, newEmailField, businessField;
    public PasswordField newPasswordField, confirmPasswordField;
 
    /*
@@ -59,19 +59,22 @@ public class CreateAccountBusiness {
        newEmailField = new TextField();
        newPasswordField = new PasswordField();
        confirmPasswordField = new PasswordField();
-       nameField = new TextField();
+       firstNameField = new TextField();
+      lastNameField = new TextField();
 
        //set prompt text for each textfield
        businessField.setPromptText("Business Name");
        newEmailField.setPromptText("Email");
        newPasswordField.setPromptText("Password");
        confirmPasswordField.setPromptText("Confirm Password");
-       nameField.setPromptText("Name");
+       firstNameField.setPromptText("First Name");
+       lastNameField.setPromptText("Last Name");
        
        newEmailField.setMaxWidth(200);
        newPasswordField.setMaxWidth(200);
        confirmPasswordField.setMaxWidth(200);
-       nameField.setMaxWidth(200);
+       firstNameField.setMaxWidth(200);
+       lastNameField.setMaxWidth(200);
        businessField.setMaxWidth(200);
 
       HBox hButtonsCreateAcc = new HBox();
@@ -92,7 +95,7 @@ public class CreateAccountBusiness {
       createAccColumn.setBackground(new Background(new BackgroundFill(Color.web("#4681e0"), null, null)));
       createAccColumn.setAlignment(Pos.CENTER);
       createAccColumn.setSpacing(5);
-      createAccColumn.getChildren().addAll(title, businessField, nameField, newEmailField, newPasswordField, confirmPasswordField, hButtonsCreateAcc, accountCreation);
+      createAccColumn.getChildren().addAll(title, businessField, firstNameField, lastNameField, newEmailField, newPasswordField, confirmPasswordField, hButtonsCreateAcc, accountCreation);
 
       createAccountPage = new Scene(createAccColumn, 600, 500);
 
@@ -112,7 +115,9 @@ public class CreateAccountBusiness {
    public void validateAccountCreation(Label note){
       //get variables from text fields
       String business = businessField.getText();
-      String name = nameField.getText();
+      String firstName = firstNameField.getText();
+      String lastName = lastNameField.getText();
+      String name = firstName + " " + lastName;
       String email = newEmailField.getText();
       String password = newPasswordField.getText();
       String confirmPassword = confirmPasswordField.getText();
@@ -174,7 +179,7 @@ public class CreateAccountBusiness {
 
                //write to user file
                FileWriter fileWriterUser = new FileWriter("businessList.csv", true);
-               fileWriterUser.write(name + "," + email + "," + business + "," + id + "\n");
+               fileWriterUser.write(name + "," + email + "," + business + "," + id + "," + fristName + lastName + "Appointments.csv" + "\n");
                fileWriterUser.close();
 
                }catch(IOException except){
@@ -205,7 +210,8 @@ public class CreateAccountBusiness {
       }
 
       //clear text fields after attempt
-      nameField.clear();
+      firstNameField.clear();
+      lastNameField.clear();
       newEmailField.clear();
       newPasswordField.clear();
       confirmPasswordField.clear();

@@ -6,7 +6,6 @@ import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
-import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.Background;
 import javafx.scene.layout.BackgroundFill;
@@ -22,6 +21,7 @@ import javafx.scene.text.Font;
 import javafx.scene.text.FontWeight;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
+import java.time.ZonedDateTime;
 
 public class AppointmentCreationPage {
 
@@ -32,13 +32,20 @@ public class AppointmentCreationPage {
     public Rectangle profilePicture;
     public Rectangle buffer1, buffer2;
     public GridPane center;
+    Business businessLoggedin;
+    ZonedDateTime date;
+
+    Button backButton = new Button("Back");
+    Button createButton = new Button("Create");
 
     private BorderPane layout = new BorderPane();
 
-    public AppointmentCreationPage(){
+    public AppointmentCreationPage(Stage primaryStage/* , ZonedDateTime date*/){
         
+        businessLoggedin = (Business) primaryStage.getUserData();
+        //this.date = date;
 
-        HBox sidebar = sideBar();
+        HBox sidebar = sideBar(primaryStage);
         layout.setLeft(sidebar);
 
         center = new GridPane();
@@ -53,7 +60,7 @@ public class AppointmentCreationPage {
         appointmentCreationPage = new Scene(layout, 600, 500);
     }
 
-    public void SetupPageSwitching(Stage primaryStage, HomePage Home, ProfilePage Profile, PlacesPage Places, SettingsPage Settings){
+    public void SetupPageSwitching(Stage primaryStage, HomePageBusiness Home, ProfilePageBusiness Profile, PlacesPageBusiness Places, SettingsPageBusiness Settings){
 
         homeTabRectangle.setOnMouseClicked(e -> primaryStage.setScene(Home.homePage));
         homeTabText.setOnMouseClicked(e -> primaryStage.setScene(Home.homePage));
@@ -69,14 +76,15 @@ public class AppointmentCreationPage {
 
     }
 
-    public HBox sideBar(){
+    public HBox sideBar(Stage primaryStage){
+
         // FIXME this should display the user's profile picture
         profilePicture = new Rectangle(65, 65, Color.CORAL);
         StackPane pfp = new StackPane(profilePicture);
         pfp.setAlignment(Pos.CENTER);
 
         // FIXME this should display the user's name
-        Text nameText = new Text("Name");
+        Text nameText = new Text(businessLoggedin.getName());
         StackPane name = new StackPane(nameText);
         name.setAlignment(Pos.CENTER);
 
@@ -143,9 +151,6 @@ public class AppointmentCreationPage {
         TextField appointmentName = new TextField();
         appointmentName.setPromptText("Appointment Name");
 
-        Button backButton = new Button("Back");
-        Button createButton = new Button("Create");
-
         setUp.setPrefWidth(200);
         backButton.setMinWidth(97.5);
         createButton.setMinWidth(97.5);
@@ -159,6 +164,22 @@ public class AppointmentCreationPage {
         return appointmentColumn;
 
 
+    }
+
+    public void createAccount(){
+        createButton.setOnAction(e->{
+            Appointment tempAppointment = new Appointment();
+            //tempAppointment.setDate();
+            try{
+               //write to user file
+               FileWriter fileWriterUser = new FileWriter(businessLoggedin.getName() + "Appointments.csv", true);
+               fileWriterUser.write(tempAppointment.getType() + "," + tempAppointment.getDate() + "," + tempAppointment.getAvailability() + "," + tempAppointment.getProvider() + "," + tempAppointment.getCustomer() + "," + tempAppointment.getCost() + "\n");
+               fileWriterUser.close();
+
+               }catch(IOException except){
+                  System.out.println(except);
+               }
+        });
     }
 
 }

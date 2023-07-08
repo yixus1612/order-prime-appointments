@@ -23,8 +23,6 @@ public class LoginPage{
     public TextField emailField;
     public PasswordField passwordField;
     public Label note, title;
-    private User userLoggedin = new User();
-    private Business businessLoggedin = new Business();
     private boolean isUser = false;
 
     public LoginPage(Stage primaryStage){
@@ -109,6 +107,7 @@ public class LoginPage{
                 }
 
                 br.close();
+                fileReaderAccount.close();
 
             }catch(IOException except){
                 System.out.println(except);
@@ -116,15 +115,14 @@ public class LoginPage{
 
             //if login info is correct, log in user
             if(login){
-
-                findUser(email);
+                User userLoggedin = findUser(email);
                 if(isUser){
                     primaryStage.setUserData(userLoggedin);
-                    System.out.println(userLoggedin.getName());
                     HomePage homepage = new HomePage(primaryStage);
                     primaryStage.setScene(homepage.homePage);
                 }else{
-                    findBusiness(email);
+                    Business businessLoggedin = findBusiness(email);
+                    System.out.println(businessLoggedin.getName());
                     primaryStage.setUserData(businessLoggedin);
                     System.out.println(businessLoggedin.getName());
                     HomePageBusiness homepage = new HomePageBusiness(primaryStage);
@@ -143,58 +141,69 @@ public class LoginPage{
 
     }
 
-    public void findUser(String userEmail){
+    public User findUser(String userEmail){
+        User tempUser = new User();
         try{
             FileReader fileReaderUser = new FileReader("userList.csv");
             BufferedReader br = new BufferedReader(fileReaderUser);
             String line = "";
             String[] tempArr;
-            User tempUser = new User(null, null, 0);
 
             while((line = br.readLine()) != null){
                     tempArr = line.split(",");
                     tempUser.setName(tempArr[0]);
                     tempUser.setEmail(tempArr[1]);
                     tempUser.setID(Integer.parseInt(tempArr[2]));
+                    tempUser.createAppointmentList(tempArr[3]);
 
                     //check to see if email and password are correctly inputted
                     if(userEmail.equals(tempUser.getEmail())){
-                        userLoggedin = tempUser;
                         isUser = true;
+                        br.close();
+                        return tempUser;
                     }
             }
 
             br.close();
+            fileReaderUser.close();
 
         }catch(IOException except){
             System.out.println(except);
         }
+
+        return tempUser;
     }
 
-    public void findBusiness(String userEmail){
+    public Business findBusiness(String userEmail){
+        Business tempBusiness = new Business();
         try{
-            FileReader fileReaderUser = new FileReader("userList.csv");
+            FileReader fileReaderUser = new FileReader("businessList.csv");
             BufferedReader br = new BufferedReader(fileReaderUser);
             String line = "";
             String[] tempArr;
-            Business tempBusiness = new Business(null, null,null, 0);
 
             while((line = br.readLine()) != null){
                 tempArr = line.split(",");
                 tempBusiness.setName(tempArr[0]);
                 tempBusiness.setEmail(tempArr[1]);
                 tempBusiness.setType(tempArr[2]);
-                //tempBusiness.setID(Integer.parseInt(tempArr[3]));
+                tempBusiness.setID(Integer.parseInt(tempArr[3]));
+                tempBusiness.createAppointmentList(tempArr[4]);
+
 
                 //check to see if email and password are correctly inputted
                 if(userEmail.equals(tempBusiness.getEmail())){
-                    businessLoggedin = tempBusiness;
+                    br.close();
+                    return tempBusiness;
                 }  
             }
             br.close();
+            fileReaderUser.close();
 
         }catch(IOException except){
             System.out.println(except);
         }
+
+        return tempBusiness;
     }
 };

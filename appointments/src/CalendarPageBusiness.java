@@ -39,24 +39,23 @@ public class CalendarPageBusiness {
     private Text year = new Text(); 
     private Text month = new Text();
     private Button leftButton, rightButton;
-    public AppointmentCreationPage appointmentPage = new AppointmentCreationPage();
     private Business businessLoggedin = new Business();
 
 
-    public CalendarPageBusiness(Stage primaryStage){
+    public CalendarPageBusiness(Stage primaryStage, AppointmentCreationPage Creation){
 
 
         HBox sidebar = sideBar(primaryStage);
         layout.setLeft(sidebar);
 
-        HBox yearBar = yearBox(primaryStage);
+        HBox yearBar = yearBox(primaryStage, Creation);
 
         HBox weekBar = weekBox();
         
         HBox calendarBox = new HBox();
         calendar.setBackground(new Background(new BackgroundFill(Color.WHITE, null, null)));
         calendar.setPrefWidth(calendarWidth);
-        drawCalendar(primaryStage);
+        drawCalendar(primaryStage, Creation);
         calendarBox.getChildren().addAll(calendar);
 
         background.getChildren().addAll(yearBar, weekBar, calendar);
@@ -155,20 +154,20 @@ public class CalendarPageBusiness {
 
     }
 
-    public HBox yearBox(Stage primaryStage){
+    public HBox yearBox(Stage primaryStage, AppointmentCreationPage Creation){
         year.setText(String.valueOf(userDate.getYear()));
         month.setText(String.valueOf(userDate.getMonth()));
         leftButton = new Button("<");
         leftButton.setOnAction(e->{
             userDate = userDate.minusMonths(1);
             calendar.getChildren().clear();
-            drawCalendar(primaryStage);
+            drawCalendar(primaryStage, Creation);
         });
         rightButton = new Button(">");
         rightButton.setOnAction(e->{
             userDate = userDate.plusMonths(1);
             calendar.getChildren().clear();
-            drawCalendar(primaryStage);
+            drawCalendar(primaryStage, Creation);
         });
         HBox yearBar = new HBox();
         yearBar.getChildren().addAll(leftButton, month, year, rightButton);
@@ -192,7 +191,7 @@ public class CalendarPageBusiness {
         return weekBar;
     }
 
-    public void drawCalendar(Stage primaryStage){
+    public void drawCalendar(Stage primaryStage, AppointmentCreationPage Creation){
         year.setText(String.valueOf(userDate.getYear()));
         month.setText(String.valueOf(userDate.getMonth()));
 
@@ -220,7 +219,7 @@ public class CalendarPageBusiness {
                 calendarRectangles.setStroke(Color.BLACK);
                 calendarRectangles.setWidth(rectangleWidth);
                 calendarRectangles.setHeight(rectangeHeight);
-                calendarRectangles.setOnMouseClicked(e->primaryStage.setScene(appointmentPage.appointmentCreationPage));
+                calendarRectangles.setOnMouseClicked(e->primaryStage.setScene(Creation.appointmentCreationPage));
                 stackPane.getChildren().add(calendarRectangles);
 
                 //put numbers on calendar

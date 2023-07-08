@@ -22,18 +22,20 @@ public class HomePage {
     Rectangle profilePicture;
     Rectangle buffer1, buffer2;
     private User userLoggedin = new User();
-    private Business businessLoggedin = new Business();
     private ProfilePage Profile;
     private CalendarPage Calendar;
     private PlacesPage Places;
     private SettingsPage Settings;
+    private AppointmentSchedulingPage Scheduling;
 
     public HomePage(Stage primaryStage){
 
         Profile = new ProfilePage(primaryStage);
-        Calendar = new CalendarPage(primaryStage);
         Places = new PlacesPage(primaryStage);
         Settings = new SettingsPage(primaryStage);
+        Scheduling = new AppointmentSchedulingPage(primaryStage);
+        Calendar = new CalendarPage(primaryStage, Scheduling);
+        
 
         //businessLoggedin = (Business) primaryStage.getUserData();
         HBox sidebar = sideBar(primaryStage);
@@ -47,7 +49,6 @@ public class HomePage {
     public HBox sideBar(Stage primaryStage){
 
         userLoggedin = (User) primaryStage.getUserData();
-        System.out.println(userLoggedin.getName());
         
         // FIXME this should display the user's profile picture
         profilePicture = new Rectangle(65, 65, Color.CORAL);
@@ -115,6 +116,8 @@ public class HomePage {
         Places.SetupPageSwitching(primaryStage, this, Profile, Calendar, Settings);
         Settings.SetupPageSwitching(primaryStage, this, Profile, Calendar, Places);
         SetupPageSwitching(primaryStage, Profile, Calendar, Places, Settings);
+        Scheduling.SetupPageSwitching(primaryStage, this, Profile, Places, Settings);
+
 
         return sidebar;
         

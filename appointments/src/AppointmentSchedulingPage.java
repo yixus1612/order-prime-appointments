@@ -1,68 +1,88 @@
+
+
+import java.io.*;
+
 import javafx.geometry.Pos;
-import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.control.Button;
+import javafx.scene.control.Label;
+import javafx.scene.control.PasswordField;
+import javafx.scene.control.TextField;
 import javafx.scene.layout.Background;
 import javafx.scene.layout.BackgroundFill;
 import javafx.scene.layout.BorderPane;
+import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Line;
 import javafx.scene.shape.Rectangle;
-import javafx.scene.text.Text;
-import javafx.stage.Stage;
 import javafx.scene.text.Font;
 import javafx.scene.text.FontWeight;
+import javafx.scene.text.Text;
+import javafx.stage.Stage;
 
-public class HomePageBusiness {
-    public Scene homePage;
-    Rectangle homeTabRectangle, calendarTabRectangle, profileTabRectangle, placesTabRectangle, paymentTabRectangle, settingsTabRectangle;
-    Text homeTabText, profileTabText, calendarTabText, placesTabText, settingsTabText;
-    Rectangle profilePicture;
-    Rectangle buffer1, buffer2;
-    private Business businessLoggedin = new Business();
-    private ProfilePageBusiness Profile;
-    private CalendarPageBusiness Calendar;
-    private PlacesPageBusiness Places;
-    private SettingsPageBusiness Settings;
-    private AppointmentCreationPage Creation;
+public class AppointmentSchedulingPage {
 
-    public HomePageBusiness(Stage primaryStage){
+    public Scene appointmentSchedulingPage;
 
-        Profile = new ProfilePageBusiness(primaryStage);
-        Creation = new AppointmentCreationPage(primaryStage);
-        Calendar = new CalendarPageBusiness(primaryStage, Creation);
-        Places = new PlacesPageBusiness(primaryStage);
-        Settings = new SettingsPageBusiness(primaryStage);
+    public Rectangle homeTabRectangle, calendarTabRectangle, profileTabRectangle, placesTabRectangle, paymentTabRectangle, settingsTabRectangle;
+    public Text homeTabText, profileTabText, calendarTabText, placesTabText, settingsTabText;
+    public Rectangle profilePicture;
+    public Rectangle buffer1, buffer2;
+    public GridPane center;
 
-        //businessLoggedin = (Business) primaryStage.getUserData();
+    private BorderPane layout = new BorderPane();
+
+    public AppointmentSchedulingPage(Stage primaryStage){
+
         HBox sidebar = sideBar(primaryStage);
-        BorderPane layout = new BorderPane();
         layout.setLeft(sidebar);
 
-        homePage = new Scene(layout, 600, 500);
+        center = new GridPane();
+        center.setPrefWidth(490);
+        VBox mainpage= mainPage();
+        center.add(mainpage, 1, 1);
+
+        layout.setCenter(center);
+
+        appointmentSchedulingPage = new Scene(layout, 600, 500);
+    }
+
+    public void SetupPageSwitching(Stage primaryStage, HomePage Home, ProfilePage Profile, PlacesPage Places, SettingsPage Settings){
+
+        homeTabRectangle.setOnMouseClicked(e -> primaryStage.setScene(Home.homePage));
+        homeTabText.setOnMouseClicked(e -> primaryStage.setScene(Home.homePage));
+
+        profileTabRectangle.setOnMouseClicked(e -> primaryStage.setScene(Profile.profilePage));
+        profileTabText.setOnMouseClicked(e -> primaryStage.setScene(Profile.profilePage));
+
+        placesTabRectangle.setOnMouseClicked(e -> primaryStage.setScene(Places.placesPage));
+        placesTabText.setOnMouseClicked(e -> primaryStage.setScene(Places.placesPage));
+        
+        settingsTabRectangle.setOnMouseClicked(e -> primaryStage.setScene(Settings.settingsPage));
+        settingsTabText.setOnMouseClicked(e -> primaryStage.setScene((Settings.settingsPage)));
 
     }
 
     public HBox sideBar(Stage primaryStage){
+        User userLoggedin = (User) primaryStage.getUserData();
 
-        businessLoggedin = (Business) primaryStage.getUserData();
-        System.out.println(businessLoggedin.getName());
-        
         // FIXME this should display the user's profile picture
         profilePicture = new Rectangle(65, 65, Color.CORAL);
         StackPane pfp = new StackPane(profilePicture);
         pfp.setAlignment(Pos.CENTER);
 
         // FIXME this should display the user's name
-        Text nameText = new Text(businessLoggedin.getName());
+        Text nameText = new Text(userLoggedin.getName());
         StackPane name = new StackPane(nameText);
         name.setAlignment(Pos.CENTER);
 
         homeTabText = new Text("  Home");
+        homeTabText.setFill(Color.WHITE);
         homeTabText.setFont(Font.font ("Arial", FontWeight.BOLD, 12));
-        homeTabRectangle = new Rectangle(110,25, Color.web("#f2efd0"));
+        homeTabRectangle = new Rectangle(110,25, Color.web("#3064b8"));
         StackPane homeTab = new StackPane();
         homeTab.getChildren().addAll(homeTabRectangle, homeTabText);
         homeTab.setAlignment(Pos.CENTER_LEFT);
@@ -76,9 +96,8 @@ public class HomePageBusiness {
         profileTab.setAlignment(Pos.CENTER_LEFT);
 
         calendarTabText = new Text("  Calendar");
-        calendarTabText.setFill(Color.WHITE);
         calendarTabText.setFont(Font.font ("Arial", FontWeight.BOLD, 12));
-        calendarTabRectangle = new Rectangle(110,25, Color.web("#3064b8"));
+        calendarTabRectangle = new Rectangle(110,25, Color.web("#f2efd0"));
         StackPane calendarTab = new StackPane();
         calendarTab.getChildren().addAll(calendarTabRectangle, calendarTabText);
         calendarTab.setAlignment(Pos.CENTER_LEFT);
@@ -111,33 +130,34 @@ public class HomePageBusiness {
         HBox sidebar = new HBox(tabStack, sidebarSeparator);
         sidebar.setBackground(new Background(new BackgroundFill(Color.web("#4681e0"), null, null)));
 
-        Profile.SetupPageSwitching(primaryStage, this, Calendar, Places, Settings);
-        Calendar.SetupPageSwitching(primaryStage, this, Profile, Places, Settings);
-        Places.SetupPageSwitching(primaryStage, this, Profile, Calendar, Settings);
-        Settings.SetupPageSwitching(primaryStage, this, Profile, Calendar, Places);
-        SetupPageSwitching(primaryStage, Profile, Calendar, Places, Settings);
-        Creation.SetupPageSwitching(primaryStage, this, Profile, Places, Settings);
-
         return sidebar;
-        
-    }
-
-    //Text homeTabText, profileTabText, calendarTabText, placesTabText, paymentTabText, settingsTabText;
-    // this function sets up page switching between all the other pages in the sidebar
-    public void SetupPageSwitching(Stage primaryStage, ProfilePageBusiness Profile, CalendarPageBusiness Calendar, PlacesPageBusiness Places, SettingsPageBusiness Settings){
-
-        profileTabRectangle.setOnMouseClicked(e ->primaryStage.setScene(Profile.profilePage));
-        profileTabText.setOnMouseClicked(e -> primaryStage.setScene(Profile.profilePage));
-
-        calendarTabRectangle.setOnMouseClicked(e -> primaryStage.setScene(Calendar.calendarPage));
-        calendarTabText.setOnMouseClicked(e -> primaryStage.setScene(Calendar.calendarPage));
-
-        placesTabRectangle.setOnMouseClicked(e -> primaryStage.setScene(Places.placesPage));
-        placesTabText.setOnMouseClicked(e -> primaryStage.setScene(Places.placesPage));
-        
-        settingsTabRectangle.setOnMouseClicked(e -> primaryStage.setScene(Settings.settingsPage));
-        settingsTabText.setOnMouseClicked(e -> primaryStage.setScene((Settings.settingsPage)));
 
     }
-    
+
+    public VBox mainPage(){
+        HBox setUp = new HBox();
+        VBox appointmentColumn = new VBox();
+        Label title = new Label("Schedule An Appointment");
+
+        TextField appointmentName = new TextField();
+        appointmentName.setPromptText("Appointment Name");
+
+        Button backButton = new Button("Back");
+        Button createButton = new Button("Create");
+
+        setUp.setPrefWidth(200);
+        backButton.setMinWidth(97.5);
+        createButton.setMinWidth(97.5);
+        setUp.getChildren().addAll(backButton, createButton);
+        setUp.setAlignment(Pos.CENTER);
+
+        appointmentColumn.getChildren().addAll(title, appointmentName, setUp);
+        appointmentColumn.setSpacing(5);
+        appointmentColumn.setAlignment(Pos.CENTER);
+
+        return appointmentColumn;
+
+
+    }
+
 }
