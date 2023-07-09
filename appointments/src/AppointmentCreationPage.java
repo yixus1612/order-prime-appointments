@@ -2,9 +2,12 @@
 
 import java.io.*;
 
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
+import javafx.scene.control.ComboBox;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.Background;
@@ -22,6 +25,8 @@ import javafx.scene.text.FontWeight;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
 import java.time.ZonedDateTime;
+import java.time.format.DateTimeFormatter;
+import java.util.Random;
 
 public class AppointmentCreationPage {
 
@@ -32,25 +37,28 @@ public class AppointmentCreationPage {
     public Rectangle profilePicture;
     public Rectangle buffer1, buffer2;
     public GridPane center;
-    Business businessLoggedin;
-    ZonedDateTime date;
+    public Business businessLoggedin;
+    public ZonedDateTime date;
+    static DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd hh:mm:ss a z");
+    public Appointment createdAppointment = new Appointment();
 
     Button backButton = new Button("Back");
     Button createButton = new Button("Create");
+    TextField cost = new TextField();
+    TextField appointmentName = new TextField();
 
     private BorderPane layout = new BorderPane();
 
-    public AppointmentCreationPage(Stage primaryStage/* , ZonedDateTime date*/){
+    public AppointmentCreationPage(Stage primaryStage){
         
         businessLoggedin = (Business) primaryStage.getUserData();
-        //this.date = date;
 
         HBox sidebar = sideBar(primaryStage);
         layout.setLeft(sidebar);
 
         center = new GridPane();
         center.setPrefWidth(490);
-        VBox mainpage= mainPage();
+        VBox mainpage = mainPage(primaryStage);
         center.add(mainpage, 1, 1);
 
         layout.setCenter(center);
@@ -143,12 +151,38 @@ public class AppointmentCreationPage {
 
     }
 
-    public VBox mainPage(){
+    public VBox mainPage(Stage primaryStage){
         HBox setUp = new HBox();
         VBox appointmentColumn = new VBox();
         Label title = new Label("Create An Appointment");
 
-        TextField appointmentName = new TextField();
+        HBox dateBox = new HBox();
+
+        cost.setPromptText("Cost");
+        cost.setPrefWidth(200);
+        System.out.println(cost.getText());
+        System.out.println(createdAppointment.getCost());
+
+        ObservableList<String> hours = FXCollections.observableArrayList(
+            "01", "02", "03", "04", "05", "06", "07", "08", "09", "10", "11", "12"
+        );
+        final ComboBox comboBox = new ComboBox(hours);
+
+        ObservableList<String> mins = FXCollections.observableArrayList(
+            "00", "15", "30", "45"
+        );
+        final ComboBox comboBox2 = new ComboBox(mins);
+
+        ObservableList<String> time = FXCollections.observableArrayList(
+            "AM", "PM"
+        );
+        final ComboBox comboBox3 = new ComboBox(time);
+
+
+        createAppointment(primaryStage, comboBox,comboBox2,comboBox3);
+
+        dateBox.getChildren().addAll(comboBox, comboBox2, comboBox3);
+
         appointmentName.setPromptText("Appointment Name");
 
         setUp.setPrefWidth(200);
@@ -157,28 +191,77 @@ public class AppointmentCreationPage {
         setUp.getChildren().addAll(backButton, createButton);
         setUp.setAlignment(Pos.CENTER);
 
-        appointmentColumn.getChildren().addAll(title, appointmentName, setUp);
+        appointmentColumn.getChildren().addAll(title, appointmentName, dateBox, cost, setUp);
         appointmentColumn.setSpacing(5);
         appointmentColumn.setAlignment(Pos.CENTER);
+
 
         return appointmentColumn;
 
 
     }
 
-    public void createAccount(){
+    public void createAppointment(Stage primaryStage, ComboBox hour, ComboBox min, ComboBox amPM){
         createButton.setOnAction(e->{
-            Appointment tempAppointment = new Appointment();
-            //tempAppointment.setDate();
-            try{
-               //write to user file
-               FileWriter fileWriterUser = new FileWriter(businessLoggedin.getName() + "Appointments.csv", true);
-               fileWriterUser.write(tempAppointment.getType() + "," + tempAppointment.getDate() + "," + tempAppointment.getAvailability() + "," + tempAppointment.getProvider() + "," + tempAppointment.getCustomer() + "," + tempAppointment.getCost() + "\n");
-               fileWriterUser.close();
 
-               }catch(IOException except){
-                  System.out.println(except);
-               }
+            //sets up current info for appointemnt
+            createdAppointment.setType(appointmentName.getText());
+            createdAppointment.setProvider(businessLoggedin.getID());
+            createdAppointment.setCost(cost.getText());
+            createdAppointment.setDate(ZonedDateTime.parse("2023-07-08 " + (String) hour.getSelectionModel().getSelectedItem() + ":" + (String) min.getSelectionModel().getSelectedItem() + ":00 " + (String) amPM.getSelectionModel().getSelectedItem() + " -05:00", formatter));
+            Random random = new Random();
+            createdAppointment.setID(random.nextInt(1000000000));
+
+            //checks to see if appointment is already created
+            Boolean alreadyExists = false;
+            /*if(new File("appointmentList.csv").exists()){
+                try{
+               
+                    //set up FileReader
+                    FileReader fileReaderAccount = new FileReader("accountList.csv");
+                    BufferedReader br = new BufferedReader(fileReaderAccount);
+                    String line = "";
+                    String[] tempArr;
+                    int tempProvider;
+                    ZonedDateTime tempDate;
+       
+                    //read in data and determine if appointment already exists
+                    while((line = br.readLine()) != null){
+                        tempArr = line.split(",");
+                        tempDate = ZonedDateTime.parse(tempArr[1]);
+                        tempProvider = Integer.parseInt(tempArr[6]);
+       
+                        //keep note if email is found
+                        if(tempProvider == createdAppointment.getProvider().getID() && tempDate.isEqual(createdAppointment.getDate())){
+                            alreadyExists = true;
+                            System.out.println("Appointment already exists");
+                        }
+                    }
+                    br.close();
+                }catch(IOException except){
+                    System.out.println(except);
+                }
+            }*/
+
+            //writes appointment to file
+            try{              
+                FileWriter fileWriterUser = new FileWriter("appointmentList.csv", true);
+
+                //checks to see if appointment is before current time
+                if(createdAppointment.getDate().isBefore(ZonedDateTime.now()) && alreadyExists){
+                    System.out.println("Please choose a valid date");
+                }else{
+                    fileWriterUser.write(createdAppointment.getType() + "," + createdAppointment.getDate().toString() + "," + createdAppointment.getAvailability() + "," + createdAppointment.getProvider().getID() + "," + createdAppointment.getCustomer() + "," + createdAppointment.getCost() + "," + createdAppointment.getID() + "\n");
+                    Business businessLoggedIn = (Business) primaryStage.getUserData();
+                    businessLoggedin.addAppointment(createdAppointment);
+                    primaryStage.setUserData(businessLoggedIn);
+                }
+
+                fileWriterUser.close();
+
+            }catch(IOException except){
+                System.out.println(except);
+            }
         });
     }
 
