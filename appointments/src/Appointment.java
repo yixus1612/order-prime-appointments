@@ -2,10 +2,11 @@ import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
 import java.time.ZonedDateTime;
+import java.time.format.DateTimeFormatter;
 
 public class Appointment {
     private String appointmentType;
-    private ZonedDateTime appointmentDate;
+    private String appointmentDate;
     private Boolean availability;
     private Business provider;
     private User customer;
@@ -26,7 +27,7 @@ public class Appointment {
             this.id = 0;
     }
     
-    Appointment(String appointmentType, ZonedDateTime appointmentDate, Boolean availability, int businessID, int customerID, String cost, int id){
+    Appointment(String appointmentType, String appointmentDate, Boolean availability, int businessID, int customerID, String cost, int id){
             this.appointmentType = appointmentType;
             this.appointmentDate = appointmentDate;
             this.availability = availability;
@@ -39,7 +40,7 @@ public class Appointment {
             return appointmentType;
     }
 
-    public ZonedDateTime getDate(){
+    public String getDate(){
             return appointmentDate;
     }
 
@@ -67,7 +68,7 @@ public class Appointment {
         this.appointmentType = newType;
     }
 
-    public void setDate(ZonedDateTime newDate){
+    public void setDate(String newDate){
         this.appointmentDate = newDate;
     }
 
@@ -153,5 +154,11 @@ public class Appointment {
         }
 
         return tempBusiness;
+    }
+
+    public ZonedDateTime stringToDate(){
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd hh:mm:ss a z");
+        ZonedDateTime dateTime = ZonedDateTime.parse(this.appointmentDate, formatter);
+        return dateTime;
     }
 }

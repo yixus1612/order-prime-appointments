@@ -1,9 +1,12 @@
 import javafx.geometry.Pos;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.control.Button;
+import javafx.scene.control.Label;
 import javafx.scene.layout.Background;
 import javafx.scene.layout.BackgroundFill;
 import javafx.scene.layout.BorderPane;
+import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
@@ -27,28 +30,39 @@ public class HomePage {
     private PlacesPage Places;
     private SettingsPage Settings;
     private AppointmentSchedulingPage Scheduling;
+    public Button scheduleAppointment, cancelAppointment;
+    public AppointmentSchedulingPage Schedule;
+    private Label title;
 
     public HomePage(Stage primaryStage){
+
+        userLoggedin = (User) primaryStage.getUserData();
 
         Profile = new ProfilePage(primaryStage);
         Places = new PlacesPage(primaryStage);
         Settings = new SettingsPage(primaryStage);
         Scheduling = new AppointmentSchedulingPage(primaryStage);
         Calendar = new CalendarPage(primaryStage, Scheduling);
-        
 
-        //businessLoggedin = (Business) primaryStage.getUserData();
+        title = new Label("Welcome " + userLoggedin.getName() + "! What would you like to do?");
+
         HBox sidebar = sideBar(primaryStage);
         BorderPane layout = new BorderPane();
         layout.setLeft(sidebar);
 
-        homePage = new Scene(layout, 600, 500);
+        VBox center = new VBox();
+        HBox buttons = new HBox();
+        scheduleAppointment = new Button("Create");
+        scheduleAppointment.setOnAction(e->primaryStage.setScene(Scheduling.appointmentSchedulingPage));
+        cancelAppointment = new Button("Cancel");
+        buttons.getChildren().addAll(scheduleAppointment, cancelAppointment);
+        center.getChildren().addAll(title, buttons);
+        layout.setCenter(center);
 
+        homePage = new Scene(layout, 600, 500);
     }
 
     public HBox sideBar(Stage primaryStage){
-
-        userLoggedin = (User) primaryStage.getUserData();
         
         // FIXME this should display the user's profile picture
         profilePicture = new Rectangle(65, 65, Color.CORAL);

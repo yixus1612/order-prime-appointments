@@ -179,7 +179,7 @@ public class CreateAccountBusiness {
 
                //write to user file
                FileWriter fileWriterUser = new FileWriter("businessList.csv", true);
-               fileWriterUser.write(name + "," + email + "," + business + "," + id + "," + firstName + lastName + "Appointments.csv" + "\n");
+               fileWriterUser.write(name + "," + email + "," + business + "," + id + "\n");
                fileWriterUser.close();
 
                }catch(IOException except){

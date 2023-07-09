@@ -1,6 +1,10 @@
 
 
 import java.io.*;
+import java.time.ZonedDateTime;
+import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
+import java.util.List;
 
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
@@ -32,17 +36,25 @@ public class AppointmentSchedulingPage {
     public Rectangle profilePicture;
     public Rectangle buffer1, buffer2;
     public GridPane center;
+    private DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd hh:mm:ss a z");
+    private User userLoggedin;
 
     private BorderPane layout = new BorderPane();
+    TextField businessName = new TextField();
+    Button backButton = new Button("Back");
+    Button searchButton = new Button("Search");
+    List <Label> appointments = new ArrayList<Label>();
 
     public AppointmentSchedulingPage(Stage primaryStage){
+
+        userLoggedin = (User) primaryStage.getUserData();
 
         HBox sidebar = sideBar(primaryStage);
         layout.setLeft(sidebar);
 
         center = new GridPane();
         center.setPrefWidth(490);
-        VBox mainpage= mainPage();
+        VBox mainpage= mainPage(primaryStage);
         center.add(mainpage, 1, 1);
 
         layout.setCenter(center);
@@ -134,30 +146,125 @@ public class AppointmentSchedulingPage {
 
     }
 
-    public VBox mainPage(){
+    public VBox mainPage(Stage primaryStage){
         HBox setUp = new HBox();
         VBox appointmentColumn = new VBox();
         Label title = new Label("Schedule An Appointment");
 
-        TextField appointmentName = new TextField();
-        appointmentName.setPromptText("Appointment Name");
-
-        Button backButton = new Button("Back");
-        Button createButton = new Button("Create");
+        businessName.setPromptText("Business Name");
 
         setUp.setPrefWidth(200);
         backButton.setMinWidth(97.5);
-        createButton.setMinWidth(97.5);
-        setUp.getChildren().addAll(backButton, createButton);
+        searchButton.setMinWidth(97.5);
+        setUp.getChildren().addAll(backButton, searchButton);
         setUp.setAlignment(Pos.CENTER);
 
-        appointmentColumn.getChildren().addAll(title, appointmentName, setUp);
+        appointmentColumn.getChildren().addAll(title, businessName, setUp);
         appointmentColumn.setSpacing(5);
         appointmentColumn.setAlignment(Pos.CENTER);
+
+        search(primaryStage, appointmentColumn);
 
         return appointmentColumn;
 
 
     }
 
+    public void search(Stage primaryStage, VBox home){
+        searchButton.setOnAction(e->{
+            String userInput = businessName.getText();
+            HBox column = new HBox();
+            try{
+               
+                //set up FileReader
+                FileReader fileReaderAccount = new FileReader("appointmentList.csv");
+                BufferedReader br = new BufferedReader(fileReaderAccount);
+                String line = "";
+                String[] tempArr;
+
+                Appointment tempAppointment;
+                Business tempBusiness = new Business();
+                User tempCustomer = new User();
+       
+                //read in data and create list of available appointments
+                int counter = 0;
+                while((line = br.readLine()) != null){
+                    tempArr = line.split(",");
+                    tempAppointment = new Appointment(tempArr[0], tempArr[1], Boolean.parseBoolean(tempArr[2]), Integer.parseInt(tempArr[3]), Integer.parseInt(tempArr[4]), tempArr[5], Integer.parseInt(tempArr[6]));
+
+                    tempBusiness = tempAppointment.findBusiness(Integer.parseInt(tempArr[3]));
+                    Button signUpButton = new Button("schedule");
+       
+                    
+                    if(userInput.equals(tempBusiness.getType()) && Boolean.parseBoolean(tempArr[2])){
+                        signUp(primaryStage, signUpButton, tempAppointment);
+                        column.getChildren().addAll(new Label(tempBusiness.getType() + " " + tempArr[0] + " " + tempBusiness.getName() + "        "), signUpButton);
+                        home.getChildren().add(column);
+                        counter++;
+                    }
+                }
+                br.close();
+            }catch(IOException except){
+                System.out.println(except);
+            }
+
+        });
+    }
+
+    public void signUp(Stage primaryStage, Button button, Appointment appointment){
+        button.setOnAction(e->{
+            
+            Boolean alreadyExists = false;
+            List<Appointment> appointmentList = new ArrayList<>();
+            try{
+                //set up FileReader
+                FileReader fileReaderAccount = new FileReader("appointmentList.csv");
+                BufferedReader br = new BufferedReader(fileReaderAccount);
+                String line = "";
+                String[] tempArr;
+                int tempCustomer;
+                ZonedDateTime tempDate;
+                Appointment tempAppointment;
+   
+                //read in data and determine if appointment already exists
+                while((line = br.readLine()) != null){
+                    tempArr = line.split(",");
+                    tempAppointment = new Appointment(tempArr[0], tempArr[1], Boolean.parseBoolean(tempArr[2]), Integer.parseInt(tempArr[3]), Integer.parseInt(tempArr[4]), tempArr[5], Integer.parseInt(tempArr[6]));
+                    tempDate = ZonedDateTime.parse(tempArr[1], formatter);
+                    tempCustomer = Integer.parseInt(tempArr[6]);
+   
+                    //keep note if email is found
+                    if(tempCustomer == appointment.getCustomer().getID() && tempDate.isEqual(appointment.stringToDate())){
+                        alreadyExists = true;
+                        System.out.println("Appointment already exists");
+                    }else if(appointment.getID() == Integer.parseInt(tempArr[6])){
+                        tempAppointment.setCustomer(userLoggedin.getID());
+                        tempAppointment.setAvailability(false);
+                        userLoggedin.addAppointment(tempAppointment);
+                        primaryStage.setUserData(userLoggedin);
+                    }
+
+                    appointmentList.add(tempAppointment);
+
+                }
+                br.close();
+            }catch(IOException except){
+                System.out.println(except);
+            }
+
+            try{              
+                FileWriter fileWriterUser = new FileWriter("appointmentList.csv", false);
+
+                for(Appointment a : appointmentList){
+                    fileWriterUser.write(a.getType() + "," + a.getDate() + "," + a.getAvailability() + "," + a.getProvider().getID() + "," + a.getCustomer().getID() + "," + a.getCost() + "," + a.getID() + "\n");
+                }
+
+                fileWriterUser.close();
+
+            }catch(IOException except){
+                System.out.println(except);
+            }
+
+        });
+    }
 }

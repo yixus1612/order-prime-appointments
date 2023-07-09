@@ -77,7 +77,7 @@ public class User extends Account{
                 //check if id matches user and add it to their appointment list.
                 if(Integer.parseInt(tempArr[4]) == this.iD){
                     tempAppointment.setType(tempArr[0]);
-                    tempAppointment.setDate(ZonedDateTime.parse(tempArr[1]));
+                    tempAppointment.setDate(tempArr[1]);
                     tempAppointment.setAvailability(Boolean.parseBoolean(tempArr[2]));
                     tempAppointment.setProvider(Integer.parseInt(tempArr[3]));
                     tempAppointment.setCustomer(Integer.parseInt(tempArr[4]));

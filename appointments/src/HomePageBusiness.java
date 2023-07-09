@@ -1,6 +1,8 @@
 import javafx.geometry.Pos;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.control.Button;
+import javafx.scene.control.Label;
 import javafx.scene.layout.Background;
 import javafx.scene.layout.BackgroundFill;
 import javafx.scene.layout.BorderPane;
@@ -27,28 +29,38 @@ public class HomePageBusiness {
     private PlacesPageBusiness Places;
     private SettingsPageBusiness Settings;
     private AppointmentCreationPage Creation;
+    private Button createButton, editButton;
+    private Label title;
 
     public HomePageBusiness(Stage primaryStage){
+
+        businessLoggedin = (Business) primaryStage.getUserData();
+        title = new Label("Welcome "+ businessLoggedin.getName() + "! What would you like to do?");
 
         Profile = new ProfilePageBusiness(primaryStage);
         Creation = new AppointmentCreationPage(primaryStage);
         Calendar = new CalendarPageBusiness(primaryStage, Creation);
         Places = new PlacesPageBusiness(primaryStage);
         Settings = new SettingsPageBusiness(primaryStage);
-
-        //businessLoggedin = (Business) primaryStage.getUserData();
+      
         HBox sidebar = sideBar(primaryStage);
         BorderPane layout = new BorderPane();
         layout.setLeft(sidebar);
+
+        VBox center = new VBox();
+        HBox buttons = new HBox();
+        createButton = new Button("Create");
+        createButton.setOnAction(e->primaryStage.setScene(Creation.appointmentCreationPage));
+        editButton = new Button("Edit");
+        buttons.getChildren().addAll(createButton, editButton);
+        center.getChildren().addAll(title, buttons);
+        layout.setCenter(center);
 
         homePage = new Scene(layout, 600, 500);
 
     }
 
     public HBox sideBar(Stage primaryStage){
-
-        businessLoggedin = (Business) primaryStage.getUserData();
-        System.out.println(businessLoggedin.getName());
         
         // FIXME this should display the user's profile picture
         profilePicture = new Rectangle(65, 65, Color.CORAL);

@@ -82,7 +82,7 @@ public class Business extends Account{
                 //check to see if email and password are correctly inputted
                 if(Integer.parseInt(tempArr[3]) == this.id){
                     tempAppointment.setType(tempArr[0]);
-                    tempAppointment.setDate(ZonedDateTime.parse(tempArr[1]));
+                    tempAppointment.setDate(tempArr[1]);
                     tempAppointment.setAvailability(Boolean.parseBoolean(tempArr[2]));
                     tempAppointment.setProvider(Integer.parseInt(tempArr[3]));
                     tempAppointment.setCustomer(Integer.parseInt(tempArr[4]));
