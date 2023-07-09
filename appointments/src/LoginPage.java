@@ -87,20 +87,16 @@ public class LoginPage{
                 BufferedReader br = new BufferedReader(fileReaderAccount);
                 String line = "";
                 String[] tempArr;
-                String tempEmail;
-                String tempPassword;
                 Encryption encrypt = new Encryption();
                 String encryptedPassword = encrypt.hash(password, email);
 
             //read account file
                 while((line = br.readLine()) != null){
                     tempArr = line.split(",");
-                    tempEmail = tempArr[0];
-                    tempPassword = tempArr[1];
 
                     //check to see if email and password are correctly inputted
-                    if(tempEmail.equals(email)){
-                        if(tempPassword.equals(encryptedPassword)){
+                    if(tempArr[0].equals(email)){
+                        if(tempArr[1].equals(encryptedPassword)){
                             login = true;
                         }
                     }
@@ -122,9 +118,7 @@ public class LoginPage{
                     primaryStage.setScene(homepage.homePage);
                 }else{
                     Business businessLoggedin = findBusiness(email);
-                    System.out.println(businessLoggedin.getName());
                     primaryStage.setUserData(businessLoggedin);
-                    System.out.println(businessLoggedin.getName());
                     HomePageBusiness homepage = new HomePageBusiness(primaryStage);
                     primaryStage.setScene(homepage.homePage);
                 }
@@ -151,13 +145,13 @@ public class LoginPage{
 
             while((line = br.readLine()) != null){
                     tempArr = line.split(",");
-                    tempUser.setName(tempArr[0]);
-                    tempUser.setEmail(tempArr[1]);
-                    tempUser.setID(Integer.parseInt(tempArr[2]));
-                    tempUser.createAppointmentList(tempArr[3]);
 
                     //check to see if email and password are correctly inputted
-                    if(userEmail.equals(tempUser.getEmail())){
+                    if(userEmail.equals(tempArr[1])){
+                        tempUser.setName(tempArr[0]);
+                        tempUser.setEmail(tempArr[1]);
+                        tempUser.setID(Integer.parseInt(tempArr[2]));
+                        tempUser.createAppointmentList();
                         isUser = true;
                         br.close();
                         return tempUser;
@@ -184,15 +178,15 @@ public class LoginPage{
 
             while((line = br.readLine()) != null){
                 tempArr = line.split(",");
-                tempBusiness.setName(tempArr[0]);
-                tempBusiness.setEmail(tempArr[1]);
-                tempBusiness.setType(tempArr[2]);
-                tempBusiness.setID(Integer.parseInt(tempArr[3]));
-                tempBusiness.createAppointmentList(tempArr[4]);
 
 
                 //check to see if email and password are correctly inputted
-                if(userEmail.equals(tempBusiness.getEmail())){
+                if(userEmail.equals(tempArr[1])){
+                    tempBusiness.setName(tempArr[0]);
+                    tempBusiness.setEmail(tempArr[1]);
+                    tempBusiness.setType(tempArr[2]);
+                    tempBusiness.setID(Integer.parseInt(tempArr[3]));
+                    tempBusiness.createAppointmentList();
                     br.close();
                     return tempBusiness;
                 }  

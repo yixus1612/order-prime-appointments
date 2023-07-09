@@ -2,6 +2,8 @@ import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.time.ZonedDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 
 import javafx.scene.image.Image;
@@ -12,7 +14,6 @@ public class User extends Account{
     private int iD;
     public ArrayList <Appointment> appointmentList = new ArrayList<Appointment>();
     //public Image profilePic;
-    //when appointment class is created, declare an appointment vector here
 
     User(){
         super(null);
@@ -59,35 +60,43 @@ public class User extends Account{
         this.profilePic = newImage; 
     }*/
 
-    public void createAppointmentList(String file){
+    public void createAppointmentList(){
         try{
-                //set up fileReader
-                FileReader fileReaderAccount = new FileReader(file);
-                BufferedReader br = new BufferedReader(fileReaderAccount);
-                String line = "";
-                String[] tempArr;
-                Appointment tempAppointment = new Appointment();
-                int counter = 0;
+            //set up fileReader
+            FileReader fileReaderAccount = new FileReader("appointmentList.csv");
+            BufferedReader br = new BufferedReader(fileReaderAccount);
+            String line = "";
+            String[] tempArr;
+            Appointment tempAppointment = new Appointment();
+            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd hh:mm:ss a z");
 
             //read account file
-                while((line = br.readLine()) != null){
-                    tempArr = line.split(",");
-                    //check to see if email and password are correctly inputted
+            while((line = br.readLine()) != null){
+                tempArr = line.split(",");
+                    
+                //check if id matches user and add it to their appointment list.
+                if(Integer.parseInt(tempArr[4]) == this.iD){
                     tempAppointment.setType(tempArr[0]);
-                    //tempAppointment.setDate(tempArr[1]);
-                    //tempAppointment.setAvailability(tempArr[2]);
+                    tempAppointment.setDate(ZonedDateTime.parse(tempArr[1]));
+                    tempAppointment.setAvailability(Boolean.parseBoolean(tempArr[2]));
                     tempAppointment.setProvider(Integer.parseInt(tempArr[3]));
                     tempAppointment.setCustomer(Integer.parseInt(tempArr[4]));
-                    tempAppointment.setCost(Integer.parseInt(tempArr[5]));
-                    appointmentList.add(counter, tempAppointment);
-                    counter++;
+                    tempAppointment.setCost(tempArr[5]);
+                    tempAppointment.setID(Integer.parseInt(tempArr[6]));
+                    appointmentList.add(tempAppointment);
                 }
 
-                br.close();
-                fileReaderAccount.close();
-
-            }catch(IOException except){
-                System.out.println(except);
             }
-    }        
+
+            br.close();
+            fileReaderAccount.close();
+
+        }catch(IOException except){
+            System.out.println(except);
+        }
+    }
+    
+    public void addAppointment(Appointment appointment){
+        appointmentList.add(appointment);
+    }
 }

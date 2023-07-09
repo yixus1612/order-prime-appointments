@@ -3,6 +3,8 @@ import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
 import java.sql.Date;
+import java.time.ZonedDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Scanner;
 
@@ -38,23 +40,6 @@ public class Business extends Account{
 
     }
 
-    public void createAppointment(Business business, Appointment newAppointment){   //takes business object as parameter to access its appointment vector. 
-                                                        //This is because the login info will determine which account this appointment is being created under
-        //this function assumes the user has already been prompted for the appointments information like date and time by the GUI, 
-        //meaning an appointment object has been created and passed as a parameter
-
-        business.appointmentList.add(newAppointment);
-
-    }
-
-    public void deleteAppointment(Date appointmentDate){
-        //this function takes a date, uses it to find an appointment at that date and time, and deletes it 
-    }
-
-    public void editAppointment(Date appointmentDate){
-        //this function takes a date and allows the business to edit the appointment at that date and time
-    }
-
     public String getName(){
         return name;
     }
@@ -79,35 +64,44 @@ public class Business extends Account{
         this.id = id;
     }
 
-    public void createAppointmentList(String file){
+    public void createAppointmentList(){
         try{
-                //set up fileReader
-                FileReader fileReaderAccount = new FileReader(file);
-                BufferedReader br = new BufferedReader(fileReaderAccount);
-                String line = "";
-                String[] tempArr;
-                Appointment tempAppointment = new Appointment();
-                int counter = 0;
+            //set up fileReader
+            FileReader fileReaderAccount = new FileReader("appointmentList.csv");
+            BufferedReader br = new BufferedReader(fileReaderAccount);
+            String line = "";
+            String[] tempArr;
+            Appointment tempAppointment = new Appointment();
+            int counter = 0;
+            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss z");
 
             //read account file
-                while((line = br.readLine()) != null){
-                    tempArr = line.split(",");
-                    //check to see if email and password are correctly inputted
+            while((line = br.readLine()) != null){
+                tempArr = line.split(",");
+
+                //check to see if email and password are correctly inputted
+                if(Integer.parseInt(tempArr[3]) == this.id){
                     tempAppointment.setType(tempArr[0]);
-                    //tempAppointment.setDate(tempArr[1]);
-                    //tempAppointment.setAvailability(tempArr[2]);
+                    tempAppointment.setDate(ZonedDateTime.parse(tempArr[1]));
+                    tempAppointment.setAvailability(Boolean.parseBoolean(tempArr[2]));
                     tempAppointment.setProvider(Integer.parseInt(tempArr[3]));
                     tempAppointment.setCustomer(Integer.parseInt(tempArr[4]));
-                    tempAppointment.setCost(Integer.parseInt(tempArr[5]));
+                    tempAppointment.setCost(tempArr[5]);
+                    tempAppointment.setID(Integer.parseInt(tempArr[6]));
                     appointmentList.add(counter, tempAppointment);
                     counter++;
                 }
-
-                br.close();
-                fileReaderAccount.close();
-
-            }catch(IOException except){
-                System.out.println(except);
             }
-    }        
+
+            br.close();
+            fileReaderAccount.close();
+
+        }catch(IOException except){
+            System.out.println(except);
+        }
+    }     
+    
+    void addAppointment(Appointment appointment){
+        appointmentList.add(appointment);
+    }
 }

@@ -1,15 +1,16 @@
 import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
-import java.util.Date;
+import java.time.ZonedDateTime;
 
 public class Appointment {
     private String appointmentType;
-    private Date appointmentDate;
+    private ZonedDateTime appointmentDate;
     private Boolean availability;
     private Business provider;
     private User customer;
-    private float cost;
+    private String cost;
+    private int id;
 
     public void sendNotification(){
         //this function will inform the user they have an upcoming appointment
@@ -18,25 +19,27 @@ public class Appointment {
     Appointment(){
             this.appointmentType = null;
             this.appointmentDate = null;
-            this.availability = null;
+            this.availability = true;
             this.provider = null;
             this.customer = null;
-            this.cost = 0;
+            this.cost = null;
+            this.id = 0;
     }
     
-    Appointment(String appointmentType, Date appointmentDate, Boolean availability, int businessID, int customerID, float cost){
+    Appointment(String appointmentType, ZonedDateTime appointmentDate, Boolean availability, int businessID, int customerID, String cost, int id){
             this.appointmentType = appointmentType;
             this.appointmentDate = appointmentDate;
             this.availability = availability;
             this.provider = findBusiness(businessID);
             this.customer = findUser(customerID);
             this.cost = cost;
+            this.id = id;
     }
     public String getType(){
             return appointmentType;
     }
 
-    public Date getDate(){
+    public ZonedDateTime getDate(){
             return appointmentDate;
     }
 
@@ -52,15 +55,19 @@ public class Appointment {
             return customer;
     }
 
-    public float getCost(){
+    public String getCost(){
             return cost;
+    }
+
+    public int getID(){
+        return id;
     }
 
     public void setType(String newType){
         this.appointmentType = newType;
     }
 
-    public void setDate(Date newDate){
+    public void setDate(ZonedDateTime newDate){
         this.appointmentDate = newDate;
     }
 
@@ -76,8 +83,12 @@ public class Appointment {
         this.customer = findUser(newCustomer);
     }
 
-    public void setCost(float newCost){
+    public void setCost(String newCost){
         this.cost = newCost;
+    }
+
+    public void setID(int id){
+        this.id = id;
     }
 
     public User findUser(int id){
