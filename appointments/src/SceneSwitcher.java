@@ -1,3 +1,5 @@
+import java.util.List;
+
 import javafx.scene.Scene;
 import javafx.stage.Stage;
 import javafx.stage.Window;
@@ -21,6 +23,8 @@ public class SceneSwitcher {
     ProfilePageBusiness ProfilePageBusiness;
     SettingsPage SettingsPage;
     SettingsPageBusiness SettingsPageBusiness;
+    AppointmentsPage AppointmentsPage;
+    EditAppointments EditAppointments;
     
     public SceneSwitcher(Stage primaryStage){
         this.primaryStage = primaryStage;
@@ -152,6 +156,22 @@ public class SceneSwitcher {
         if(w instanceof Stage){
             Stage s = (Stage) w;
             s.setScene(SettingsPageBusiness.settingsPage);
+        }
+    }
+
+    public void switchToAppointmentsPage(Window w, Stage primaryStage, List<Appointment> appointmentList){
+        AppointmentsPage = new AppointmentsPage(primaryStage, appointmentList);
+        if(w instanceof Stage){
+            Stage s = (Stage) w;
+            s.setScene(AppointmentsPage.appointmentsPage);
+        }
+    }
+
+    public void switchToEditAppointmentsPage(Window w, Stage primaryStage, Appointment appointment){
+        EditAppointments = new EditAppointments(primaryStage, appointment);
+        if(w instanceof Stage){
+            Stage s = (Stage) w;
+            s.setScene(EditAppointments.editAppointmentsPage);
         }
     }
 }

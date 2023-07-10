@@ -1,6 +1,15 @@
+import java.io.BufferedReader;
+import java.io.FileReader;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.time.ZonedDateTime;
+import java.util.ArrayList;
+import java.util.List;
 
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
+import javafx.scene.control.Button;
+import javafx.scene.control.Label;
 import javafx.scene.layout.Background;
 import javafx.scene.layout.BackgroundFill;
 import javafx.scene.layout.BorderPane;
@@ -22,15 +31,35 @@ public class AppointmentsPage {
     Text homeTabText, profileTabText, calendarTabText, placesTabText, appointmentsTabText, settingsTabText;
     Rectangle profilePicture;
     Rectangle buffer1, buffer2;
+    private User userLoggedin;
+    private SceneSwitcher switcher;
+    private List<Appointment> appointmentlist;
 
-    public AppointmentsPage(){
-    // FIXME this should display the user's profile picture
+    public AppointmentsPage(Stage primaryStage, List<Appointment> appointmentListForDay){
+
+        switcher = new SceneSwitcher(primaryStage);
+    
+        userLoggedin = (User) primaryStage.getUserData();
+
+        HBox sidebar = sideBar(primaryStage);
+
+        BorderPane layout = new BorderPane();
+        layout.setLeft(sidebar);
+
+        VBox center = mainPage(primaryStage, appointmentListForDay);
+        layout.setCenter(center);
+
+        appointmentsPage = new Scene(layout, 600, 500);
+    }
+    
+    public HBox sideBar(Stage primaryStage){
+        // FIXME this should display the user's profile picture
         profilePicture = new Rectangle(65, 65, Color.CORAL);
         StackPane pfp = new StackPane(profilePicture);
         pfp.setAlignment(Pos.CENTER);
 
         // FIXME this should display the user's name
-        Text nameText = new Text("Name");
+        Text nameText = new Text(userLoggedin.getName());
         StackPane name = new StackPane(nameText);
         name.setAlignment(Pos.CENTER);
 
@@ -93,36 +122,81 @@ public class AppointmentsPage {
         HBox sidebar = new HBox(tabStack, sidebarSeparator);
         sidebar.setBackground(new Background(new BackgroundFill(Color.web("#4681e0"), null, null)));
 
-        BorderPane layout = new BorderPane();
-        layout.setLeft(sidebar);
+        homeTabRectangle.setOnMouseClicked(e -> switcher.switchToHomePageBusiness(appointmentsPage.getWindow(), primaryStage));
+        homeTabText.setOnMouseClicked(e -> switcher.switchToHomePageBusiness(appointmentsPage.getWindow(), primaryStage));
 
-        // tab switching events. the text also needs to be set to switch to different pages since it blocks parts of the rectangles
-        // FIXME actually make the tabs switch pages
-        profileTabRectangle.setOnMouseClicked(e -> System.out.println("Profile!"));
-        profileTabText.setOnMouseClicked(e -> System.out.println("Profile Text!"));
+        profileTabRectangle.setOnMouseClicked(e -> switcher.switchToProfilePageBusiness(appointmentsPage.getWindow(), primaryStage));
+        profileTabText.setOnMouseClicked(e -> switcher.switchToProfilePageBusiness(appointmentsPage.getWindow(), primaryStage));
 
-        
+        placesTabRectangle.setOnMouseClicked(e -> switcher.switchToPlacesPageBusiness(appointmentsPage.getWindow(), primaryStage));
+        placesTabText.setOnMouseClicked(e -> switcher.switchToPlacesPageBusiness(appointmentsPage.getWindow(), primaryStage));
 
-        appointmentsPage = new Scene(layout, 600, 500);
+        settingsTabRectangle.setOnMouseClicked(e -> switcher.switchToSettingsPageBusiness(appointmentsPage.getWindow(), primaryStage));
+        settingsTabText.setOnMouseClicked(e -> switcher.switchToSettingsPageBusiness(appointmentsPage.getWindow(), primaryStage));
+
+        return sidebar;
     }
-    // this function sets up page switching between all the other pages in the sidebar
-    public void SetupPageSwitching(Stage primaryStage, HomePage Home, ProfilePage Profile, CalendarPage Calendar, PlacesPage Places, SettingsPage Settings){
 
-        homeTabRectangle.setOnMouseClicked(e -> primaryStage.setScene(Home.homePage));
-        homeTabText.setOnMouseClicked(e -> primaryStage.setScene(Home.homePage));
+    public VBox mainPage(Stage primaryStage, List<Appointment> appointmentListForDay){
+        VBox center = new VBox();
 
-        profileTabRectangle.setOnMouseClicked(e -> primaryStage.setScene(Profile.profilePage));
-        profileTabText.setOnMouseClicked(e -> primaryStage.setScene(Profile.profilePage));
+        for(Appointment appointment : appointmentListForDay){
+            Label appointmentType = new Label(appointment.getType() + " " + appointment.getDate() + " " + appointment.getProvider().getName() + " " + appointment.getCost() + "       ");
+            Button cancelButton = new Button("Cancel");
+            cancelButton.setMinWidth(97.5);
+            cancelButton.setOnAction(e-> cancelAppointment(appointment, primaryStage, appointmentListForDay));
+            HBox appointmentData = new HBox();
+            appointmentData.getChildren().addAll(appointmentType, cancelButton);
+            center.getChildren().add(appointmentData);
+        }
 
-        calendarTabRectangle.setOnMouseClicked(e -> primaryStage.setScene(Calendar.calendarPage));
-        calendarTabText.setOnMouseClicked(e -> primaryStage.setScene(Calendar.calendarPage));
-
-        placesTabRectangle.setOnMouseClicked(e -> primaryStage.setScene(Places.placesPage));
-        placesTabText.setOnMouseClicked(e -> primaryStage.setScene(Places.placesPage));
-
-        settingsTabRectangle.setOnMouseClicked(e -> primaryStage.setScene(Settings.settingsPage));
-        settingsTabText.setOnMouseClicked(e -> primaryStage.setScene((Settings.settingsPage)));
-
+        return center;
     }
+
+    public void cancelAppointment(Appointment appointment, Stage primaryStage, List<Appointment> appointmentListForDay){
+
+        List<Appointment> totalAppointmentList = new ArrayList<>();
+        try{
+            //set up FileReader
+            FileReader fileReaderAccount = new FileReader("appointmentList.csv");
+            BufferedReader br = new BufferedReader(fileReaderAccount);
+            String line = "";
+            String[] tempArr;
+            Appointment tempAppointment;
+   
+            //read in data and determine if appointment already exists
+            while((line = br.readLine()) != null){
+                tempArr = line.split(",");
+                tempAppointment = new Appointment(tempArr[0], tempArr[1], Boolean.parseBoolean(tempArr[2]), Integer.parseInt(tempArr[3]), Integer.parseInt(tempArr[4]), tempArr[5], Integer.parseInt(tempArr[6]));
+   
+                //keep note if email is found
+                if(appointment.getID() == tempAppointment.getID()){
+                    tempAppointment.getCustomer().setID(0);
+                }
+
+                totalAppointmentList.add(tempAppointment);
+
+            }
+            br.close();
+        }catch(IOException except){
+            System.out.println(except);
+        }
+
+        try{              
+            FileWriter fileWriterUser = new FileWriter("appointmentList.csv", false);
+
+            for(Appointment a : totalAppointmentList){
+                fileWriterUser.write(a.getType() + "," + a.getDate() + "," + a.getAvailability() + "," + a.getProvider().getID() + "," + a.getCustomer().getID() + "," + a.getCost() + "," + a.getID() + "\n");
+            }
+
+            fileWriterUser.close();
+
+        }catch(IOException except){
+            System.out.println(except);
+        }
+
+        switcher.switchToAppointmentsPage(appointmentsPage.getWindow(), primaryStage, appointmentListForDay);
+    }
+
 }
 

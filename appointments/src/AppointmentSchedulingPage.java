@@ -243,7 +243,6 @@ public class AppointmentSchedulingPage {
                         tempAppointment.setAvailability(false);
                         userLoggedin.addAppointment(tempAppointment);
                         primaryStage.setUserData(userLoggedin);
-                        switcher.switchToAppointmentSchedulingPage(appointmentSchedulingPage.getWindow(), primaryStage);
                     }
 
                     appointmentList.add(tempAppointment);
@@ -257,8 +256,10 @@ public class AppointmentSchedulingPage {
             try{              
                 FileWriter fileWriterUser = new FileWriter("appointmentList.csv", false);
 
-                for(Appointment a : appointmentList){
-                    fileWriterUser.write(a.getType() + "," + a.getDate() + "," + a.getAvailability() + "," + a.getProvider().getID() + "," + a.getCustomer().getID() + "," + a.getCost() + "," + a.getID() + "\n");
+                if(!alreadyExists){
+                    for(Appointment a : appointmentList){
+                        fileWriterUser.write(a.getType() + "," + a.getDate() + "," + a.getAvailability() + "," + a.getProvider().getID() + "," + a.getCustomer().getID() + "," + a.getCost() + "," + a.getID() + "\n");
+                    }
                 }
 
                 fileWriterUser.close();
@@ -266,6 +267,8 @@ public class AppointmentSchedulingPage {
             }catch(IOException except){
                 System.out.println(except);
             }
+
+            switcher.switchToAppointmentSchedulingPage(appointmentSchedulingPage.getWindow(), primaryStage);
 
         });
     }

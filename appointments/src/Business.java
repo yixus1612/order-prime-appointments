@@ -6,11 +6,12 @@ import java.sql.Date;
 import java.time.ZonedDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Scanner;
 
 public class Business extends Account{
 
-    public ArrayList <Appointment> appointmentList = new ArrayList <Appointment>();
+    public List <Appointment> appointmentList = new ArrayList <Appointment>();
     private String name;
     private String type;
     private int id;

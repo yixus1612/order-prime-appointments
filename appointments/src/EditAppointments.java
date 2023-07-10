@@ -1,12 +1,14 @@
+import java.io.BufferedReader;
+import java.io.FileReader;
+import java.io.IOException;
+
 import javafx.geometry.Pos;
-import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.layout.Background;
 import javafx.scene.layout.BackgroundFill;
 import javafx.scene.layout.BorderPane;
-import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
@@ -18,50 +20,34 @@ import javafx.stage.Stage;
 import javafx.scene.text.Font;
 import javafx.scene.text.FontWeight;
 
-public class HomePage {
-    public Scene homePage;
-    Rectangle homeTabRectangle, calendarTabRectangle, profileTabRectangle, placesTabRectangle, paymentTabRectangle, settingsTabRectangle;
-    Text homeTabText, profileTabText, calendarTabText, placesTabText, settingsTabText;
+public class EditAppointments {
+
+    public Scene editAppointmentsPage;
+    public Rectangle homeTabRectangle, calendarTabRectangle, profileTabRectangle, placesTabRectangle, appointmentsTabRectangle, settingsTabRectangle;
+    Text homeTabText, profileTabText, calendarTabText, placesTabText, appointmentsTabText, settingsTabText;
     Rectangle profilePicture;
     Rectangle buffer1, buffer2;
-    private User userLoggedin = new User();
-    private ProfilePage Profile;
-    private CalendarPage Calendar;
-    private PlacesPage Places;
-    private SettingsPage Settings;
-    private AppointmentSchedulingPage Scheduling;
-    public Button scheduleAppointment, cancelAppointment;
-    public AppointmentSchedulingPage Schedule;
-    private Label title;
+    private User userLoggedin;
     private SceneSwitcher switcher;
+    private Business businessLoggedin;
 
-    public HomePage(Stage primaryStage){
+    public EditAppointments(Stage primaryStage, Appointment appointment){
 
+        businessLoggedin = (Business) primaryStage.getUserData();
+
+        switcher = new SceneSwitcher(primaryStage);
+    
         userLoggedin = (User) primaryStage.getUserData();
-        switcher =  new SceneSwitcher(primaryStage);
-
-        title = new Label("Welcome " + userLoggedin.getName() + "! What would you like to do?");
 
         HBox sidebar = sideBar(primaryStage);
+
         BorderPane layout = new BorderPane();
         layout.setLeft(sidebar);
 
-        VBox center = new VBox();
-        HBox buttons = new HBox();
-        scheduleAppointment = new Button("Create");
-        scheduleAppointment.setOnAction(e->switcher.switchToAppointmentSchedulingPage(homePage.getWindow(), primaryStage));
-        cancelAppointment = new Button("Cancel");
-        cancelAppointment.setOnAction(e->switcher.switchToAppointmentsPage(homePage.getWindow(), primaryStage, userLoggedin.appointmentList));
-
-        buttons.getChildren().addAll(scheduleAppointment, cancelAppointment);
-        center.getChildren().addAll(title, buttons);
-        layout.setCenter(center);
-
-        homePage = new Scene(layout, 600, 500);
+        editAppointmentsPage = new Scene(layout, 600, 500);
     }
-
+    
     public HBox sideBar(Stage primaryStage){
-        
         // FIXME this should display the user's profile picture
         profilePicture = new Rectangle(65, 65, Color.CORAL);
         StackPane pfp = new StackPane(profilePicture);
@@ -73,8 +59,9 @@ public class HomePage {
         name.setAlignment(Pos.CENTER);
 
         homeTabText = new Text("  Home");
+        homeTabText.setFill(Color.WHITE);
         homeTabText.setFont(Font.font ("Arial", FontWeight.BOLD, 12));
-        homeTabRectangle = new Rectangle(110,25, Color.web("#f2efd0"));
+        homeTabRectangle = new Rectangle(110,25, Color.web("#3064b8"));
         StackPane homeTab = new StackPane();
         homeTab.getChildren().addAll(homeTabRectangle, homeTabText);
         homeTab.setAlignment(Pos.CENTER_LEFT);
@@ -103,6 +90,13 @@ public class HomePage {
         placesTab.getChildren().addAll(placesTabRectangle, placesTabText);
         placesTab.setAlignment(Pos.CENTER_LEFT);
 
+        appointmentsTabText = new Text("  Appointments");
+        appointmentsTabText.setFont(Font.font ("Arial", FontWeight.BOLD, 12));
+        appointmentsTabRectangle = new Rectangle(110,25, Color.web("#f2efd0"));
+        StackPane appointmentsTab = new StackPane();
+        appointmentsTab.getChildren().addAll(appointmentsTabRectangle, appointmentsTabText);
+        appointmentsTab.setAlignment(Pos.CENTER_LEFT);
+
         settingsTabText = new Text("  Settings");
         settingsTabText.setFill(Color.WHITE);
         settingsTabText.setFont(Font.font ("Arial", FontWeight.BOLD, 12));
@@ -118,25 +112,30 @@ public class HomePage {
         buffer2 = new Rectangle(5,5, Color.web("#4681e0"));
 
         VBox tabStack = new VBox();
-        tabStack.getChildren().addAll(buffer1, pfp, name, buffer2, homeTab, profileTab, calendarTab, placesTab, settingsTab);
+        tabStack.getChildren().addAll(buffer1, pfp, name, buffer2, homeTab, profileTab, calendarTab, placesTab, appointmentsTab, settingsTab);
         
         HBox sidebar = new HBox(tabStack, sidebarSeparator);
         sidebar.setBackground(new Background(new BackgroundFill(Color.web("#4681e0"), null, null)));
 
-        profileTabRectangle.setOnMouseClicked(e -> switcher.switchToProfilePage(homePage.getWindow(), primaryStage));
-        profileTabText.setOnMouseClicked(e -> switcher.switchToProfilePage(homePage.getWindow(), primaryStage));
+        homeTabRectangle.setOnMouseClicked(e -> switcher.switchToHomePageBusiness(editAppointmentsPage.getWindow(), primaryStage));
+        homeTabText.setOnMouseClicked(e -> switcher.switchToHomePageBusiness(editAppointmentsPage.getWindow(), primaryStage));
 
-        calendarTabRectangle.setOnMouseClicked(e -> switcher.switchToCalendarPage(homePage.getWindow(), primaryStage));
-        calendarTabText.setOnMouseClicked(e -> switcher.switchToCalendarPage(homePage.getWindow(), primaryStage));
+        profileTabRectangle.setOnMouseClicked(e -> switcher.switchToProfilePageBusiness(editAppointmentsPage.getWindow(), primaryStage));
+        profileTabText.setOnMouseClicked(e -> switcher.switchToProfilePageBusiness(editAppointmentsPage.getWindow(), primaryStage));
 
-        placesTabRectangle.setOnMouseClicked(e -> switcher.switchToPlacesPage(homePage.getWindow(), primaryStage));
-        placesTabText.setOnMouseClicked(e -> switcher.switchToPlacesPage(homePage.getWindow(), primaryStage));
-        
-        settingsTabRectangle.setOnMouseClicked(e -> switcher.switchToSettingsPage(homePage.getWindow(), primaryStage));
-        settingsTabText.setOnMouseClicked(e -> switcher.switchToSettingsPage(homePage.getWindow(), primaryStage));
+        placesTabRectangle.setOnMouseClicked(e -> switcher.switchToPlacesPageBusiness(editAppointmentsPage.getWindow(), primaryStage));
+        placesTabText.setOnMouseClicked(e -> switcher.switchToPlacesPageBusiness(editAppointmentsPage.getWindow(), primaryStage));
+
+        settingsTabRectangle.setOnMouseClicked(e -> switcher.switchToSettingsPageBusiness(editAppointmentsPage.getWindow(), primaryStage));
+        settingsTabText.setOnMouseClicked(e -> switcher.switchToSettingsPageBusiness(editAppointmentsPage.getWindow(), primaryStage));
 
         return sidebar;
-        
     }
-    
+
+    public VBox mainPage(Stage primaryStage, Appointment appointment){
+        VBox center = new VBox();
+        return center;
+
+    }
+
 }

@@ -257,7 +257,6 @@ public class AppointmentCreationPage {
                     Business businessLoggedIn = (Business) primaryStage.getUserData();
                     businessLoggedin.addAppointment(createdAppointment);
                     primaryStage.setUserData(businessLoggedIn);
-                    //switcher.switchToAppointmentCreationPage(appointmentCreationPage.getWindow(), primaryStage);
                 }
 
                 fileWriterUser.close();
@@ -265,6 +264,8 @@ public class AppointmentCreationPage {
             }catch(IOException except){
                 System.out.println(except);
             }
+
+            switcher.switchToAppointmentCreationPage(appointmentCreationPage.getWindow(), primaryStage);
         });
     }
 

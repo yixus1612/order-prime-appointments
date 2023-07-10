@@ -5,6 +5,7 @@ import java.io.IOException;
 import java.time.ZonedDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
+import java.util.List;
 
 import javafx.scene.image.Image;
 
@@ -12,7 +13,7 @@ public class User extends Account{
     
     private String name;
     private int iD;
-    public ArrayList <Appointment> appointmentList = new ArrayList<Appointment>();
+    public List <Appointment> appointmentList = new ArrayList<Appointment>();
     //public Image profilePic;
 
     User(){
