@@ -22,6 +22,7 @@ public class CreateAccountPage {
    public Button signUpButton, backButton;
    public TextField firstNameField, newEmailField, lastNameField;
    public PasswordField newPasswordField, confirmPasswordField;
+   private SceneSwitcher switcher;
 
    /*
       email must:
@@ -40,7 +41,9 @@ public class CreateAccountPage {
     */
    private static final String PASSWORD_PATTERN = "^(?=.*[0-9])(?=.*[a-z])(?=.*[A-Z])(?=.*[!@#&()-[{}]:;',?/*~$^+=<>]).{6,15}$";
 
-   public CreateAccountPage(){
+   public CreateAccountPage(Stage primaryStage){
+
+      switcher = new SceneSwitcher(primaryStage);
 
       //Set up labels
       Label title = new Label("Create User Account");
@@ -82,6 +85,8 @@ public class CreateAccountPage {
       backButton.setPrefWidth(97.5);
       backButton.minWidth(97.5);
 
+      backButton.setOnAction(e-> switcher.switchToChooseAccountPage(createAccountPage.getWindow(), primaryStage));
+
       //set up layout
       hButtonsCreateAcc.getChildren().addAll(backButton, signUpButton);
       hButtonsCreateAcc.setAlignment(Pos.CENTER);
@@ -102,10 +107,6 @@ public class CreateAccountPage {
          validateAccountCreation(accountCreation);
       });
 
-   }
-
-   public void switchToChooseAccount(Stage primaryStage, ChooseAccountType accountType){
-      backButton.setOnAction(e-> primaryStage.setScene(accountType.chooseAccountType));
    }
 
    public void validateAccountCreation(Label note){

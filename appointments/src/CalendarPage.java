@@ -16,9 +16,17 @@ import javafx.stage.Stage;
 import javafx.scene.text.Font;
 import javafx.scene.text.FontWeight;
 import javafx.scene.control.Button;
+
+import java.io.BufferedReader;
+import java.io.FileReader;
+import java.io.IOException;
 import java.time.DayOfWeek;
 import java.time.ZonedDateTime;
-
+import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 import java.time.ZoneId;
 import javafx.geometry.Insets;
 
@@ -40,22 +48,27 @@ public class CalendarPage {
     private Text month = new Text();
     private Button leftButton, rightButton;
     private User userLoggedin = new User();
+    private DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd hh:mm:ss a z");
+    private SceneSwitcher switcher;
 
 
-    public CalendarPage(Stage primaryStage, AppointmentSchedulingPage Scheduling){
+    public CalendarPage(Stage primaryStage){
 
+        userLoggedin = (User) primaryStage.getUserData();
+
+        switcher = new SceneSwitcher(primaryStage);
 
         HBox sidebar = sideBar(primaryStage);
         layout.setLeft(sidebar);
 
-        HBox yearBar = yearBox(primaryStage, Scheduling);
+        HBox yearBar = yearBox(primaryStage);
 
         HBox weekBar = weekBox();
         
         HBox calendarBox = new HBox();
         calendar.setBackground(new Background(new BackgroundFill(Color.WHITE, null, null)));
         calendar.setPrefWidth(calendarWidth);
-        drawCalendar(primaryStage, Scheduling);
+        drawCalendar(primaryStage);
         calendarBox.getChildren().addAll(calendar);
 
         background.getChildren().addAll(yearBar, weekBar, calendar);
@@ -69,26 +82,8 @@ public class CalendarPage {
 
         calendarPage = new Scene(layout, 600, 500);
     }
-    
-    // this function sets up page switching between all the other pages in the sidebar
-    public void SetupPageSwitching(Stage primaryStage, HomePage Home, ProfilePage Profile, PlacesPage Places, SettingsPage Settings){
-
-        homeTabRectangle.setOnMouseClicked(e -> primaryStage.setScene(Home.homePage));
-        homeTabText.setOnMouseClicked(e -> primaryStage.setScene(Home.homePage));
-
-        profileTabRectangle.setOnMouseClicked(e -> primaryStage.setScene(Profile.profilePage));
-        profileTabText.setOnMouseClicked(e -> primaryStage.setScene(Profile.profilePage));
-
-        placesTabRectangle.setOnMouseClicked(e -> primaryStage.setScene(Places.placesPage));
-        placesTabText.setOnMouseClicked(e -> primaryStage.setScene(Places.placesPage));
-
-        settingsTabRectangle.setOnMouseClicked(e -> primaryStage.setScene(Settings.settingsPage));
-        settingsTabText.setOnMouseClicked(e -> primaryStage.setScene((Settings.settingsPage)));
-
-    }
 
     public HBox sideBar(Stage primaryStage){
-        userLoggedin = (User) primaryStage.getUserData();
         // FIXME this should display the user's profile picture
         profilePicture = new Rectangle(65, 65, Color.CORAL);
         StackPane pfp = new StackPane(profilePicture);
@@ -150,25 +145,36 @@ public class CalendarPage {
         HBox sidebar = new HBox(tabStack, sidebarSeparator);
         sidebar.setBackground(new Background(new BackgroundFill(Color.web("#4681e0"), null, null)));
 
+        homeTabRectangle.setOnMouseClicked(e -> switcher.switchToHomePage(calendarPage.getWindow(), primaryStage));
+        homeTabText.setOnMouseClicked(e -> switcher.switchToHomePage(calendarPage.getWindow(), primaryStage));
+
+        profileTabRectangle.setOnMouseClicked(e -> switcher.switchToProfilePage(calendarPage.getWindow(), primaryStage));
+        profileTabText.setOnMouseClicked(e -> switcher.switchToProfilePage(calendarPage.getWindow(), primaryStage));
+
+        placesTabRectangle.setOnMouseClicked(e -> switcher.switchToPlacesPage(calendarPage.getWindow(), primaryStage));
+        placesTabText.setOnMouseClicked(e -> switcher.switchToPlacesPage(calendarPage.getWindow(), primaryStage));
+
+        settingsTabRectangle.setOnMouseClicked(e -> switcher.switchToSettingsPage(calendarPage.getWindow(), primaryStage));
+        settingsTabText.setOnMouseClicked(e -> switcher.switchToSettingsPage(calendarPage.getWindow(), primaryStage));
 
         return sidebar;
 
     }
 
-    public HBox yearBox(Stage primaryStage, AppointmentSchedulingPage scheduling){
+    public HBox yearBox(Stage primaryStage){
         year.setText(String.valueOf(userDate.getYear()));
         month.setText(String.valueOf(userDate.getMonth()));
         leftButton = new Button("<");
         leftButton.setOnAction(e->{
             userDate = userDate.minusMonths(1);
             calendar.getChildren().clear();
-            drawCalendar(primaryStage, scheduling);
+            drawCalendar(primaryStage);
         });
         rightButton = new Button(">");
         rightButton.setOnAction(e->{
             userDate = userDate.plusMonths(1);
             calendar.getChildren().clear();
-            drawCalendar(primaryStage, scheduling);
+            drawCalendar(primaryStage);
         });
         HBox yearBar = new HBox();
         yearBar.getChildren().addAll(leftButton, month, year, rightButton);
@@ -192,7 +198,7 @@ public class CalendarPage {
         return weekBar;
     }
 
-    public void drawCalendar(Stage primaryStage, AppointmentSchedulingPage scheduling){
+    public void drawCalendar(Stage primaryStage){
         year.setText(String.valueOf(userDate.getYear()));
         month.setText(String.valueOf(userDate.getMonth()));
 
@@ -201,6 +207,8 @@ public class CalendarPage {
         calendar.setHgap(5);
         double rectangleWidth = (calendarWidth - 5)/8;
         double rectangeHeight = (calendarHeight - 5)/6;
+
+        Map<Integer, List<Appointment>> appointmentMap = getAppointments(userDate);
 
         int monthMaxDate = userDate.getMonth().maxLength();
 
@@ -220,7 +228,7 @@ public class CalendarPage {
                 calendarRectangles.setStroke(Color.BLACK);
                 calendarRectangles.setWidth(rectangleWidth);
                 calendarRectangles.setHeight(rectangeHeight);
-                calendarRectangles.setOnMouseClicked(e->primaryStage.setScene(scheduling.appointmentSchedulingPage));
+                calendarRectangles.setOnMouseClicked(e->switcher.switchToAppointmentSchedulingPage(calendarPage.getWindow(), primaryStage));;
                 stackPane.getChildren().add(calendarRectangles);
 
                 //put numbers on calendar
@@ -231,19 +239,97 @@ public class CalendarPage {
                         Text date = new Text(String.valueOf(currentDate));
                         date.setTranslateY(-(rectangeHeight/2)* .75);
                         stackPane.getChildren().add(date);
+
+                        List<Appointment> appointmentList = appointmentMap.get(currentDate);
+                        if(appointmentList != null){
+                            createAppointment(appointmentList, rectangeHeight, rectangleWidth, stackPane);
+                        }
+                    }
+                    if(today.getYear() == userDate.getYear() && today.getMonth() == userDate.getMonth() && today.getDayOfMonth() == currentDate){
+                        calendarRectangles.setStroke(Color.RED);
                     }
                 }
-
-                if(today.getYear() == userDate.getYear() && today.getMonth() == userDate.getMonth() && today.getDayOfMonth() == currentDate){
-                    calendarRectangles.setStroke(Color.RED);
-                }
-
-
-                calendar.getChildren().add(stackPane);
+            calendar.getChildren().add(stackPane);
             }
         }
+          
+    }
+
+    public void createAppointment(List<Appointment> appointments, double height, double width, StackPane stack){
+        VBox appointmentBox = new VBox();
+        for(int i = 0; i < appointments.size(); i++){
+            if(i >= 2){
+                Text moreActivities = new Text("...");
+                appointmentBox.getChildren().add(moreActivities);
+                moreActivities.setOnMouseClicked(e-> {
+                    System.out.println(appointments);
+                });
+                break;
+            }
+            Text text = new Text(appointments.get(i).getType());
+            appointmentBox.getChildren().add(text);
+            text.setOnMouseClicked(e->{
+                System.out.println(text.getText());
+            });
+        }
+        appointmentBox.setTranslateY((height/2) * .2);
+        appointmentBox.setMaxHeight(height * .1);
+        appointmentBox.setMaxWidth(width * .8);
+        appointmentBox.setStyle("-fx-background-color:GRAY");
+        stack.getChildren().add(appointmentBox);
+
+    }
+
+    public Map<Integer, List<Appointment>> createCalendarMap(List<Appointment> appointments){
+        Map<Integer, List<Appointment>> appointmentMap = new HashMap<>();
+
+        for(Appointment appointment: appointments){
+            int appointmentDate = appointment.stringToDate().getDayOfMonth();
+            if(!appointmentMap.containsKey(appointmentDate)){
+                appointmentMap.put(appointmentDate, List.of(appointment));
+            }else{
+                List<Appointment> OldListByDate = appointmentMap.get(appointmentDate);
+                List<Appointment> newList = new ArrayList<>(OldListByDate);
+                newList.add(appointment);
+                appointmentMap.put(appointmentDate, newList);
+            }
+        }
+        return appointmentMap;
+    }
+
+    private Map<Integer, List<Appointment>> getAppointments(ZonedDateTime date){
+        List<Appointment> appointments = new ArrayList<>();
+        int year = date.getYear();
+        int month = date.getMonth().getValue();
+
+        try{
+               
+            //set up FileReader
+            FileReader fileReaderAccount = new FileReader("appointmentList.csv");
+            BufferedReader br = new BufferedReader(fileReaderAccount);
+            String line = "";
+            String[] tempArr;
+            int tempCustomer;
+            ZonedDateTime tempDate;
        
-        
+            //read in data and determine if appointment already exists
+            while((line = br.readLine()) != null){
+                tempArr = line.split(",");
+                System.out.println(tempArr[1]);
+                tempDate = ZonedDateTime.parse(tempArr[1], formatter);
+                tempCustomer = Integer.parseInt(tempArr[4]);
+       
+                //keep note if email is found
+                if(tempCustomer == userLoggedin.getID() && tempDate.getYear() == year && tempDate.getMonth().getValue() == month){
+                    appointments.add(new Appointment(tempArr[0], tempArr[1], Boolean.parseBoolean(tempArr[2]), Integer.parseInt(tempArr[3]), Integer.parseInt(tempArr[4]), tempArr[5], Integer.parseInt(tempArr[6])));
+                }
+            }
+            br.close();
+        }catch(IOException except){
+            System.out.println(except);
+        }
+
+        return createCalendarMap(appointments);
     }
 
 }

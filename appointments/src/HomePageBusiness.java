@@ -31,17 +31,14 @@ public class HomePageBusiness {
     private AppointmentCreationPage Creation;
     private Button createButton, editButton;
     private Label title;
+    private SceneSwitcher switcher;
 
     public HomePageBusiness(Stage primaryStage){
 
+        switcher = new SceneSwitcher(primaryStage);
+
         businessLoggedin = (Business) primaryStage.getUserData();
         title = new Label("Welcome "+ businessLoggedin.getName() + "! What would you like to do?");
-
-        Profile = new ProfilePageBusiness(primaryStage);
-        Creation = new AppointmentCreationPage(primaryStage);
-        Calendar = new CalendarPageBusiness(primaryStage, Creation);
-        Places = new PlacesPageBusiness(primaryStage);
-        Settings = new SettingsPageBusiness(primaryStage);
       
         HBox sidebar = sideBar(primaryStage);
         BorderPane layout = new BorderPane();
@@ -123,33 +120,20 @@ public class HomePageBusiness {
         HBox sidebar = new HBox(tabStack, sidebarSeparator);
         sidebar.setBackground(new Background(new BackgroundFill(Color.web("#4681e0"), null, null)));
 
-        Profile.SetupPageSwitching(primaryStage, this, Calendar, Places, Settings);
-        Calendar.SetupPageSwitching(primaryStage, this, Profile, Places, Settings);
-        Places.SetupPageSwitching(primaryStage, this, Profile, Calendar, Settings);
-        Settings.SetupPageSwitching(primaryStage, this, Profile, Calendar, Places);
-        SetupPageSwitching(primaryStage, Profile, Calendar, Places, Settings);
-        Creation.SetupPageSwitching(primaryStage, this, Profile, Places, Settings);
+        profileTabRectangle.setOnMouseClicked(e -> switcher.switchToProfilePageBusiness(homePage.getWindow(), primaryStage));
+        profileTabText.setOnMouseClicked(e -> switcher.switchToProfilePageBusiness(homePage.getWindow(), primaryStage));
+
+        calendarTabRectangle.setOnMouseClicked(e -> switcher.switchToCalendarPageBusiness(homePage.getWindow(), primaryStage));
+        calendarTabText.setOnMouseClicked(e -> switcher.switchToCalendarPageBusiness(homePage.getWindow(), primaryStage));
+
+        placesTabRectangle.setOnMouseClicked(e -> switcher.switchToPlacesPageBusiness(homePage.getWindow(), primaryStage));
+        placesTabText.setOnMouseClicked(e -> switcher.switchToPlacesPageBusiness(homePage.getWindow(), primaryStage));
+        
+        settingsTabRectangle.setOnMouseClicked(e -> switcher.switchToSettingsPageBusiness(homePage.getWindow(), primaryStage));
+        settingsTabText.setOnMouseClicked(e -> switcher.switchToSettingsPageBusiness(homePage.getWindow(), primaryStage));
 
         return sidebar;
         
-    }
-
-    //Text homeTabText, profileTabText, calendarTabText, placesTabText, paymentTabText, settingsTabText;
-    // this function sets up page switching between all the other pages in the sidebar
-    public void SetupPageSwitching(Stage primaryStage, ProfilePageBusiness Profile, CalendarPageBusiness Calendar, PlacesPageBusiness Places, SettingsPageBusiness Settings){
-
-        profileTabRectangle.setOnMouseClicked(e ->primaryStage.setScene(Profile.profilePage));
-        profileTabText.setOnMouseClicked(e -> primaryStage.setScene(Profile.profilePage));
-
-        calendarTabRectangle.setOnMouseClicked(e -> primaryStage.setScene(Calendar.calendarPage));
-        calendarTabText.setOnMouseClicked(e -> primaryStage.setScene(Calendar.calendarPage));
-
-        placesTabRectangle.setOnMouseClicked(e -> primaryStage.setScene(Places.placesPage));
-        placesTabText.setOnMouseClicked(e -> primaryStage.setScene(Places.placesPage));
-        
-        settingsTabRectangle.setOnMouseClicked(e -> primaryStage.setScene(Settings.settingsPage));
-        settingsTabText.setOnMouseClicked(e -> primaryStage.setScene((Settings.settingsPage)));
-
     }
     
 }

@@ -24,8 +24,11 @@ public class LoginPage{
     public PasswordField passwordField;
     public Label note, title;
     private boolean isUser = false;
+    private SceneSwitcher switcher;
 
     public LoginPage(Stage primaryStage){
+
+        switcher = new SceneSwitcher(primaryStage);
 
         title = new Label("Login");
         title.setTextFill(Color.WHITE);
@@ -50,6 +53,8 @@ public class LoginPage{
         hButtonsLogin.setPrefWidth(200);
         loginButton.setMinWidth(97.5);
         createAccButton.setMinWidth(97.5);
+
+        createAccButton.setOnAction(e->switcher.switchToChooseAccountPage(loginPage.getWindow(), primaryStage));
 
         // placing buttons in an HBox and spacing them by 5 pixels
         hButtonsLogin.getChildren().addAll(createAccButton, loginButton);
@@ -114,13 +119,11 @@ public class LoginPage{
                 User userLoggedin = findUser(email);
                 if(isUser){
                     primaryStage.setUserData(userLoggedin);
-                    HomePage homepage = new HomePage(primaryStage);
-                    primaryStage.setScene(homepage.homePage);
+                    switcher.switchToHomePage(loginPage.getWindow(), primaryStage);
                 }else{
                     Business businessLoggedin = findBusiness(email);
                     primaryStage.setUserData(businessLoggedin);
-                    HomePageBusiness homepage = new HomePageBusiness(primaryStage);
-                    primaryStage.setScene(homepage.homePage);
+                    switcher.switchToHomePageBusiness(loginPage.getWindow(), primaryStage);
                 }
 
             //if not, make them try again and update label

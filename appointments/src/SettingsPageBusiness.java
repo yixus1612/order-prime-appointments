@@ -22,31 +22,17 @@ public class SettingsPageBusiness {
     Rectangle profilePicture;
     Rectangle buffer1, buffer2;
     private Business businessLoggedin = new Business();
+    private SceneSwitcher switcher;
 
     public SettingsPageBusiness(Stage primaryStage){
+
+        switcher = new SceneSwitcher(primaryStage);
 
         BorderPane layout = new BorderPane();
         HBox sidebar = sideBar(primaryStage);
         layout.setLeft(sidebar);
 
         settingsPage = new Scene(layout, 600, 500);
-    }
-
-    // this function sets up page switching between all the other pages in the sidebar
-    public void SetupPageSwitching(Stage primaryStage, HomePageBusiness Home, ProfilePageBusiness Profile, CalendarPageBusiness Calendar, PlacesPageBusiness Places){
-
-        homeTabRectangle.setOnMouseClicked(e -> primaryStage.setScene(Home.homePage));
-        homeTabText.setOnMouseClicked(e -> primaryStage.setScene(Home.homePage));
-
-        profileTabRectangle.setOnMouseClicked(e -> primaryStage.setScene(Profile.profilePage));
-        profileTabText.setOnMouseClicked(e -> primaryStage.setScene(Profile.profilePage));
-
-        calendarTabRectangle.setOnMouseClicked(e -> primaryStage.setScene(Calendar.calendarPage));
-        calendarTabText.setOnMouseClicked(e -> primaryStage.setScene(Calendar.calendarPage));
-
-        placesTabRectangle.setOnMouseClicked(e -> primaryStage.setScene(Places.placesPage));
-        placesTabText.setOnMouseClicked(e -> primaryStage.setScene(Places.placesPage));
-        
     }
 
     public HBox sideBar(Stage primaryStage){
@@ -113,6 +99,18 @@ public class SettingsPageBusiness {
         
         HBox sidebar = new HBox(tabStack, sidebarSeparator);
         sidebar.setBackground(new Background(new BackgroundFill(Color.web("#4681e0"), null, null)));
+
+        homeTabRectangle.setOnMouseClicked(e -> switcher.switchToHomePageBusiness(settingsPage.getWindow(), primaryStage));
+        homeTabText.setOnMouseClicked(e -> switcher.switchToHomePageBusiness(settingsPage.getWindow(), primaryStage));
+
+        profileTabRectangle.setOnMouseClicked(e -> switcher.switchToProfilePageBusiness(settingsPage.getWindow(), primaryStage));
+        profileTabText.setOnMouseClicked(e -> switcher.switchToProfilePageBusiness(settingsPage.getWindow(), primaryStage));
+
+        calendarTabRectangle.setOnMouseClicked(e -> switcher.switchToCalendarPageBusiness(settingsPage.getWindow(), primaryStage));
+        calendarTabText.setOnMouseClicked(e -> switcher.switchToCalendarPageBusiness(settingsPage.getWindow(), primaryStage));
+
+        placesTabRectangle.setOnMouseClicked(e -> switcher.switchToPlacesPageBusiness(settingsPage.getWindow(), primaryStage));
+        placesTabText.setOnMouseClicked(e -> switcher.switchToPlacesPageBusiness(settingsPage.getWindow(), primaryStage));
 
 
         return sidebar;

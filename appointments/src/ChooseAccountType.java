@@ -17,8 +17,11 @@ public class ChooseAccountType {
     public Scene chooseAccountType;
 
     public Button businessButton, userButton, backButton;
+    private SceneSwitcher switcher;
 
-    public ChooseAccountType(){
+    public ChooseAccountType(Stage primaryStage){
+
+        switcher = new SceneSwitcher(primaryStage);
         Label title = new Label("Choose Account Type");
         title.setTextFill(Color.WHITE);
         title.setFont(Font.font ("Arial", FontWeight.BOLD, 12));
@@ -29,6 +32,10 @@ public class ChooseAccountType {
         businessButton = new Button("Business");
         userButton = new Button("User");
         backButton = new Button("Back");
+
+        backButton.setOnAction(e-> switcher.switchToLoginPage(chooseAccountType.getWindow(), primaryStage));
+        userButton.setOnAction(e-> switcher.switchToAccountCreationPage(chooseAccountType.getWindow(), primaryStage));
+        businessButton.setOnAction(e-> switcher.switchToBusinessAccountCreation(chooseAccountType.getWindow(), primaryStage));
 
         hButtonsCreateAcc.getChildren().addAll(businessButton, userButton, backButton);
         hButtonsCreateAcc.setAlignment(Pos.CENTER);
@@ -43,15 +50,4 @@ public class ChooseAccountType {
         chooseAccountType = new Scene(createAccColumn, 600, 500);
     }
 
-    public void switchToLogin(Stage primaryStage, LoginPage login){
-        backButton.setOnAction(e->primaryStage.setScene(login.loginPage));
-    }
-
-    public void switchToUserAccount(Stage primaryStage, CreateAccountPage createAccount){
-        userButton.setOnAction(e-> primaryStage.setScene(createAccount.createAccountPage));
-    }
-
-    public void switchToBusinessAccount(Stage primaryStage, CreateAccountBusiness createAccount){
-        businessButton.setOnAction(e-> primaryStage.setScene(createAccount.createAccountPage));
-    }
 }

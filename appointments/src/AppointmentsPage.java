@@ -101,6 +101,8 @@ public class AppointmentsPage {
         profileTabRectangle.setOnMouseClicked(e -> System.out.println("Profile!"));
         profileTabText.setOnMouseClicked(e -> System.out.println("Profile Text!"));
 
+        
+
         appointmentsPage = new Scene(layout, 600, 500);
     }
     // this function sets up page switching between all the other pages in the sidebar

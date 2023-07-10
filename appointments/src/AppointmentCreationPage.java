@@ -48,8 +48,11 @@ public class AppointmentCreationPage {
     TextField appointmentName = new TextField();
 
     private BorderPane layout = new BorderPane();
+    private SceneSwitcher switcher;
 
     public AppointmentCreationPage(Stage primaryStage){
+
+        switcher = new SceneSwitcher(primaryStage);
         
         businessLoggedin = (Business) primaryStage.getUserData();
 
@@ -65,22 +68,6 @@ public class AppointmentCreationPage {
         
 
         appointmentCreationPage = new Scene(layout, 600, 500);
-    }
-
-    public void SetupPageSwitching(Stage primaryStage, HomePageBusiness Home, ProfilePageBusiness Profile, PlacesPageBusiness Places, SettingsPageBusiness Settings){
-
-        homeTabRectangle.setOnMouseClicked(e -> primaryStage.setScene(Home.homePage));
-        homeTabText.setOnMouseClicked(e -> primaryStage.setScene(Home.homePage));
-
-        profileTabRectangle.setOnMouseClicked(e -> primaryStage.setScene(Profile.profilePage));
-        profileTabText.setOnMouseClicked(e -> primaryStage.setScene(Profile.profilePage));
-
-        placesTabRectangle.setOnMouseClicked(e -> primaryStage.setScene(Places.placesPage));
-        placesTabText.setOnMouseClicked(e -> primaryStage.setScene(Places.placesPage));
-        
-        settingsTabRectangle.setOnMouseClicked(e -> primaryStage.setScene(Settings.settingsPage));
-        settingsTabText.setOnMouseClicked(e -> primaryStage.setScene((Settings.settingsPage)));
-
     }
 
     public HBox sideBar(Stage primaryStage){
@@ -146,6 +133,18 @@ public class AppointmentCreationPage {
         HBox sidebar = new HBox(tabStack, sidebarSeparator);
         sidebar.setBackground(new Background(new BackgroundFill(Color.web("#4681e0"), null, null)));
 
+        homeTabRectangle.setOnMouseClicked(e -> switcher.switchToHomePageBusiness(appointmentCreationPage.getWindow(), primaryStage));
+        homeTabText.setOnMouseClicked(e -> switcher.switchToHomePageBusiness(appointmentCreationPage.getWindow(), primaryStage));
+
+        profileTabRectangle.setOnMouseClicked(e -> switcher.switchToProfilePageBusiness(appointmentCreationPage.getWindow(), primaryStage));
+        profileTabText.setOnMouseClicked(e -> switcher.switchToProfilePageBusiness(appointmentCreationPage.getWindow(), primaryStage));
+
+        placesTabRectangle.setOnMouseClicked(e -> switcher.switchToPlacesPageBusiness(appointmentCreationPage.getWindow(), primaryStage));
+        placesTabText.setOnMouseClicked(e -> switcher.switchToPlacesPageBusiness(appointmentCreationPage.getWindow(), primaryStage));
+
+        settingsTabRectangle.setOnMouseClicked(e -> switcher.switchToSettingsPageBusiness(appointmentCreationPage.getWindow(), primaryStage));
+        settingsTabText.setOnMouseClicked(e -> switcher.switchToSettingsPageBusiness(appointmentCreationPage.getWindow(), primaryStage));
+
         return sidebar;
 
     }
@@ -188,6 +187,7 @@ public class AppointmentCreationPage {
         createButton.setMinWidth(97.5);
         setUp.getChildren().addAll(backButton, createButton);
         setUp.setAlignment(Pos.CENTER);
+        backButton.setOnAction(e->switcher.switchToCalendarPage(appointmentCreationPage.getWindow(), primaryStage));
 
         appointmentColumn.getChildren().addAll(title, appointmentName, dateBox, cost, setUp);
         appointmentColumn.setSpacing(5);
@@ -230,7 +230,7 @@ public class AppointmentCreationPage {
                         tempArr = line.split(",");
                         System.out.println(tempArr[1]);
                         tempDate = ZonedDateTime.parse(tempArr[1], formatter);
-                        tempProvider = Integer.parseInt(tempArr[6]);
+                        tempProvider = Integer.parseInt(tempArr[3]);
        
                         //keep note if email is found
                         if(tempProvider == createdAppointment.getProvider().getID() && tempDate.isEqual(createdAppointment.stringToDate())){
@@ -257,6 +257,7 @@ public class AppointmentCreationPage {
                     Business businessLoggedIn = (Business) primaryStage.getUserData();
                     businessLoggedin.addAppointment(createdAppointment);
                     primaryStage.setUserData(businessLoggedIn);
+                    //switcher.switchToAppointmentCreationPage(appointmentCreationPage.getWindow(), primaryStage);
                 }
 
                 fileWriterUser.close();

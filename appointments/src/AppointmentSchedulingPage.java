@@ -38,6 +38,7 @@ public class AppointmentSchedulingPage {
     public GridPane center;
     private DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd hh:mm:ss a z");
     private User userLoggedin;
+    private SceneSwitcher switcher;
 
     private BorderPane layout = new BorderPane();
     TextField businessName = new TextField();
@@ -46,6 +47,8 @@ public class AppointmentSchedulingPage {
     List <Label> appointments = new ArrayList<Label>();
 
     public AppointmentSchedulingPage(Stage primaryStage){
+
+        switcher = new SceneSwitcher(primaryStage);
 
         userLoggedin = (User) primaryStage.getUserData();
 
@@ -60,22 +63,6 @@ public class AppointmentSchedulingPage {
         layout.setCenter(center);
 
         appointmentSchedulingPage = new Scene(layout, 600, 500);
-    }
-
-    public void SetupPageSwitching(Stage primaryStage, HomePage Home, ProfilePage Profile, PlacesPage Places, SettingsPage Settings){
-
-        homeTabRectangle.setOnMouseClicked(e -> primaryStage.setScene(Home.homePage));
-        homeTabText.setOnMouseClicked(e -> primaryStage.setScene(Home.homePage));
-
-        profileTabRectangle.setOnMouseClicked(e -> primaryStage.setScene(Profile.profilePage));
-        profileTabText.setOnMouseClicked(e -> primaryStage.setScene(Profile.profilePage));
-
-        placesTabRectangle.setOnMouseClicked(e -> primaryStage.setScene(Places.placesPage));
-        placesTabText.setOnMouseClicked(e -> primaryStage.setScene(Places.placesPage));
-        
-        settingsTabRectangle.setOnMouseClicked(e -> primaryStage.setScene(Settings.settingsPage));
-        settingsTabText.setOnMouseClicked(e -> primaryStage.setScene((Settings.settingsPage)));
-
     }
 
     public HBox sideBar(Stage primaryStage){
@@ -142,6 +129,18 @@ public class AppointmentSchedulingPage {
         HBox sidebar = new HBox(tabStack, sidebarSeparator);
         sidebar.setBackground(new Background(new BackgroundFill(Color.web("#4681e0"), null, null)));
 
+        homeTabRectangle.setOnMouseClicked(e -> switcher.switchToHomePage(appointmentSchedulingPage.getWindow(), primaryStage));
+        homeTabText.setOnMouseClicked(e -> switcher.switchToHomePage(appointmentSchedulingPage.getWindow(), primaryStage));
+
+        profileTabRectangle.setOnMouseClicked(e -> switcher.switchToProfilePage(appointmentSchedulingPage.getWindow(), primaryStage));
+        profileTabText.setOnMouseClicked(e -> switcher.switchToProfilePage(appointmentSchedulingPage.getWindow(), primaryStage));
+
+        placesTabRectangle.setOnMouseClicked(e -> switcher.switchToPlacesPage(appointmentSchedulingPage.getWindow(), primaryStage));
+        placesTabText.setOnMouseClicked(e -> switcher.switchToPlacesPage(appointmentSchedulingPage.getWindow(), primaryStage));
+
+        settingsTabRectangle.setOnMouseClicked(e -> switcher.switchToSettingsPage(appointmentSchedulingPage.getWindow(), primaryStage));
+        settingsTabText.setOnMouseClicked(e -> switcher.switchToSettingsPage(appointmentSchedulingPage.getWindow(), primaryStage));
+
         return sidebar;
 
     }
@@ -158,6 +157,8 @@ public class AppointmentSchedulingPage {
         searchButton.setMinWidth(97.5);
         setUp.getChildren().addAll(backButton, searchButton);
         setUp.setAlignment(Pos.CENTER);
+
+        backButton.setOnAction(e->switcher.switchToCalendarPage(appointmentSchedulingPage.getWindow(), primaryStage));
 
         appointmentColumn.getChildren().addAll(title, businessName, setUp);
         appointmentColumn.setSpacing(5);
@@ -231,7 +232,7 @@ public class AppointmentSchedulingPage {
                     tempArr = line.split(",");
                     tempAppointment = new Appointment(tempArr[0], tempArr[1], Boolean.parseBoolean(tempArr[2]), Integer.parseInt(tempArr[3]), Integer.parseInt(tempArr[4]), tempArr[5], Integer.parseInt(tempArr[6]));
                     tempDate = ZonedDateTime.parse(tempArr[1], formatter);
-                    tempCustomer = Integer.parseInt(tempArr[6]);
+                    tempCustomer = Integer.parseInt(tempArr[4]);
    
                     //keep note if email is found
                     if(tempCustomer == appointment.getCustomer().getID() && tempDate.isEqual(appointment.stringToDate())){
@@ -242,6 +243,7 @@ public class AppointmentSchedulingPage {
                         tempAppointment.setAvailability(false);
                         userLoggedin.addAppointment(tempAppointment);
                         primaryStage.setUserData(userLoggedin);
+                        switcher.switchToAppointmentSchedulingPage(appointmentSchedulingPage.getWindow(), primaryStage);
                     }
 
                     appointmentList.add(tempAppointment);

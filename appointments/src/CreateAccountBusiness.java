@@ -23,6 +23,7 @@ public class CreateAccountBusiness {
    public Button signUpButton, backButton;
    public TextField firstNameField, lastNameField, newEmailField, businessField;
    public PasswordField newPasswordField, confirmPasswordField;
+   private SceneSwitcher switcher;
 
    /*
       email must:
@@ -41,7 +42,9 @@ public class CreateAccountBusiness {
     */
    private static final String PASSWORD_PATTERN = "^(?=.*[0-9])(?=.*[a-z])(?=.*[A-Z])(?=.*[!@#&()-[{}]:;',?/*~$^+=<>]).{6,15}$";
 
-   public CreateAccountBusiness(){
+   public CreateAccountBusiness(Stage primaryStage){
+
+      switcher = new SceneSwitcher(primaryStage);
 
       //Set up labels
       Label title = new Label("Create Business Account");
@@ -54,12 +57,12 @@ public class CreateAccountBusiness {
        signUpButton = new Button("Sign Up");
        backButton = new Button("Back");
 
-       //set up textfields
-       businessField = new TextField();
-       newEmailField = new TextField();
-       newPasswordField = new PasswordField();
-       confirmPasswordField = new PasswordField();
-       firstNameField = new TextField();
+      //set up textfields
+      businessField = new TextField();
+      newEmailField = new TextField();
+      newPasswordField = new PasswordField();
+      confirmPasswordField = new PasswordField();
+      firstNameField = new TextField();
       lastNameField = new TextField();
 
        //set prompt text for each textfield
@@ -86,6 +89,8 @@ public class CreateAccountBusiness {
       backButton.setPrefWidth(97.5);
       backButton.minWidth(97.5);
 
+      backButton.setOnAction(e-> switcher.switchToChooseAccountPage(createAccountPage.getWindow(), primaryStage));
+
       //set up layout
       hButtonsCreateAcc.getChildren().addAll(backButton, signUpButton);
       hButtonsCreateAcc.setAlignment(Pos.CENTER);
@@ -106,10 +111,6 @@ public class CreateAccountBusiness {
          validateAccountCreation(accountCreation);
       });
 
-   }
-
-   public void switchToChooseAccount(Stage primaryStage, ChooseAccountType accountType){
-      backButton.setOnAction(e-> primaryStage.setScene(accountType.chooseAccountType));
    }
 
    public void validateAccountCreation(Label note){
