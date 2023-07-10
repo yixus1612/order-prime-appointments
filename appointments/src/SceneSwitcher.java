@@ -159,19 +159,19 @@ public class SceneSwitcher {
         }
     }
 
-    public void switchToAppointmentsPage(Window w, Stage primaryStage, List<Appointment> appointmentList){
-        AppointmentsPage = new AppointmentsPage(primaryStage, appointmentList);
-        if(w instanceof Stage){
-            Stage s = (Stage) w;
-            s.setScene(AppointmentsPage.appointmentsPage);
-        }
-    }
-
     public void switchToEditAppointmentsPage(Window w, Stage primaryStage, Appointment appointment){
         EditAppointments = new EditAppointments(primaryStage, appointment);
         if(w instanceof Stage){
             Stage s = (Stage) w;
             s.setScene(EditAppointments.editAppointmentsPage);
+        }
+    }
+
+    public void switchToAppointmentsPage(Window w, Stage primaryStage, List<Appointment> appointmentList){
+        AppointmentsPage = new AppointmentsPage(primaryStage, appointmentList);
+        if(w instanceof Stage){
+            Stage s = (Stage) w;
+            s.setScene(AppointmentsPage.appointmentsPage);
         }
     }
 }

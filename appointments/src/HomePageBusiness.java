@@ -47,7 +47,7 @@ public class HomePageBusiness {
         VBox center = new VBox();
         HBox buttons = new HBox();
         createButton = new Button("Create");
-        createButton.setOnAction(e->primaryStage.setScene(Creation.appointmentCreationPage));
+        createButton.setOnAction(e->switcher.switchToAppointmentCreationPage(homePage.getWindow(), primaryStage));
         editButton = new Button("Edit");
         buttons.getChildren().addAll(createButton, editButton);
         center.getChildren().addAll(title, buttons);

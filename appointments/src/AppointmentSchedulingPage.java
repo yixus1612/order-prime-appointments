@@ -174,7 +174,6 @@ public class AppointmentSchedulingPage {
     public void search(Stage primaryStage, VBox home){
         searchButton.setOnAction(e->{
             String userInput = businessName.getText();
-            HBox column = new HBox();
             try{
                
                 //set up FileReader
@@ -193,11 +192,12 @@ public class AppointmentSchedulingPage {
                     tempArr = line.split(",");
                     tempAppointment = new Appointment(tempArr[0], tempArr[1], Boolean.parseBoolean(tempArr[2]), Integer.parseInt(tempArr[3]), Integer.parseInt(tempArr[4]), tempArr[5], Integer.parseInt(tempArr[6]));
 
-                    tempBusiness = tempAppointment.findBusiness(Integer.parseInt(tempArr[3]));
-                    Button signUpButton = new Button("schedule");
+                    tempBusiness = tempAppointment.getProvider();
+                    Button signUpButton = new Button("Schedule");
        
                     
                     if(userInput.equals(tempBusiness.getType()) && Boolean.parseBoolean(tempArr[2])){
+                        HBox column = new HBox();
                         signUp(primaryStage, signUpButton, tempAppointment);
                         column.getChildren().addAll(new Label(tempBusiness.getType() + " " + tempArr[0] + " " + tempBusiness.getName() + "        "), signUpButton);
                         home.getChildren().add(column);
@@ -235,9 +235,9 @@ public class AppointmentSchedulingPage {
                     tempCustomer = Integer.parseInt(tempArr[4]);
    
                     //keep note if email is found
-                    if(tempCustomer == appointment.getCustomer().getID() && tempDate.isEqual(appointment.stringToDate())){
+                    if(tempCustomer == userLoggedin.getID() && tempDate.isEqual(appointment.stringToDate())){
                         alreadyExists = true;
-                        System.out.println("Appointment already exists");
+                        System.out.println("You already scheduled an appointment at this time");
                     }else if(appointment.getID() == Integer.parseInt(tempArr[6])){
                         tempAppointment.setCustomer(userLoggedin.getID());
                         tempAppointment.setAvailability(false);

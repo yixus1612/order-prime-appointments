@@ -122,17 +122,17 @@ public class AppointmentsPage {
         HBox sidebar = new HBox(tabStack, sidebarSeparator);
         sidebar.setBackground(new Background(new BackgroundFill(Color.web("#4681e0"), null, null)));
 
-        homeTabRectangle.setOnMouseClicked(e -> switcher.switchToHomePageBusiness(appointmentsPage.getWindow(), primaryStage));
-        homeTabText.setOnMouseClicked(e -> switcher.switchToHomePageBusiness(appointmentsPage.getWindow(), primaryStage));
+        homeTabRectangle.setOnMouseClicked(e -> switcher.switchToHomePage(appointmentsPage.getWindow(), primaryStage));
+        homeTabText.setOnMouseClicked(e -> switcher.switchToHomePage(appointmentsPage.getWindow(), primaryStage));
 
-        profileTabRectangle.setOnMouseClicked(e -> switcher.switchToProfilePageBusiness(appointmentsPage.getWindow(), primaryStage));
-        profileTabText.setOnMouseClicked(e -> switcher.switchToProfilePageBusiness(appointmentsPage.getWindow(), primaryStage));
+        profileTabRectangle.setOnMouseClicked(e -> switcher.switchToProfilePage(appointmentsPage.getWindow(), primaryStage));
+        profileTabText.setOnMouseClicked(e -> switcher.switchToProfilePage(appointmentsPage.getWindow(), primaryStage));
 
-        placesTabRectangle.setOnMouseClicked(e -> switcher.switchToPlacesPageBusiness(appointmentsPage.getWindow(), primaryStage));
-        placesTabText.setOnMouseClicked(e -> switcher.switchToPlacesPageBusiness(appointmentsPage.getWindow(), primaryStage));
+        placesTabRectangle.setOnMouseClicked(e -> switcher.switchToPlacesPage(appointmentsPage.getWindow(), primaryStage));
+        placesTabText.setOnMouseClicked(e -> switcher.switchToPlacesPage(appointmentsPage.getWindow(), primaryStage));
 
-        settingsTabRectangle.setOnMouseClicked(e -> switcher.switchToSettingsPageBusiness(appointmentsPage.getWindow(), primaryStage));
-        settingsTabText.setOnMouseClicked(e -> switcher.switchToSettingsPageBusiness(appointmentsPage.getWindow(), primaryStage));
+        settingsTabRectangle.setOnMouseClicked(e -> switcher.switchToSettingsPage(appointmentsPage.getWindow(), primaryStage));
+        settingsTabText.setOnMouseClicked(e -> switcher.switchToSettingsPage(appointmentsPage.getWindow(), primaryStage));
 
         return sidebar;
     }
@@ -141,6 +141,7 @@ public class AppointmentsPage {
         VBox center = new VBox();
 
         for(Appointment appointment : appointmentListForDay){
+            //System.out.println(appointment.getType());
             Label appointmentType = new Label(appointment.getType() + " " + appointment.getDate() + " " + appointment.getProvider().getName() + " " + appointment.getCost() + "       ");
             Button cancelButton = new Button("Cancel");
             cancelButton.setMinWidth(97.5);
@@ -156,6 +157,7 @@ public class AppointmentsPage {
     public void cancelAppointment(Appointment appointment, Stage primaryStage, List<Appointment> appointmentListForDay){
 
         List<Appointment> totalAppointmentList = new ArrayList<>();
+        int index = 0;
         try{
             //set up FileReader
             FileReader fileReaderAccount = new FileReader("appointmentList.csv");
@@ -163,6 +165,7 @@ public class AppointmentsPage {
             String line = "";
             String[] tempArr;
             Appointment tempAppointment;
+            int counter = 0;
    
             //read in data and determine if appointment already exists
             while((line = br.readLine()) != null){
@@ -171,9 +174,12 @@ public class AppointmentsPage {
    
                 //keep note if email is found
                 if(appointment.getID() == tempAppointment.getID()){
+                    tempAppointment.setAvailability(true);
                     tempAppointment.getCustomer().setID(0);
+                    index = counter;
                 }
 
+                counter++;
                 totalAppointmentList.add(tempAppointment);
 
             }
@@ -186,6 +192,7 @@ public class AppointmentsPage {
             FileWriter fileWriterUser = new FileWriter("appointmentList.csv", false);
 
             for(Appointment a : totalAppointmentList){
+                System.out.println(a.getType());
                 fileWriterUser.write(a.getType() + "," + a.getDate() + "," + a.getAvailability() + "," + a.getProvider().getID() + "," + a.getCustomer().getID() + "," + a.getCost() + "," + a.getID() + "\n");
             }
 
@@ -195,6 +202,7 @@ public class AppointmentsPage {
             System.out.println(except);
         }
 
+        appointmentListForDay.remove(index);
         switcher.switchToAppointmentsPage(appointmentsPage.getWindow(), primaryStage, appointmentListForDay);
     }
 

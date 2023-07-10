@@ -35,6 +35,7 @@ public class User extends Account{
         this.name = name;
         this.iD = iD;
         //this.profilePic = pic;
+        createAppointmentList();
     }*/
     
     public int getID(){
@@ -62,13 +63,13 @@ public class User extends Account{
     }*/
 
     public void createAppointmentList(){
+        List<Appointment> tempList = new ArrayList<>();
         try{
             //set up fileReader
             FileReader fileReaderAccount = new FileReader("appointmentList.csv");
             BufferedReader br = new BufferedReader(fileReaderAccount);
             String line = "";
             String[] tempArr;
-            Appointment tempAppointment = new Appointment();
             DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd hh:mm:ss a z");
 
             //read account file
@@ -77,6 +78,7 @@ public class User extends Account{
                     
                 //check if id matches user and add it to their appointment list.
                 if(Integer.parseInt(tempArr[4]) == this.iD){
+                    Appointment tempAppointment = new Appointment();
                     tempAppointment.setType(tempArr[0]);
                     tempAppointment.setDate(tempArr[1]);
                     tempAppointment.setAvailability(Boolean.parseBoolean(tempArr[2]));
@@ -84,7 +86,7 @@ public class User extends Account{
                     tempAppointment.setCustomer(Integer.parseInt(tempArr[4]));
                     tempAppointment.setCost(tempArr[5]);
                     tempAppointment.setID(Integer.parseInt(tempArr[6]));
-                    appointmentList.add(tempAppointment);
+                    tempList.add(tempAppointment);
                 }
 
             }
@@ -95,6 +97,8 @@ public class User extends Account{
         }catch(IOException except){
             System.out.println(except);
         }
+
+        appointmentList = tempList;
     }
     
     public void addAppointment(Appointment appointment){

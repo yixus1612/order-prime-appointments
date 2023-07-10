@@ -40,6 +40,11 @@ public class HomePage {
         userLoggedin = (User) primaryStage.getUserData();
         switcher =  new SceneSwitcher(primaryStage);
 
+        /*
+        for(Appointment appointment : userLoggedin.appointmentList){
+            System.out.println(appointment.getType());
+        }*/
+
         title = new Label("Welcome " + userLoggedin.getName() + "! What would you like to do?");
 
         HBox sidebar = sideBar(primaryStage);
@@ -48,7 +53,7 @@ public class HomePage {
 
         VBox center = new VBox();
         HBox buttons = new HBox();
-        scheduleAppointment = new Button("Create");
+        scheduleAppointment = new Button("Schedule");
         scheduleAppointment.setOnAction(e->switcher.switchToAppointmentSchedulingPage(homePage.getWindow(), primaryStage));
         cancelAppointment = new Button("Cancel");
         cancelAppointment.setOnAction(e->switcher.switchToAppointmentsPage(homePage.getWindow(), primaryStage, userLoggedin.appointmentList));

@@ -161,24 +161,39 @@ public class AppointmentCreationPage {
         System.out.println(cost.getText());
         System.out.println(createdAppointment.getCost());
 
+        ObservableList<String> months = FXCollections.observableArrayList(
+            "01", "02", "03", "04", "05", "06", "07", "08", "09", "10", "11", "12"
+        );
+        final ComboBox comboBox1 = new ComboBox(months);
+
+        ObservableList<String> days = FXCollections.observableArrayList(
+            "01", "02", "03", "04", "05", "06", "07", "08", "09", "10", "11", "12"
+        );
+        final ComboBox comboBox2 = new ComboBox(days);
+
+        ObservableList<String> years = FXCollections.observableArrayList(
+            "2023", "2024", "2025", "2026", "2027", "2028", "2029", "2030", "2031", "2032", "2033", "2034"
+        );
+        final ComboBox comboBox3 = new ComboBox(years);
+
         ObservableList<String> hours = FXCollections.observableArrayList(
             "01", "02", "03", "04", "05", "06", "07", "08", "09", "10", "11", "12"
         );
-        final ComboBox comboBox = new ComboBox(hours);
+        final ComboBox comboBox4 = new ComboBox(hours);
 
         ObservableList<String> mins = FXCollections.observableArrayList(
             "00", "15", "30", "45"
         );
-        final ComboBox comboBox2 = new ComboBox(mins);
+        final ComboBox comboBox5 = new ComboBox(mins);
 
         ObservableList<String> time = FXCollections.observableArrayList(
             "AM", "PM"
         );
-        final ComboBox comboBox3 = new ComboBox(time);
+        final ComboBox comboBox6 = new ComboBox(time);
 
-        createAppointment(primaryStage, comboBox,comboBox2,comboBox3);
+        createAppointment(primaryStage, comboBox1, comboBox2, comboBox3, comboBox4, comboBox5, comboBox6);
 
-        dateBox.getChildren().addAll(comboBox, comboBox2, comboBox3);
+        dateBox.getChildren().addAll(comboBox1, comboBox2, comboBox3, comboBox4, comboBox5, comboBox6);
 
         appointmentName.setPromptText("Appointment Name");
 
@@ -199,7 +214,7 @@ public class AppointmentCreationPage {
 
     }
 
-    public void createAppointment(Stage primaryStage, ComboBox hour, ComboBox min, ComboBox amPM){
+    public void createAppointment(Stage primaryStage, ComboBox month, ComboBox day, ComboBox year, ComboBox hour, ComboBox min, ComboBox amPM){
         createButton.setOnAction(e->{
 
             //sets up current info for appointemnt
@@ -207,7 +222,7 @@ public class AppointmentCreationPage {
             createdAppointment.setProvider(businessLoggedin.getID());
             createdAppointment.setCost(cost.getText());
             if(((String) amPM.getSelectionModel().getSelectedItem()).equals("PM")){}
-            createdAppointment.setDate("2023-07-11 " + (String) hour.getSelectionModel().getSelectedItem() + ":" + (String) min.getSelectionModel().getSelectedItem() + ":00 " + (String) amPM.getSelectionModel().getSelectedItem() + " -05:00");
+            createdAppointment.setDate((String) year.getSelectionModel().getSelectedItem() + "-" + (String) month.getSelectionModel().getSelectedItem() + "-" + (String) day.getSelectionModel().getSelectedItem() + " " + (String) hour.getSelectionModel().getSelectedItem() + ":" + (String) min.getSelectionModel().getSelectedItem() + ":00 " + (String) amPM.getSelectionModel().getSelectedItem() + " -05:00");
             Random random = new Random();
             createdAppointment.setID(random.nextInt(1000000000));
 

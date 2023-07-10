@@ -242,7 +242,7 @@ public class CalendarPage {
 
                         List<Appointment> appointmentList = appointmentMap.get(currentDate);
                         if(appointmentList != null){
-                            createAppointment(appointmentList, rectangeHeight, rectangleWidth, stackPane);
+                            createAppointment(appointmentList, rectangeHeight, rectangleWidth, stackPane, primaryStage);
                         }
                     }
                     if(today.getYear() == userDate.getYear() && today.getMonth() == userDate.getMonth() && today.getDayOfMonth() == currentDate){
@@ -255,14 +255,14 @@ public class CalendarPage {
           
     }
 
-    public void createAppointment(List<Appointment> appointments, double height, double width, StackPane stack){
+    public void createAppointment(List<Appointment> appointments, double height, double width, StackPane stack, Stage primaryStage){
         VBox appointmentBox = new VBox();
         for(int i = 0; i < appointments.size(); i++){
             if(i >= 2){
                 Text moreActivities = new Text("...");
                 appointmentBox.getChildren().add(moreActivities);
                 moreActivities.setOnMouseClicked(e-> {
-                    System.out.println(appointments);
+                    switcher.switchToAppointmentsPage(calendarPage.getWindow(), primaryStage, appointments);
                 });
                 break;
             }

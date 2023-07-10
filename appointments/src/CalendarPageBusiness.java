@@ -262,8 +262,7 @@ public class CalendarPageBusiness {
             if(i >= 2){
                 Text moreActivities = new Text("...");
                 appointmentBox.getChildren().add(moreActivities);
-                moreActivities.setOnMouseClicked(e-> {
-                    switcher.switchToAppointmentsPage(calendarPage.getWindow(), primaryStage, appointments);
+                    moreActivities.setOnMouseClicked(e-> {
                 });
                 break;
             }
@@ -316,10 +315,9 @@ public class CalendarPageBusiness {
             //read in data and determine if appointment already exists
             while((line = br.readLine()) != null){
                 tempArr = line.split(",");
-                System.out.println(tempArr[1]);
+
                 tempDate = ZonedDateTime.parse(tempArr[1], formatter);
                 tempProvider = Integer.parseInt(tempArr[3]);
-       
                 //keep note if email is found
                 if(tempProvider == businessLoggedin.getID() && tempDate.getYear() == year && tempDate.getMonth().getValue() == month){
                     appointments.add(new Appointment(tempArr[0], tempArr[1], Boolean.parseBoolean(tempArr[2]), Integer.parseInt(tempArr[3]), Integer.parseInt(tempArr[4]), tempArr[5], Integer.parseInt(tempArr[6])));

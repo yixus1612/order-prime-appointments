@@ -117,11 +117,17 @@ public class LoginPage{
             //if login info is correct, log in user
             if(login){
                 User userLoggedin = findUser(email);
+                userLoggedin.createAppointmentList();
+                /*for(Appointment appointment : userLoggedin.appointmentList){
+                    System.out.println(appointment.getType());
+                }*/
+                
                 if(isUser){
                     primaryStage.setUserData(userLoggedin);
                     switcher.switchToHomePage(loginPage.getWindow(), primaryStage);
                 }else{
                     Business businessLoggedin = findBusiness(email);
+                    businessLoggedin.createAppointmentList();
                     primaryStage.setUserData(businessLoggedin);
                     switcher.switchToHomePageBusiness(loginPage.getWindow(), primaryStage);
                 }
@@ -154,7 +160,6 @@ public class LoginPage{
                         tempUser.setName(tempArr[0]);
                         tempUser.setEmail(tempArr[1]);
                         tempUser.setID(Integer.parseInt(tempArr[2]));
-                        tempUser.createAppointmentList();
                         isUser = true;
                         br.close();
                         return tempUser;

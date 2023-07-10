@@ -72,8 +72,6 @@ public class Business extends Account{
             BufferedReader br = new BufferedReader(fileReaderAccount);
             String line = "";
             String[] tempArr;
-            Appointment tempAppointment = new Appointment();
-            int counter = 0;
             DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss z");
 
             //read account file
@@ -82,6 +80,7 @@ public class Business extends Account{
 
                 //check to see if email and password are correctly inputted
                 if(Integer.parseInt(tempArr[3]) == this.id){
+                    Appointment tempAppointment = new Appointment();
                     tempAppointment.setType(tempArr[0]);
                     tempAppointment.setDate(tempArr[1]);
                     tempAppointment.setAvailability(Boolean.parseBoolean(tempArr[2]));
@@ -89,8 +88,7 @@ public class Business extends Account{
                     tempAppointment.setCustomer(Integer.parseInt(tempArr[4]));
                     tempAppointment.setCost(tempArr[5]);
                     tempAppointment.setID(Integer.parseInt(tempArr[6]));
-                    appointmentList.add(counter, tempAppointment);
-                    counter++;
+                    appointmentList.add(tempAppointment);
                 }
             }
 
