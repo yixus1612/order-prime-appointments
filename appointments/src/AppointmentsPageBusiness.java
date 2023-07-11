@@ -124,67 +124,15 @@ public class AppointmentsPageBusiness {
         for(Appointment appointment : appointmentListForDay){
             //System.out.println(appointment.getType());
             Label appointmentType = new Label(appointment.getType() + " " + appointment.getDate() + " " + appointment.getProvider().getName() + " " + appointment.getCost() + "       ");
-            Button cancelButton = new Button("Cancel");
+            Button cancelButton = new Button("Edit");
             cancelButton.setMinWidth(97.5);
-            cancelButton.setOnAction(e-> cancelAppointment(appointment, primaryStage, appointmentListForDay));
+            cancelButton.setOnAction(e-> switcher.switchToEditAppointmentsPage(appointmentsPage.getWindow(), primaryStage, appointment, appointmentListForDay));
             HBox appointmentData = new HBox();
             appointmentData.getChildren().addAll(appointmentType, cancelButton);
             center.getChildren().add(appointmentData);
         }
 
         return center;
-    }
-
-    public void cancelAppointment(Appointment appointment, Stage primaryStage, List<Appointment> appointmentListForDay){
-
-        List<Appointment> totalAppointmentList = new ArrayList<>();
-        int index = 0;
-        try{
-            //set up FileReader
-            FileReader fileReaderAccount = new FileReader("appointmentList.csv");
-            BufferedReader br = new BufferedReader(fileReaderAccount);
-            String line = "";
-            String[] tempArr;
-            Appointment tempAppointment;
-            int counter = 0;
-   
-            //read in data and determine if appointment already exists
-            while((line = br.readLine()) != null){
-                tempArr = line.split(",");
-                tempAppointment = new Appointment(tempArr[0], tempArr[1], Boolean.parseBoolean(tempArr[2]), Integer.parseInt(tempArr[3]), Integer.parseInt(tempArr[4]), tempArr[5], Integer.parseInt(tempArr[6]));
-   
-                //keep note if email is found
-                if(appointment.getID() == tempAppointment.getID()){
-                    tempAppointment.setAvailability(true);
-                    tempAppointment.getCustomer().setID(0);
-                    index = counter;
-                }
-
-                counter++;
-                totalAppointmentList.add(tempAppointment);
-
-            }
-            br.close();
-        }catch(IOException except){
-            System.out.println(except);
-        }
-
-        try{              
-            FileWriter fileWriterUser = new FileWriter("appointmentList.csv", false);
-
-            for(Appointment a : totalAppointmentList){
-                System.out.println(a.getType());
-                fileWriterUser.write(a.getType() + "," + a.getDate() + "," + a.getAvailability() + "," + a.getProvider().getID() + "," + a.getCustomer().getID() + "," + a.getCost() + "," + a.getID() + "\n");
-            }
-
-            fileWriterUser.close();
-
-        }catch(IOException except){
-            System.out.println(except);
-        }
-
-        appointmentListForDay.remove(index);
-        switcher.switchToAppointmentsPage(appointmentsPage.getWindow(), primaryStage, appointmentListForDay);
     }
 
 }

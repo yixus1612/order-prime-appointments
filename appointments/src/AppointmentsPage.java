@@ -122,7 +122,6 @@ public class AppointmentsPage {
         VBox center = new VBox();
 
         for(Appointment appointment : appointmentListForDay){
-            //System.out.println(appointment.getType());
             Label appointmentType = new Label(appointment.getType() + " " + appointment.getDate() + " " + appointment.getProvider().getName() + " " + appointment.getCost() + "       ");
             Button cancelButton = new Button("Cancel");
             cancelButton.setMinWidth(97.5);
@@ -173,7 +172,6 @@ public class AppointmentsPage {
             FileWriter fileWriterUser = new FileWriter("appointmentList.csv", false);
 
             for(Appointment a : totalAppointmentList){
-                System.out.println(a.getType());
                 fileWriterUser.write(a.getType() + "," + a.getDate() + "," + a.getAvailability() + "," + a.getProvider().getID() + "," + a.getCustomer().getID() + "," + a.getCost() + "," + a.getID() + "\n");
             }
 

@@ -304,7 +304,6 @@ public class CalendarPage {
             //read in data and determine if appointment already exists
             while((line = br.readLine()) != null){
                 tempArr = line.split(",");
-                System.out.println(tempArr[1]);
                 tempDate = ZonedDateTime.parse(tempArr[1], formatter);
                 tempCustomer = Integer.parseInt(tempArr[4]);
        

@@ -251,14 +251,16 @@ public class CalendarPageBusiness {
             if(i >= 2){
                 Text moreActivities = new Text("...");
                 appointmentBox.getChildren().add(moreActivities);
-                    moreActivities.setOnMouseClicked(e-> {
+                moreActivities.setOnMouseClicked(e-> {
+                    switcher.switchToAppointmentsPageBusiness(calendarPage.getWindow(), primaryStage, appointments);
                 });
                 break;
             }
             Text text = new Text(appointments.get(i).getType());
             appointmentBox.getChildren().add(text);
+            int app = i;
             text.setOnMouseClicked(e->{
-                System.out.println(text.getText());
+                switcher.switchToEditAppointmentsPage(calendarPage.getWindow(),primaryStage, appointments.get(app), appointments);
             });
         }
         appointmentBox.setTranslateY((height/2) * .2);

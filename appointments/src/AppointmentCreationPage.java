@@ -147,8 +147,6 @@ public class AppointmentCreationPage {
 
         cost.setPromptText("Cost");
         cost.setPrefWidth(200);
-        System.out.println(cost.getText());
-        System.out.println(createdAppointment.getCost());
 
         ObservableList<String> months = FXCollections.observableArrayList(
             "01", "02", "03", "04", "05", "06", "07", "08", "09", "10", "11", "12"
@@ -253,7 +251,6 @@ public class AppointmentCreationPage {
                 FileWriter fileWriterUser = new FileWriter("appointmentList.csv", true);
 
                 //checks to see if appointment is before current time
-                System.out.println(createdAppointment.stringToDate().isBefore(ZonedDateTime.now()));
                 if(createdAppointment.stringToDate().isBefore(ZonedDateTime.now()) || alreadyExists){
                     System.out.println("Please choose a valid date");
                 }else{
