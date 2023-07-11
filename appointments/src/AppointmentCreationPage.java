@@ -63,7 +63,9 @@ public class AppointmentCreationPage {
         center.setPrefWidth(490);
         VBox mainpage = mainPage(primaryStage);
         center.add(mainpage, 1, 1);
+        center.setAlignment(Pos.TOP_CENTER);
         layout.setCenter(center);
+        
 
         
 
@@ -142,6 +144,8 @@ public class AppointmentCreationPage {
         HBox setUp = new HBox();
         VBox appointmentColumn = new VBox();
         Label title = new Label("Create An Appointment");
+        Label spacingBuffer = new Label(" ");
+        spacingBuffer.setFont(Font.font("Arial", FontWeight.BOLD, 90));
 
         HBox dateBox = new HBox();
 
@@ -152,35 +156,42 @@ public class AppointmentCreationPage {
             "01", "02", "03", "04", "05", "06", "07", "08", "09", "10", "11", "12"
         );
         final ComboBox comboBox1 = new ComboBox(months);
+        comboBox1.setPromptText("Month");
 
         ObservableList<String> days = FXCollections.observableArrayList(
-            "01", "02", "03", "04", "05", "06", "07", "08", "09", "10", "11", "12"
+            "01", "02", "03", "04", "05", "06", "07", "08", "09", "10", "11", "12", "13", "14", "15", "16", "17", "18", "19", "20", "21", "22", "23", "24", "25", "26", "27", "28", "29", "30", "31"
         );
         final ComboBox comboBox2 = new ComboBox(days);
+        comboBox2.setPromptText("Day");
 
         ObservableList<String> years = FXCollections.observableArrayList(
             "2023", "2024", "2025", "2026", "2027", "2028", "2029", "2030", "2031", "2032", "2033", "2034"
         );
         final ComboBox comboBox3 = new ComboBox(years);
+        comboBox3.setPromptText("Year");
 
         ObservableList<String> hours = FXCollections.observableArrayList(
             "01", "02", "03", "04", "05", "06", "07", "08", "09", "10", "11", "12"
         );
         final ComboBox comboBox4 = new ComboBox(hours);
+        comboBox4.setPromptText("Hour");
 
         ObservableList<String> mins = FXCollections.observableArrayList(
             "00", "15", "30", "45"
         );
         final ComboBox comboBox5 = new ComboBox(mins);
+        comboBox5.setPromptText("Min");
 
         ObservableList<String> time = FXCollections.observableArrayList(
             "AM", "PM"
         );
         final ComboBox comboBox6 = new ComboBox(time);
+        comboBox6.setPromptText("AM/PM");
 
         createAppointment(primaryStage, comboBox1, comboBox2, comboBox3, comboBox4, comboBox5, comboBox6);
 
         dateBox.getChildren().addAll(comboBox1, comboBox2, comboBox3, comboBox4, comboBox5, comboBox6);
+        dateBox.setSpacing(1);
 
         appointmentName.setPromptText("Appointment Name");
 
@@ -189,9 +200,10 @@ public class AppointmentCreationPage {
         createButton.setMinWidth(97.5);
         setUp.getChildren().addAll(backButton, createButton);
         setUp.setAlignment(Pos.CENTER);
+        setUp.setSpacing(3);
         backButton.setOnAction(e->switcher.switchToCalendarPage(appointmentCreationPage.getWindow(), primaryStage));
 
-        appointmentColumn.getChildren().addAll(title, appointmentName, dateBox, cost, setUp);
+        appointmentColumn.getChildren().addAll(spacingBuffer,title, appointmentName, dateBox, cost, setUp);
         appointmentColumn.setSpacing(5);
         appointmentColumn.setAlignment(Pos.CENTER);
 
