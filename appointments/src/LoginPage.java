@@ -124,12 +124,12 @@ public class LoginPage{
                 
                 if(isUser){
                     primaryStage.setUserData(userLoggedin);
-                    switcher.switchToHomePage(loginPage.getWindow(), primaryStage);
+                    switcher.switchToAppointmentSchedulingPage(loginPage.getWindow(), primaryStage);
                 }else{
                     Business businessLoggedin = findBusiness(email);
                     businessLoggedin.createAppointmentList();
                     primaryStage.setUserData(businessLoggedin);
-                    switcher.switchToHomePageBusiness(loginPage.getWindow(), primaryStage);
+                    switcher.switchToAppointmentCreationPage(loginPage.getWindow(), primaryStage);
                 }
 
             //if not, make them try again and update label

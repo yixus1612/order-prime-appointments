@@ -24,22 +24,22 @@ import javafx.stage.Stage;
 import javafx.scene.text.Font;
 import javafx.scene.text.FontWeight;
 
-public class AppointmentsPage {
+public class AppointmentsPageBusiness {
 
     public Scene appointmentsPage;
-    public Rectangle scheduleTabRectangle, calendarTabRectangle, appointmentsTabRectangle, settingsTabRectangle;
-    Text scheduleTabText, calendarTabText, appointmentsTabText, settingsTabText;
+    public Rectangle createTabRectangle, calendarTabRectangle, appointmentsTabRectangle, settingsTabRectangle;
+    Text createTabText, calendarTabText, appointmentsTabText, settingsTabText;
     Rectangle profilePicture;
     Rectangle buffer1, buffer2;
-    private User userLoggedin;
     private SceneSwitcher switcher;
     private List<Appointment> appointmentlist;
+    private Business businessLoggedin;
 
-    public AppointmentsPage(Stage primaryStage, List<Appointment> appointmentListForDay){
+    public AppointmentsPageBusiness(Stage primaryStage, List<Appointment> appointmentListForDay){
 
         switcher = new SceneSwitcher(primaryStage);
     
-        userLoggedin = (User) primaryStage.getUserData();
+        businessLoggedin = (Business) primaryStage.getUserData();
 
         HBox sidebar = sideBar(primaryStage);
 
@@ -59,17 +59,17 @@ public class AppointmentsPage {
         pfp.setAlignment(Pos.CENTER);
 
         // FIXME this should display the user's name
-        Text nameText = new Text(userLoggedin.getName());
+        Text nameText = new Text(businessLoggedin.getName());
         StackPane name = new StackPane(nameText);
         name.setAlignment(Pos.CENTER);
 
-        scheduleTabText = new Text("  Schedule");
-        scheduleTabText.setFill(Color.WHITE);
-        scheduleTabText.setFont(Font.font ("Arial", FontWeight.BOLD, 12));
-        scheduleTabRectangle = new Rectangle(110,25, Color.web("#3064b8"));
-        StackPane scheduleTab = new StackPane();
-        scheduleTab.getChildren().addAll(scheduleTabRectangle, scheduleTabText);
-        scheduleTab.setAlignment(Pos.CENTER_LEFT);
+        createTabText = new Text("  Create");
+        createTabText.setFill(Color.WHITE);
+        createTabText.setFont(Font.font ("Arial", FontWeight.BOLD, 12));
+        createTabRectangle = new Rectangle(110,25, Color.web("#3064b8"));
+        StackPane createTab = new StackPane();
+        createTab.getChildren().addAll(createTabRectangle, createTabText);
+        createTab.setAlignment(Pos.CENTER_LEFT);
 
         calendarTabText = new Text("  Calendar");
         calendarTabText.setFill(Color.WHITE);
@@ -101,19 +101,19 @@ public class AppointmentsPage {
         buffer2 = new Rectangle(5,5, Color.web("#4681e0"));
 
         VBox tabStack = new VBox();
-        tabStack.getChildren().addAll(buffer1, pfp, name, buffer2, scheduleTab, calendarTab, appointmentsTab, settingsTab);
+        tabStack.getChildren().addAll(buffer1, pfp, name, buffer2, createTab, calendarTab, appointmentsTab, settingsTab);
         
         HBox sidebar = new HBox(tabStack, sidebarSeparator);
         sidebar.setBackground(new Background(new BackgroundFill(Color.web("#4681e0"), null, null)));
 
-        scheduleTabRectangle.setOnMouseClicked(e -> switcher.switchToAppointmentSchedulingPage(appointmentsPage.getWindow(), primaryStage));
-        scheduleTabText.setOnMouseClicked(e -> switcher.switchToAppointmentSchedulingPage(appointmentsPage.getWindow(), primaryStage));
+        createTabRectangle.setOnMouseClicked(e -> switcher.switchToAppointmentCreationPage(appointmentsPage.getWindow(), primaryStage));
+        createTabText.setOnMouseClicked(e -> switcher.switchToAppointmentCreationPage(appointmentsPage.getWindow(), primaryStage));
 
-        calendarTabRectangle.setOnMouseClicked(e -> switcher.switchToCalendarPage(appointmentsPage.getWindow(), primaryStage));
-        calendarTabText.setOnMouseClicked(e -> switcher.switchToCalendarPage(appointmentsPage.getWindow(), primaryStage));
+        calendarTabRectangle.setOnMouseClicked(e -> switcher.switchToCalendarPageBusiness(appointmentsPage.getWindow(), primaryStage));
+        calendarTabText.setOnMouseClicked(e -> switcher.switchToCalendarPageBusiness(appointmentsPage.getWindow(), primaryStage));
 
-        settingsTabRectangle.setOnMouseClicked(e -> switcher.switchToSettingsPage(appointmentsPage.getWindow(), primaryStage));
-        settingsTabText.setOnMouseClicked(e -> switcher.switchToSettingsPage(appointmentsPage.getWindow(), primaryStage));
+        settingsTabRectangle.setOnMouseClicked(e -> switcher.switchToSettingsPageBusiness(appointmentsPage.getWindow(), primaryStage));
+        settingsTabText.setOnMouseClicked(e -> switcher.switchToSettingsPageBusiness(appointmentsPage.getWindow(), primaryStage));
 
         return sidebar;
     }
@@ -188,4 +188,3 @@ public class AppointmentsPage {
     }
 
 }
-
