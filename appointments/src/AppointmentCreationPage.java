@@ -32,8 +32,8 @@ public class AppointmentCreationPage {
 
     public Scene appointmentCreationPage;
 
-    public Rectangle homeTabRectangle, calendarTabRectangle, profileTabRectangle, placesTabRectangle, paymentTabRectangle, settingsTabRectangle;
-    public Text homeTabText, profileTabText, calendarTabText, placesTabText, settingsTabText;
+    public Rectangle createTabRectangle, calendarTabRectangle, appointmentsTabRectangle, settingsTabRectangle;
+    Text createTabText, calendarTabText, appointmentsTabText, settingsTabText;
     public Rectangle profilePicture;
     public Rectangle buffer1, buffer2;
     public GridPane center;
@@ -82,36 +82,28 @@ public class AppointmentCreationPage {
         StackPane name = new StackPane(nameText);
         name.setAlignment(Pos.CENTER);
 
-        homeTabText = new Text("  Home");
-        homeTabText.setFill(Color.WHITE);
-        homeTabText.setFont(Font.font ("Arial", FontWeight.BOLD, 12));
-        homeTabRectangle = new Rectangle(110,25, Color.web("#3064b8"));
+        createTabText = new Text("  Create");
+        createTabText.setFont(Font.font ("Arial", FontWeight.BOLD, 12));
+        createTabRectangle = new Rectangle(110,25, Color.web("#f2efd0"));
         StackPane homeTab = new StackPane();
-        homeTab.getChildren().addAll(homeTabRectangle, homeTabText);
+        homeTab.getChildren().addAll(createTabRectangle, createTabText);
         homeTab.setAlignment(Pos.CENTER_LEFT);
 
-        profileTabText = new Text("  Profile");
-        profileTabText.setFill(Color.WHITE);
-        profileTabText.setFont(Font.font ("Arial", FontWeight.BOLD, 12));
-        profileTabRectangle = new Rectangle(110,25, Color.web("#3064b8"));
-        StackPane profileTab = new StackPane();
-        profileTab.getChildren().addAll(profileTabRectangle, profileTabText);
-        profileTab.setAlignment(Pos.CENTER_LEFT);
-
         calendarTabText = new Text("  Calendar");
+        calendarTabText.setFill(Color.WHITE);
         calendarTabText.setFont(Font.font ("Arial", FontWeight.BOLD, 12));
-        calendarTabRectangle = new Rectangle(110,25, Color.web("#f2efd0"));
+        calendarTabRectangle = new Rectangle(110,25, Color.web("#3064b8"));
         StackPane calendarTab = new StackPane();
         calendarTab.getChildren().addAll(calendarTabRectangle, calendarTabText);
         calendarTab.setAlignment(Pos.CENTER_LEFT);
 
-        placesTabText = new Text("  Your Places");
-        placesTabText.setFill(Color.WHITE);
-        placesTabText.setFont(Font.font ("Arial", FontWeight.BOLD, 12));
-        placesTabRectangle = new Rectangle(110,25, Color.web("#3064b8"));
-        StackPane placesTab = new StackPane();
-        placesTab.getChildren().addAll(placesTabRectangle, placesTabText);
-        placesTab.setAlignment(Pos.CENTER_LEFT);
+        appointmentsTabText = new Text("  Appointments");
+        appointmentsTabText.setFill(Color.WHITE);
+        appointmentsTabText.setFont(Font.font ("Arial", FontWeight.BOLD, 12));
+        appointmentsTabRectangle = new Rectangle(110,25, Color.web("#3064b8"));
+        StackPane appointmentsTab = new StackPane();
+        appointmentsTab.getChildren().addAll(appointmentsTabRectangle, appointmentsTabText);
+        appointmentsTab.setAlignment(Pos.CENTER_LEFT);
 
         settingsTabText = new Text("  Settings");
         settingsTabText.setFill(Color.WHITE);
@@ -128,19 +120,16 @@ public class AppointmentCreationPage {
         buffer2 = new Rectangle(5,5, Color.web("#4681e0"));
 
         VBox tabStack = new VBox();
-        tabStack.getChildren().addAll(buffer1, pfp, name, buffer2, homeTab, profileTab, calendarTab, placesTab, settingsTab);
+        tabStack.getChildren().addAll(buffer1, pfp, name, buffer2, homeTab, calendarTab, appointmentsTab, settingsTab);
         
         HBox sidebar = new HBox(tabStack, sidebarSeparator);
         sidebar.setBackground(new Background(new BackgroundFill(Color.web("#4681e0"), null, null)));
 
-        homeTabRectangle.setOnMouseClicked(e -> switcher.switchToHomePageBusiness(appointmentCreationPage.getWindow(), primaryStage));
-        homeTabText.setOnMouseClicked(e -> switcher.switchToHomePageBusiness(appointmentCreationPage.getWindow(), primaryStage));
+        calendarTabRectangle.setOnMouseClicked(e -> switcher.switchToCalendarPageBusiness(appointmentCreationPage.getWindow(), primaryStage));
+        calendarTabText.setOnMouseClicked(e -> switcher.switchToCalendarPageBusiness(appointmentCreationPage.getWindow(), primaryStage));
 
-        profileTabRectangle.setOnMouseClicked(e -> switcher.switchToProfilePageBusiness(appointmentCreationPage.getWindow(), primaryStage));
-        profileTabText.setOnMouseClicked(e -> switcher.switchToProfilePageBusiness(appointmentCreationPage.getWindow(), primaryStage));
-
-        placesTabRectangle.setOnMouseClicked(e -> switcher.switchToPlacesPageBusiness(appointmentCreationPage.getWindow(), primaryStage));
-        placesTabText.setOnMouseClicked(e -> switcher.switchToPlacesPageBusiness(appointmentCreationPage.getWindow(), primaryStage));
+        appointmentsTabRectangle.setOnMouseClicked(e->switcher.switchToAppointmentsPageBusiness(appointmentCreationPage.getWindow(), primaryStage, businessLoggedin.appointmentList));
+        appointmentsTabText.setOnMouseClicked(e -> switcher.switchToAppointmentsPageBusiness(appointmentCreationPage.getWindow(), primaryStage, businessLoggedin.appointmentList));
 
         settingsTabRectangle.setOnMouseClicked(e -> switcher.switchToSettingsPageBusiness(appointmentCreationPage.getWindow(), primaryStage));
         settingsTabText.setOnMouseClicked(e -> switcher.switchToSettingsPageBusiness(appointmentCreationPage.getWindow(), primaryStage));

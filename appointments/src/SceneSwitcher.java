@@ -11,20 +11,15 @@ public class SceneSwitcher {
     CreateAccountBusiness CreateAccountBusiness;
     CreateAccountPage CreateAccountPage;
     ChooseAccountType ChooseAccountType;
-    HomePage HomePage;
-    HomePageBusiness HomePageBusiness;
     AppointmentCreationPage AppointmentCreationPage;
     AppointmentSchedulingPage AppointmentSchedulingPage;
     CalendarPage CalendarPage;
     CalendarPageBusiness CalendarPageBusiness;
-    PlacesPage PlacesPage;
-    PlacesPageBusiness PlacesPageBusiness;
-    ProfilePage ProfilePage;
-    ProfilePageBusiness ProfilePageBusiness;
     SettingsPage SettingsPage;
     SettingsPageBusiness SettingsPageBusiness;
     AppointmentsPage AppointmentsPage;
     EditAppointments EditAppointments;
+    AppointmentsPageBusiness AppointmentsPageBusiness;
     
     public SceneSwitcher(Stage primaryStage){
         this.primaryStage = primaryStage;
@@ -95,54 +90,6 @@ public class SceneSwitcher {
         }
     }
 
-    public void switchToHomePage(Window w, Stage primaryStage){
-        HomePage = new HomePage(primaryStage);
-        if(w instanceof Stage){
-            Stage s = (Stage) w;
-            s.setScene(HomePage.homePage);
-        }
-    }
-
-    public void switchToHomePageBusiness(Window w, Stage primaryStage){
-        HomePageBusiness = new HomePageBusiness(primaryStage);
-        if(w instanceof Stage){
-            Stage s = (Stage) w;
-            s.setScene(HomePageBusiness.homePage);
-        }
-    }
-
-    public void switchToPlacesPage(Window w, Stage primaryStage){
-        PlacesPage = new PlacesPage(primaryStage);
-        if(w instanceof Stage){
-            Stage s = (Stage) w;
-            s.setScene(PlacesPage.placesPage);
-        }
-    }
-
-    public void switchToPlacesPageBusiness(Window w, Stage primaryStage){
-        PlacesPageBusiness = new PlacesPageBusiness(primaryStage);
-        if(w instanceof Stage){
-            Stage s = (Stage) w;
-            s.setScene(PlacesPageBusiness.placesPage);
-        }
-    }
-
-    public void switchToProfilePage(Window w, Stage primaryStage){
-        ProfilePage = new ProfilePage(primaryStage);
-        if(w instanceof Stage){
-            Stage s = (Stage) w;
-            s.setScene(ProfilePage.profilePage);
-        }
-    }
-
-    public void switchToProfilePageBusiness(Window w, Stage primaryStage){
-        ProfilePageBusiness = new ProfilePageBusiness(primaryStage);
-        if(w instanceof Stage){
-            Stage s = (Stage) w;
-            s.setScene(ProfilePageBusiness.profilePage);
-        }
-    }
-
     public void switchToSettingsPage(Window w, Stage primaryStage){
         SettingsPage = new SettingsPage(primaryStage);
         if(w instanceof Stage){
@@ -172,6 +119,14 @@ public class SceneSwitcher {
         if(w instanceof Stage){
             Stage s = (Stage) w;
             s.setScene(AppointmentsPage.appointmentsPage);
+        }
+    }
+
+    public void switchToAppointmentsPageBusiness(Window w, Stage primaryStage, List<Appointment> appointmentList){
+        AppointmentsPageBusiness = new AppointmentsPageBusiness(primaryStage, appointmentList);
+        if(w instanceof Stage){
+            Stage s = (Stage) w;
+            s.setScene(AppointmentsPageBusiness.appointmentsPage);
         }
     }
 }
