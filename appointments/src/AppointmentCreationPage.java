@@ -10,6 +10,7 @@ import javafx.scene.control.Button;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
+import javafx.scene.image.ImageView;
 import javafx.scene.layout.Background;
 import javafx.scene.layout.BackgroundFill;
 import javafx.scene.layout.BorderPane;
@@ -74,12 +75,13 @@ public class AppointmentCreationPage {
 
     public HBox sideBar(Stage primaryStage){
 
-        // FIXME this should display the user's profile picture
-        profilePicture = new Rectangle(65, 65, Color.CORAL);
-        StackPane pfp = new StackPane(profilePicture);
+        ImageView imageView = new ImageView();
+        imageView.setImage(businessLoggedin.getProfilePic());
+        imageView.setFitHeight(65);
+        imageView.setFitWidth(65);
+        StackPane pfp = new StackPane(imageView);
         pfp.setAlignment(Pos.CENTER);
 
-        // FIXME this should display the user's name
         Text nameText = new Text(businessLoggedin.getName());
         StackPane name = new StackPane(nameText);
         name.setAlignment(Pos.CENTER);

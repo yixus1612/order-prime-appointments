@@ -14,27 +14,27 @@ public class User extends Account{
     private String name;
     private int iD;
     public List <Appointment> appointmentList = new ArrayList<Appointment>();
-    //public Image profilePic;
+    public Image profilePic;
 
     User(){
         super(null);
         this.name = null;
         this.iD = 0;
-        //this.profilePic = null;
+        this.profilePic = new Image(getClass().getResourceAsStream("/images/BlankImage.jpg"));
     }
 
     User(String name, String email, int iD){
         super(email);
         this.name = name;
         this.iD = iD;
-        //this.profilePic = new Image("BlankImage.jpg");
+        this.profilePic = new Image(getClass().getResourceAsStream("/images/BlankImage.jpg"));
     }
 
     /*User(String name, String email, int iD, Image pic){
         super(email);
         this.name = name;
         this.iD = iD;
-        //this.profilePic = pic;
+        this.profilePic = pic;
         createAppointmentList();
     }*/
     
@@ -42,9 +42,9 @@ public class User extends Account{
         return iD;
     }
 
-    /*public Image getProfilePic(){
+    public Image getProfilePic(){
         return profilePic;
-    }*/
+    }
 
     public String getName(){
         return name;
@@ -58,9 +58,9 @@ public class User extends Account{
         this.name = newName;
     }
 
-  /*  public void setProfilePic(Image newImage){
+    public void setProfilePic(Image newImage){
         this.profilePic = newImage; 
-    }*/
+    }
 
     public void createAppointmentList(){
         List<Appointment> tempList = new ArrayList<>();

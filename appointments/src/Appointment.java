@@ -93,7 +93,7 @@ public class Appointment {
     }
 
     public User findUser(int id){
-        User tempUser = new User();
+        User tempUser;
         try{
             FileReader fileReaderUser = new FileReader("userList.csv");
             BufferedReader br = new BufferedReader(fileReaderUser);
@@ -102,6 +102,7 @@ public class Appointment {
 
             while((line = br.readLine()) != null){
                     tempArr = line.split(",");
+                    tempUser = new User();
                     tempUser.setName(tempArr[0]);
                     tempUser.setEmail(tempArr[1]);
                     tempUser.setID(Integer.parseInt(tempArr[2]));
@@ -109,6 +110,7 @@ public class Appointment {
                     //check to see if email and password are correctly inputted
                     if(tempUser.getID() == id){
                         br.close();
+                        fileReaderUser.close();
                         return tempUser;
                     }
             }
@@ -120,11 +122,12 @@ public class Appointment {
             System.out.println(except);
         }
 
+        tempUser = new User();
         return tempUser;
     }
 
     public Business findBusiness(int id){
-        Business tempBusiness = new Business();
+        Business tempBusiness;
         try{
             FileReader fileReaderUser = new FileReader("businessList.csv");
             BufferedReader br = new BufferedReader(fileReaderUser);
@@ -133,6 +136,7 @@ public class Appointment {
 
             while((line = br.readLine()) != null){
                 tempArr = line.split(",");
+                tempBusiness = new Business();
                 tempBusiness.setName(tempArr[0]);
                 tempBusiness.setEmail(tempArr[1]);
                 tempBusiness.setType(tempArr[2]);
@@ -153,6 +157,7 @@ public class Appointment {
             System.out.println(except);
         }
 
+        tempBusiness = new Business();
         return tempBusiness;
     }
 

@@ -12,6 +12,7 @@ import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
+import javafx.scene.image.ImageView;
 import javafx.scene.layout.Background;
 import javafx.scene.layout.BackgroundFill;
 import javafx.scene.layout.BorderPane;
@@ -66,14 +67,14 @@ public class AppointmentSchedulingPage {
     }
 
     public HBox sideBar(Stage primaryStage){
-        User userLoggedin = (User) primaryStage.getUserData();
 
-        // FIXME this should display the user's profile picture
-        profilePicture = new Rectangle(65, 65, Color.CORAL);
-        StackPane pfp = new StackPane(profilePicture);
+        ImageView imageView = new ImageView();
+        imageView.setImage(userLoggedin.getProfilePic());
+        imageView.setFitHeight(65);
+        imageView.setFitWidth(65);
+        StackPane pfp = new StackPane(imageView);
         pfp.setAlignment(Pos.CENTER);
 
-        // FIXME this should display the user's name
         Text nameText = new Text(userLoggedin.getName());
         StackPane name = new StackPane(nameText);
         name.setAlignment(Pos.CENTER);
@@ -193,6 +194,12 @@ public class AppointmentSchedulingPage {
                         counter++;
                     }
                 }
+
+                if(counter == 0){
+                    Label noAppointments = new Label("There are no appointments at this time.");
+                    home.getChildren().add(noAppointments);
+                }
+
                 br.close();
             }catch(IOException except){
                 System.out.println(except);
@@ -222,11 +229,13 @@ public class AppointmentSchedulingPage {
                     tempAppointment = new Appointment(tempArr[0], tempArr[1], Boolean.parseBoolean(tempArr[2]), Integer.parseInt(tempArr[3]), Integer.parseInt(tempArr[4]), tempArr[5], Integer.parseInt(tempArr[6]));
                     tempDate = ZonedDateTime.parse(tempArr[1], formatter);
                     tempCustomer = Integer.parseInt(tempArr[4]);
+                    System.out.println(tempAppointment.findUser(tempCustomer).getName());
    
                     //keep note if email is found
                     if(tempCustomer == userLoggedin.getID() && tempDate.isEqual(appointment.stringToDate())){
                         alreadyExists = true;
                         System.out.println("You already scheduled an appointment at this time");
+                        break;
                     }else if(appointment.getID() == Integer.parseInt(tempArr[6])){
                         tempAppointment.setCustomer(userLoggedin.getID());
                         tempAppointment.setAvailability(false);
@@ -235,7 +244,6 @@ public class AppointmentSchedulingPage {
                     }
 
                     appointmentList.add(tempAppointment);
-
                 }
                 br.close();
             }catch(IOException except){

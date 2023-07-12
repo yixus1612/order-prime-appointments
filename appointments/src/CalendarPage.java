@@ -16,6 +16,7 @@ import javafx.stage.Stage;
 import javafx.scene.text.Font;
 import javafx.scene.text.FontWeight;
 import javafx.scene.control.Button;
+import javafx.scene.image.ImageView;
 
 import java.io.BufferedReader;
 import java.io.FileReader;
@@ -84,12 +85,13 @@ public class CalendarPage {
     }
 
     public HBox sideBar(Stage primaryStage){
-        // FIXME this should display the user's profile picture
-        profilePicture = new Rectangle(65, 65, Color.CORAL);
-        StackPane pfp = new StackPane(profilePicture);
+        ImageView imageView = new ImageView();
+        imageView.setImage(userLoggedin.getProfilePic());
+        imageView.setFitHeight(65);
+        imageView.setFitWidth(65);
+        StackPane pfp = new StackPane(imageView);
         pfp.setAlignment(Pos.CENTER);
 
-        // FIXME this should display the user's name
         Text nameText = new Text(userLoggedin.getName());
         StackPane name = new StackPane(nameText);
         name.setAlignment(Pos.CENTER);
