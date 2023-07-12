@@ -123,21 +123,46 @@ public class AppointmentsPage {
 
     public VBox mainPage(Stage primaryStage, List<Appointment> appointmentListForDay){
         VBox center = new VBox();
+        center.setAlignment(Pos.TOP_CENTER);
 
+        Label spacingBuffer1 = new Label(" ");
+        Label spacingBuffer2 = new Label(" ");
+        Label title = new Label("Your Appointments");
+        title.setFont(Font.font("Arial", FontWeight.BOLD, 28));
+        spacingBuffer1.setFont(Font.font("Arial", FontWeight.BOLD, 45));
+        spacingBuffer2.setFont(Font.font("Arial", FontWeight.BOLD, 5));
+        center.getChildren().addAll(spacingBuffer1, title, spacingBuffer2);
+
+        int counter = 0;
         for(Appointment appointment : appointmentListForDay){
+            Rectangle rowRectangle;
+            if(counter % 2 == 0){
+                rowRectangle = new Rectangle(400, 32, Color.WHITE);
+            }
+            else{rowRectangle = new Rectangle(400, 32, Color.LIGHTGRAY);}
+            
+
             Label appointmentType = new Label(appointment.getType() + " " + appointment.getDate() + " " + appointment.getProvider().getName() + " " + appointment.getCost() + "       ");
-            Button cancelButton = new Button("Cancel");
-            cancelButton.setMinWidth(97.5);
-            cancelButton.setOnAction(e-> cancelAppointment(appointment, primaryStage, appointmentListForDay));
+            Button editButton = new Button("Cancel");
+            editButton.setMinWidth(97.5);
+            editButton.setOnAction(e-> editAppointment(appointment, primaryStage, appointmentListForDay));
             HBox appointmentData = new HBox();
-            appointmentData.getChildren().addAll(appointmentType, cancelButton);
-            center.getChildren().add(appointmentData);
+            appointmentData.setAlignment(Pos.CENTER);
+            appointmentData.getChildren().addAll(appointmentType, editButton);
+
+            StackPane row = new StackPane();
+            row.setAlignment(Pos.CENTER);
+            row.getChildren().addAll(rowRectangle, appointmentData);
+
+            center.getChildren().add(row);
+
+            counter++;
         }
 
         return center;
     }
 
-    public void cancelAppointment(Appointment appointment, Stage primaryStage, List<Appointment> appointmentListForDay){
+    public void editAppointment(Appointment appointment, Stage primaryStage, List<Appointment> appointmentListForDay){
 
         List<Appointment> totalAppointmentList = new ArrayList<>();
         int index = 0;

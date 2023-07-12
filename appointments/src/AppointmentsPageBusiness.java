@@ -124,22 +124,51 @@ public class AppointmentsPageBusiness {
 
     public VBox mainPage(Stage primaryStage, List<Appointment> appointmentListForDay){
         VBox center = new VBox();
-
+        center.setAlignment(Pos.TOP_CENTER);
+        Label spacingBuffer1 = new Label(" ");
+        Label spacingBuffer2 = new Label(" ");
+        Label title = new Label("Your Appointments");
+        title.setFont(Font.font("Arial", FontWeight.BOLD, 28));
+        spacingBuffer1.setFont(Font.font("Arial", FontWeight.BOLD, 45));
+        spacingBuffer2.setFont(Font.font("Arial", FontWeight.BOLD, 5));
+        center.getChildren().addAll(spacingBuffer1, title, spacingBuffer2);
+        
         if(appointmentListForDay.size() == 0){
             Label noAppointments = new Label("There are no appointments at this time");
             center.getChildren().add(noAppointments);
         }else{
-            for(Appointment appointment : appointmentListForDay){
-                //System.out.println(appointment.getType());
-                Label appointmentType = new Label(appointment.getType() + " " + appointment.getDate() + " " + appointment.getProvider().getName() + " " + appointment.getCost() + "       ");
-                Button cancelButton = new Button("Edit");
-                cancelButton.setMinWidth(97.5);
-                cancelButton.setOnAction(e-> switcher.switchToEditAppointmentsPage(appointmentsPage.getWindow(), primaryStage, appointment, appointmentListForDay));
-                HBox appointmentData = new HBox();
-                appointmentData.getChildren().addAll(appointmentType, cancelButton);
-                center.getChildren().add(appointmentData);
+         int counter = 0;
+        for(Appointment appointment : appointmentListForDay){
+            Rectangle rowRectangle;
+            if(counter % 2 == 0){
+                rowRectangle = new Rectangle(400, 32, Color.WHITE);
             }
+            else{rowRectangle = new Rectangle(400, 32, Color.LIGHTGRAY);}
+            
+
+            Label appointmentType = new Label(appointment.getType() + " " + appointment.getDate() + " " + appointment.getProvider().getName() + " " + appointment.getCost() + "       ");
+            HBox appointmentData = new HBox();
+            appointmentData.setAlignment(Pos.CENTER);
+            Button cancelButton = new Button("Edit");
+            cancelButton.setMinWidth(97.5);
+            cancelButton.setOnAction(e-> switcher.switchToEditAppointmentsPage(appointmentsPage.getWindow(), primaryStage, appointment, appointmentListForDay));
+
+            appointmentData.getChildren().addAll(appointmentType, cancelButton);
+
+            StackPane row = new StackPane();
+            row.setAlignment(Pos.CENTER);
+            row.getChildren().addAll(rowRectangle, appointmentData);
+
+            center.getChildren().add(row);
+
+            counter++;
         }
+
+       
+        }
+
+        
+
 
         
 
