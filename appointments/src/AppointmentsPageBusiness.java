@@ -48,7 +48,6 @@ public class AppointmentsPageBusiness {
         BorderPane layout = new BorderPane();
         layout.setLeft(sidebar);
 
-        AnchorPane format = new AnchorPane();
         VBox center = mainPage(primaryStage, appointmentListForDay);
         layout.setCenter(center);
 
@@ -129,8 +128,8 @@ public class AppointmentsPageBusiness {
             Label noAppointments = new Label("There are no appointments at this time");
             center.getChildren().add(noAppointments);
         }else{
+            center.getChildren().clear();
             for(Appointment appointment : appointmentListForDay){
-                //System.out.println(appointment.getType());
                 Label appointmentType = new Label(appointment.getType() + " " + appointment.getDate() + " " + appointment.getProvider().getName() + " " + appointment.getCost() + "       ");
                 Button cancelButton = new Button("Edit");
                 cancelButton.setMinWidth(97.5);

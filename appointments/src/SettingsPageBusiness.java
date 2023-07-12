@@ -1,5 +1,7 @@
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
+import javafx.scene.control.Button;
+import javafx.scene.control.Label;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.Background;
 import javafx.scene.layout.BackgroundFill;
@@ -32,6 +34,10 @@ public class SettingsPageBusiness {
         businessLoggedin = (Business) primaryStage.getUserData();
 
         BorderPane layout = new BorderPane();
+
+        VBox mainPage = mainPage(primaryStage);
+        layout.setCenter(mainPage);
+        
         HBox sidebar = sideBar(primaryStage);
         layout.setLeft(sidebar);
 
@@ -104,6 +110,37 @@ public class SettingsPageBusiness {
         calendarTabText.setOnMouseClicked(e -> switcher.switchToCalendarPageBusiness(settingsPage.getWindow(), primaryStage));
 
         return sidebar;
+
+    }
+
+    public VBox mainPage(Stage primaryStage){
+        VBox center = new VBox();
+        center.setAlignment(Pos.CENTER);
+        Button editButton = new Button("Edit");
+        Button signOutButton = new Button("Sign Out");
+
+        ImageView imageView = new ImageView();
+        imageView.setImage(businessLoggedin.getProfilePic());
+        imageView.setFitHeight(200);
+        imageView.setFitWidth(200);
+
+        Label nameLabel = new Label("Name: " + businessLoggedin.getName());
+
+        Label emailLabel = new Label("Email: " + businessLoggedin.getEmail());
+
+        Label typeLabel = new Label("Business Name: " + businessLoggedin.getType());
+
+        editButton.setOnAction(e->{
+            switcher.switchToEditProfilePageBusiness(settingsPage.getWindow(), primaryStage);
+        });
+
+        signOutButton.setOnAction(e->{
+            businessLoggedin = null;
+            switcher.switchToLoginPage(settingsPage.getWindow(), primaryStage);
+        });
+
+        center.getChildren().addAll(imageView, nameLabel, emailLabel, typeLabel, editButton, signOutButton);
+        return center;
 
     }
 }

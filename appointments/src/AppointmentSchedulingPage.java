@@ -7,6 +7,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import javafx.geometry.Pos;
+import javafx.scene.Group;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
@@ -46,6 +47,8 @@ public class AppointmentSchedulingPage {
     Button backButton = new Button("Back");
     Button searchButton = new Button("Search");
     List <Label> appointments = new ArrayList<Label>();
+    private Label noAppointments;
+    private int counter = 0;
 
     public AppointmentSchedulingPage(Stage primaryStage){
 
@@ -164,8 +167,11 @@ public class AppointmentSchedulingPage {
     public void search(Stage primaryStage, VBox home){
         searchButton.setOnAction(e->{
             String userInput = businessName.getText();
+            for(int i = 2; i < counter; i++){
+                home.getChildren().remove(i);
+            }
+            counter = 0;
             try{
-               
                 //set up FileReader
                 FileReader fileReaderAccount = new FileReader("appointmentList.csv");
                 BufferedReader br = new BufferedReader(fileReaderAccount);
@@ -177,7 +183,6 @@ public class AppointmentSchedulingPage {
                 User tempCustomer = new User();
        
                 //read in data and create list of available appointments
-                int counter = 0;
                 while((line = br.readLine()) != null){
                     tempArr = line.split(",");
                     tempAppointment = new Appointment(tempArr[0], tempArr[1], Boolean.parseBoolean(tempArr[2]), Integer.parseInt(tempArr[3]), Integer.parseInt(tempArr[4]), tempArr[5], Integer.parseInt(tempArr[6]));
@@ -196,8 +201,9 @@ public class AppointmentSchedulingPage {
                 }
 
                 if(counter == 0){
-                    Label noAppointments = new Label("There are no appointments at this time.");
+                    noAppointments = new Label("There are no appointments at this time.");
                     home.getChildren().add(noAppointments);
+                    counter++;
                 }
 
                 br.close();

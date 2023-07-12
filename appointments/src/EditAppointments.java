@@ -254,7 +254,7 @@ public class EditAppointments {
                 tempAppointment = new Appointment(tempArr[0], tempArr[1], Boolean.parseBoolean(tempArr[2]), Integer.parseInt(tempArr[3]), Integer.parseInt(tempArr[4]), tempArr[5], Integer.parseInt(tempArr[6]));
    
                 //keep note if email is found
-                if(appointment.getID() != tempAppointment.getID()){
+                if(appointment.getID() == tempAppointment.getID()){
                     index = counter;
                 }else{
                     totalAppointmentList.add(tempAppointment);

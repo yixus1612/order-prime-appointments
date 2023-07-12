@@ -1,9 +1,6 @@
 import java.io.BufferedReader;
 import java.io.FileReader;
-import java.io.FileWriter;
 import java.io.IOException;
-import java.time.ZonedDateTime;
-import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -14,7 +11,8 @@ public class User extends Account{
     private String name;
     private int iD;
     public List <Appointment> appointmentList = new ArrayList<Appointment>();
-    public Image profilePic;
+    private Image profilePic;
+    private String fileName;
 
     User(){
         super(null);
@@ -29,14 +27,6 @@ public class User extends Account{
         this.iD = iD;
         this.profilePic = new Image(getClass().getResourceAsStream("/images/BlankImage.jpg"));
     }
-
-    /*User(String name, String email, int iD, Image pic){
-        super(email);
-        this.name = name;
-        this.iD = iD;
-        this.profilePic = pic;
-        createAppointmentList();
-    }*/
     
     public int getID(){
         return iD;
@@ -44,6 +34,10 @@ public class User extends Account{
 
     public Image getProfilePic(){
         return profilePic;
+    }
+
+    public String getFileName(){
+        return fileName;
     }
 
     public String getName(){
@@ -58,10 +52,6 @@ public class User extends Account{
         this.name = newName;
     }
 
-    public void setProfilePic(Image newImage){
-        this.profilePic = newImage; 
-    }
-
     public void createAppointmentList(){
         List<Appointment> tempList = new ArrayList<>();
         try{
@@ -70,7 +60,6 @@ public class User extends Account{
             BufferedReader br = new BufferedReader(fileReaderAccount);
             String line = "";
             String[] tempArr;
-            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd hh:mm:ss a z");
 
             //read account file
             while((line = br.readLine()) != null){
@@ -104,4 +93,5 @@ public class User extends Account{
     public void addAppointment(Appointment appointment){
         appointmentList.add(appointment);
     }
+
 }

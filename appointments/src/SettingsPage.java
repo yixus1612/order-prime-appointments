@@ -1,6 +1,8 @@
 
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
+import javafx.scene.control.Button;
+import javafx.scene.control.Label;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.Background;
 import javafx.scene.layout.BackgroundFill;
@@ -33,6 +35,10 @@ public class SettingsPage {
         userLoggedin = (User) primaryStage.getUserData();
 
         BorderPane layout = new BorderPane();
+
+        VBox mainPage = mainPage(primaryStage);
+        layout.setCenter(mainPage);
+
         HBox sidebar = sideBar(primaryStage);
         layout.setLeft(sidebar);
 
@@ -106,6 +112,35 @@ public class SettingsPage {
         calendarTabText.setOnMouseClicked(e -> switcher.switchToCalendarPage(settingsPage.getWindow(), primaryStage));
 
         return sidebar;
+
+    }
+
+    public VBox mainPage(Stage primaryStage){
+        VBox center = new VBox();
+        center.setAlignment(Pos.CENTER);
+        Button editButton = new Button("Edit");
+        Button signOutButton = new Button("Sign Out");
+
+        ImageView imageView = new ImageView();
+        imageView.setImage(userLoggedin.getProfilePic());
+        imageView.setFitHeight(200);
+        imageView.setFitWidth(200);
+
+        Label nameLabel = new Label("Name: " + userLoggedin.getName());
+
+        Label emailLabel = new Label("Email: " + userLoggedin.getEmail());
+
+        editButton.setOnAction(e->{
+            switcher.switchToEditProfilePage(settingsPage.getWindow(), primaryStage);
+        });
+
+        signOutButton.setOnAction(e->{
+            userLoggedin = null;
+            switcher.switchToLoginPage(settingsPage.getWindow(), primaryStage);
+        });
+
+        center.getChildren().addAll(imageView, nameLabel, emailLabel, editButton, signOutButton);
+        return center;
 
     }
 }

@@ -20,6 +20,8 @@ public class SceneSwitcher {
     AppointmentsPage AppointmentsPage;
     EditAppointments EditAppointments;
     AppointmentsPageBusiness AppointmentsPageBusiness;
+    EditProfilePage EditProfilePage;
+    EditProfilePageBusiness EditProfilePageBusiness;
     
     public SceneSwitcher(Stage primaryStage){
         this.primaryStage = primaryStage;
@@ -127,6 +129,22 @@ public class SceneSwitcher {
         if(w instanceof Stage){
             Stage s = (Stage) w;
             s.setScene(AppointmentsPageBusiness.appointmentsPage);
+        }
+    }
+
+    public void switchToEditProfilePage(Window w, Stage primaryStage){
+        EditProfilePage = new EditProfilePage(primaryStage);
+        if(w instanceof Stage){
+            Stage s = (Stage) w;
+            s.setScene(EditProfilePage.settingsPage);
+        }
+    }
+
+    public void switchToEditProfilePageBusiness(Window w, Stage primaryStage){
+        EditProfilePageBusiness = new EditProfilePageBusiness(primaryStage);
+        if(w instanceof Stage){
+            Stage s = (Stage) w;
+            s.setScene(EditProfilePage.settingsPage);
         }
     }
 }
