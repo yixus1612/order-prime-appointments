@@ -129,25 +129,26 @@ public class EditAppointments {
 
     public VBox mainPage(Stage primaryStage, Appointment appointment, List<Appointment> appointmentListForDay){
         VBox center = new VBox();
-        center.setAlignment(Pos.CENTER);
+        center.setAlignment(Pos.TOP_CENTER);
         Button submitButton = new Button("Submit");
         Button deleteButton = new Button("Delete");
         HBox [] boxs = new HBox[6];
         for(int i = 0; i < 6; i++){
             boxs[i] = new HBox();
+            boxs[i].setAlignment(Pos.CENTER_LEFT);
         }
 
-        Label typeLabel = new Label("Appointment Type: ");
+        Label typeLabel = new Label("\t\t\t\t\tAppointment Type:  ");
         TextField type = new TextField(appointment.getType());
         String userType = type.getText();
         boxs[0].getChildren().addAll(typeLabel, type);
 
-        Label dateLabel = new Label("Date: ");
+        Label dateLabel = new Label("\t\t\t\t\tDate:  ");
         TextField date = new TextField(appointment.getDate());
         String userDate = date.getText();
         boxs[1].getChildren().addAll(dateLabel, date);
 
-        Label availabilityLabel = new Label("Availability: ");
+        Label availabilityLabel = new Label("\t\t\t\t\tAvailability:  ");
          ObservableList<String> availability = FXCollections.observableArrayList(
             "true", "false"
         );
@@ -156,11 +157,11 @@ public class EditAppointments {
         Boolean userAvailability = Boolean.parseBoolean((String) comboBoxAvailability.getSelectionModel().getSelectedItem());
         boxs[2].getChildren().addAll(availabilityLabel, comboBoxAvailability);
 
-        Label customerLabel = new Label("Customer Name: ");
+        Label customerLabel = new Label("\t\t\t\t\tCustomer Name:  ");
         Label customer = new Label(appointment.getCustomer().getName());
         boxs[3].getChildren().addAll(customerLabel, customer);
 
-        Label costLabel = new Label("Cost: ");
+        Label costLabel = new Label("\t\t\t\t\tCost:  ");
         TextField cost = new TextField(appointment.getCost());
         String userCost = cost.getText();
         boxs[4].getChildren().addAll(costLabel, cost);
@@ -177,7 +178,20 @@ public class EditAppointments {
             delete(appointment, primaryStage, appointmentListForDay);
         });
 
-        center.getChildren().addAll(boxs[0], boxs[1], boxs[2], boxs[3], boxs[4], submitButton, deleteButton);
+        Label title = new Label("Edit Appointment");
+        title.setFont(Font.font("Arial", FontWeight.BOLD, 28));
+
+        Label spacingBuffer1 = new Label(" ");
+        Label spacingBuffer2 = new Label(" ");
+        spacingBuffer1.setFont(Font.font("Arial", FontWeight.BOLD, 45));
+        spacingBuffer2.setFont(Font.font("Arial", FontWeight.BOLD, 5));
+
+        HBox buttons = new HBox(submitButton, deleteButton);
+        buttons.setAlignment(Pos.CENTER);
+        buttons.setSpacing(2);
+
+        center.setSpacing(3);
+        center.getChildren().addAll(spacingBuffer1, title, spacingBuffer2, boxs[0], boxs[1], boxs[2], boxs[3], boxs[4], boxs[5], buttons);
         return center;
 
     }
