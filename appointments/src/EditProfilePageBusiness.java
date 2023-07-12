@@ -66,7 +66,7 @@ public class EditProfilePageBusiness {
         StackPane name = new StackPane(nameText);
         name.setAlignment(Pos.CENTER);
 
-        scheduleTabText = new Text("  Schedule");
+        scheduleTabText = new Text("  Create");
         scheduleTabText.setFill(Color.WHITE);
         scheduleTabText.setFont(Font.font ("Arial", FontWeight.BOLD, 12));
         scheduleTabRectangle = new Rectangle(110,25, Color.web("#3064b8"));
@@ -109,14 +109,14 @@ public class EditProfilePageBusiness {
         HBox sidebar = new HBox(tabStack, sidebarSeparator);
         sidebar.setBackground(new Background(new BackgroundFill(Color.web("#4681e0"), null, null)));
 
-        scheduleTabRectangle.setOnMouseClicked(e -> switcher.switchToAppointmentSchedulingPage(settingsPage.getWindow(), primaryStage));
-        scheduleTabText.setOnMouseClicked(e -> switcher.switchToAppointmentSchedulingPage(settingsPage.getWindow(), primaryStage));
+        scheduleTabRectangle.setOnMouseClicked(e -> switcher.switchToAppointmentCreationPage(settingsPage.getWindow(), primaryStage));
+        scheduleTabText.setOnMouseClicked(e -> switcher.switchToAppointmentCreationPage(settingsPage.getWindow(), primaryStage));
 
-        appointmentsTabRectangle.setOnMouseClicked(e->switcher.switchToAppointmentsPage(settingsPage.getWindow(), primaryStage, businessLoggedin.appointmentList));
-        appointmentsTabText.setOnMouseClicked(e -> switcher.switchToAppointmentsPage(settingsPage.getWindow(), primaryStage, businessLoggedin.appointmentList));
+        appointmentsTabRectangle.setOnMouseClicked(e->switcher.switchToAppointmentsPageBusiness(settingsPage.getWindow(), primaryStage, businessLoggedin.appointmentList));
+        appointmentsTabText.setOnMouseClicked(e -> switcher.switchToAppointmentsPageBusiness(settingsPage.getWindow(), primaryStage, businessLoggedin.appointmentList));
 
-        calendarTabRectangle.setOnMouseClicked(e -> switcher.switchToCalendarPage(settingsPage.getWindow(), primaryStage));
-        calendarTabText.setOnMouseClicked(e -> switcher.switchToCalendarPage(settingsPage.getWindow(), primaryStage));
+        calendarTabRectangle.setOnMouseClicked(e -> switcher.switchToCalendarPageBusiness(settingsPage.getWindow(), primaryStage));
+        calendarTabText.setOnMouseClicked(e -> switcher.switchToCalendarPageBusiness(settingsPage.getWindow(), primaryStage));
 
         return sidebar;
 
@@ -164,7 +164,7 @@ public class EditProfilePageBusiness {
         });
 
         backButton.setOnAction(e->{
-            switcher.switchToSettingsPage(settingsPage.getWindow(), primaryStage);
+            switcher.switchToSettingsPageBusiness(settingsPage.getWindow(), primaryStage);
         });
 
         HBox buttons = new HBox(submitButton, deleteButton);
