@@ -187,7 +187,8 @@ public class AppointmentSchedulingPage {
                 Appointment tempAppointment;
                 Business tempBusiness = new Business();
                 User tempCustomer = new User();
-       
+    
+                int counter = 0;
                 //read in data and create list of available appointments
                 while((line = br.readLine()) != null){
                     tempArr = line.split(",");
