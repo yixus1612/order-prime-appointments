@@ -144,7 +144,7 @@ public class SceneSwitcher {
         EditProfilePageBusiness = new EditProfilePageBusiness(primaryStage);
         if(w instanceof Stage){
             Stage s = (Stage) w;
-            s.setScene(EditProfilePage.settingsPage);
+            s.setScene(EditProfilePageBusiness.settingsPage);
         }
     }
 }
