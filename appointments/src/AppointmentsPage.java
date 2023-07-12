@@ -10,6 +10,8 @@ import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 import javafx.scene.layout.Background;
 import javafx.scene.layout.BackgroundFill;
 import javafx.scene.layout.BorderPane;
@@ -53,12 +55,13 @@ public class AppointmentsPage {
     }
     
     public HBox sideBar(Stage primaryStage){
-        // FIXME this should display the user's profile picture
-        profilePicture = new Rectangle(65, 65, Color.CORAL);
-        StackPane pfp = new StackPane(profilePicture);
+        ImageView imageView = new ImageView();
+        imageView.setImage(userLoggedin.getProfilePic());
+        imageView.setFitHeight(65);
+        imageView.setFitWidth(65);
+        StackPane pfp = new StackPane(imageView);
         pfp.setAlignment(Pos.CENTER);
 
-        // FIXME this should display the user's name
         Text nameText = new Text(userLoggedin.getName());
         StackPane name = new StackPane(nameText);
         name.setAlignment(Pos.CENTER);
@@ -122,7 +125,6 @@ public class AppointmentsPage {
         VBox center = new VBox();
 
         for(Appointment appointment : appointmentListForDay){
-            //System.out.println(appointment.getType());
             Label appointmentType = new Label(appointment.getType() + " " + appointment.getDate() + " " + appointment.getProvider().getName() + " " + appointment.getCost() + "       ");
             Button cancelButton = new Button("Cancel");
             cancelButton.setMinWidth(97.5);
@@ -173,7 +175,6 @@ public class AppointmentsPage {
             FileWriter fileWriterUser = new FileWriter("appointmentList.csv", false);
 
             for(Appointment a : totalAppointmentList){
-                System.out.println(a.getType());
                 fileWriterUser.write(a.getType() + "," + a.getDate() + "," + a.getAvailability() + "," + a.getProvider().getID() + "," + a.getCustomer().getID() + "," + a.getCost() + "," + a.getID() + "\n");
             }
 

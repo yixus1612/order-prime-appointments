@@ -10,6 +10,8 @@ import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
+import javafx.scene.image.ImageView;
+import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.Background;
 import javafx.scene.layout.BackgroundFill;
 import javafx.scene.layout.BorderPane;
@@ -46,6 +48,7 @@ public class AppointmentsPageBusiness {
         BorderPane layout = new BorderPane();
         layout.setLeft(sidebar);
 
+        AnchorPane format = new AnchorPane();
         VBox center = mainPage(primaryStage, appointmentListForDay);
         layout.setCenter(center);
 
@@ -53,12 +56,13 @@ public class AppointmentsPageBusiness {
     }
     
     public HBox sideBar(Stage primaryStage){
-        // FIXME this should display the user's profile picture
-        profilePicture = new Rectangle(65, 65, Color.CORAL);
-        StackPane pfp = new StackPane(profilePicture);
+        ImageView imageView = new ImageView();
+        imageView.setImage(businessLoggedin.getProfilePic());
+        imageView.setFitHeight(65);
+        imageView.setFitWidth(65);
+        StackPane pfp = new StackPane(imageView);
         pfp.setAlignment(Pos.CENTER);
 
-        // FIXME this should display the user's name
         Text nameText = new Text(businessLoggedin.getName());
         StackPane name = new StackPane(nameText);
         name.setAlignment(Pos.CENTER);
@@ -121,70 +125,25 @@ public class AppointmentsPageBusiness {
     public VBox mainPage(Stage primaryStage, List<Appointment> appointmentListForDay){
         VBox center = new VBox();
 
-        for(Appointment appointment : appointmentListForDay){
-            //System.out.println(appointment.getType());
-            Label appointmentType = new Label(appointment.getType() + " " + appointment.getDate() + " " + appointment.getProvider().getName() + " " + appointment.getCost() + "       ");
-            Button cancelButton = new Button("Cancel");
-            cancelButton.setMinWidth(97.5);
-            cancelButton.setOnAction(e-> cancelAppointment(appointment, primaryStage, appointmentListForDay));
-            HBox appointmentData = new HBox();
-            appointmentData.getChildren().addAll(appointmentType, cancelButton);
-            center.getChildren().add(appointmentData);
+        if(appointmentListForDay.size() == 0){
+            Label noAppointments = new Label("There are no appointments at this time");
+            center.getChildren().add(noAppointments);
+        }else{
+            for(Appointment appointment : appointmentListForDay){
+                //System.out.println(appointment.getType());
+                Label appointmentType = new Label(appointment.getType() + " " + appointment.getDate() + " " + appointment.getProvider().getName() + " " + appointment.getCost() + "       ");
+                Button cancelButton = new Button("Edit");
+                cancelButton.setMinWidth(97.5);
+                cancelButton.setOnAction(e-> switcher.switchToEditAppointmentsPage(appointmentsPage.getWindow(), primaryStage, appointment, appointmentListForDay));
+                HBox appointmentData = new HBox();
+                appointmentData.getChildren().addAll(appointmentType, cancelButton);
+                center.getChildren().add(appointmentData);
+            }
         }
+
+        
 
         return center;
-    }
-
-    public void cancelAppointment(Appointment appointment, Stage primaryStage, List<Appointment> appointmentListForDay){
-
-        List<Appointment> totalAppointmentList = new ArrayList<>();
-        int index = 0;
-        try{
-            //set up FileReader
-            FileReader fileReaderAccount = new FileReader("appointmentList.csv");
-            BufferedReader br = new BufferedReader(fileReaderAccount);
-            String line = "";
-            String[] tempArr;
-            Appointment tempAppointment;
-            int counter = 0;
-   
-            //read in data and determine if appointment already exists
-            while((line = br.readLine()) != null){
-                tempArr = line.split(",");
-                tempAppointment = new Appointment(tempArr[0], tempArr[1], Boolean.parseBoolean(tempArr[2]), Integer.parseInt(tempArr[3]), Integer.parseInt(tempArr[4]), tempArr[5], Integer.parseInt(tempArr[6]));
-   
-                //keep note if email is found
-                if(appointment.getID() == tempAppointment.getID()){
-                    tempAppointment.setAvailability(true);
-                    tempAppointment.getCustomer().setID(0);
-                    index = counter;
-                }
-
-                counter++;
-                totalAppointmentList.add(tempAppointment);
-
-            }
-            br.close();
-        }catch(IOException except){
-            System.out.println(except);
-        }
-
-        try{              
-            FileWriter fileWriterUser = new FileWriter("appointmentList.csv", false);
-
-            for(Appointment a : totalAppointmentList){
-                System.out.println(a.getType());
-                fileWriterUser.write(a.getType() + "," + a.getDate() + "," + a.getAvailability() + "," + a.getProvider().getID() + "," + a.getCustomer().getID() + "," + a.getCost() + "," + a.getID() + "\n");
-            }
-
-            fileWriterUser.close();
-
-        }catch(IOException except){
-            System.out.println(except);
-        }
-
-        appointmentListForDay.remove(index);
-        switcher.switchToAppointmentsPage(appointmentsPage.getWindow(), primaryStage, appointmentListForDay);
     }
 
 }

@@ -9,18 +9,22 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
 
+import javafx.scene.image.Image;
+
 public class Business extends Account{
 
     public List <Appointment> appointmentList = new ArrayList <Appointment>();
     private String name;
     private String type;
     private int id;
+    public Image profilePic;
 
     Business(){
         super(null);
         this.name = null;
         this.type = null;
         this.id = 0;
+        this.profilePic = new Image(getClass().getResourceAsStream("/images/BlankImage.jpg"));
     }
 
     Business(String name, String email, String type, int id){
@@ -28,6 +32,7 @@ public class Business extends Account{
         this.name = name;
         this.type = type;
         this.id = id;
+        this.profilePic = new Image(getClass().getResourceAsStream("/images/BlankImage.jpg"));
     }
 
     public void displayAppointments(Business business){
@@ -53,6 +58,10 @@ public class Business extends Account{
         return id;
     }
 
+    public Image getProfilePic(){
+        return profilePic;
+    }
+
     public void setName(String newName){
         this.name = newName;
     }
@@ -63,6 +72,10 @@ public class Business extends Account{
 
     public void setID(int id){
         this.id = id;
+    }
+
+    public void setProfilePic(Image newImage){
+        this.profilePic = newImage; 
     }
 
     public void createAppointmentList(){

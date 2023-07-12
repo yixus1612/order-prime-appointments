@@ -106,8 +106,8 @@ public class SceneSwitcher {
         }
     }
 
-    public void switchToEditAppointmentsPage(Window w, Stage primaryStage, Appointment appointment){
-        EditAppointments = new EditAppointments(primaryStage, appointment);
+    public void switchToEditAppointmentsPage(Window w, Stage primaryStage, Appointment appointment, List<Appointment> appointmentList){
+        EditAppointments = new EditAppointments(primaryStage, appointment, appointmentList);
         if(w instanceof Stage){
             Stage s = (Stage) w;
             s.setScene(EditAppointments.editAppointmentsPage);

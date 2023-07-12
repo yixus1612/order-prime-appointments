@@ -118,7 +118,7 @@ public class CreateAccountBusiness {
       String business = businessField.getText();
       String firstName = firstNameField.getText();
       String lastName = lastNameField.getText();
-      String name = firstName + lastName;
+      String name = firstName + " " + lastName;
       String email = newEmailField.getText();
       String password = newPasswordField.getText();
       String confirmPassword = confirmPasswordField.getText();

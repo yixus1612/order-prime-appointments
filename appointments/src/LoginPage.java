@@ -194,7 +194,6 @@ public class LoginPage{
                     tempBusiness.setEmail(tempArr[1]);
                     tempBusiness.setType(tempArr[2]);
                     tempBusiness.setID(Integer.parseInt(tempArr[3]));
-                    tempBusiness.createAppointmentList();
                     br.close();
                     return tempBusiness;
                 }  
