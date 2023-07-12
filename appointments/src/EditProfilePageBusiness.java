@@ -124,7 +124,7 @@ public class EditProfilePageBusiness {
 
     public VBox mainPage(Stage primaryStage){
         VBox center = new VBox();
-        center.setAlignment(Pos.CENTER);
+        center.setAlignment(Pos.TOP_CENTER);
         Button submitButton = new Button("Submit");
         Button deleteButton = new Button("Delete");
         Button backButton = new Button("Back");
@@ -133,22 +133,22 @@ public class EditProfilePageBusiness {
             boxs[i] = new HBox();
         }
 
-        Label firstNameLabel = new Label("First Name: ");
+        Label firstNameLabel = new Label("\t\t\t\tFirst Name:\t  ");
         TextField firstName = new TextField(businessLoggedin.getName().split(" (?!.* )")[0]);
         String userFirstName = firstName.getText();
         boxs[0].getChildren().addAll(firstNameLabel, firstName);
 
-        Label lastNameLabel = new Label("Last Name: ");
+        Label lastNameLabel = new Label("\t\t\t\tLast Name:\t  ");
         TextField lastName = new TextField(businessLoggedin.getName().split(" (?!.* )")[1]);
         String userLastName = lastName.getText();
         boxs[1].getChildren().addAll(lastNameLabel, lastName);
 
-        Label typeLabel = new Label("Business Name: ");
+        Label typeLabel = new Label("\t\t\t\tBusiness Name: ");
         TextField type = new TextField(businessLoggedin.getType());
         String userType = lastName.getText();
         boxs[2].getChildren().addAll(typeLabel, type);
 
-        Label emailLabel = new Label("Email: ");
+        Label emailLabel = new Label("\t\t\t\tEmail:\t\t  ");
         TextField email = new TextField(businessLoggedin.getEmail());
         String userEmail = email.getText();
         boxs[3].getChildren().addAll(emailLabel, email);
@@ -167,7 +167,19 @@ public class EditProfilePageBusiness {
             switcher.switchToSettingsPage(settingsPage.getWindow(), primaryStage);
         });
 
-        center.getChildren().addAll(boxs[0], boxs[1], boxs[2], boxs[3], submitButton, deleteButton, backButton);
+        HBox buttons = new HBox(submitButton, deleteButton);
+        buttons.setAlignment(Pos.CENTER);
+        buttons.setSpacing(2);
+        
+        Label spacingBuffer1 = new Label(" ");
+        Label spacingBuffer2 = new Label(" ");
+        Label title = new Label("Profile");
+        title.setFont(Font.font("Arial", FontWeight.BOLD, 28));
+        spacingBuffer1.setFont(Font.font("Arial", FontWeight.BOLD, 45));
+        spacingBuffer2.setFont(Font.font("Arial", FontWeight.BOLD, 5));
+
+        center.getChildren().addAll(spacingBuffer1, title, spacingBuffer2, boxs[0], boxs[1], boxs[2], boxs[3], buttons, backButton);
+        center.setSpacing(2);
         return center;
 
     }

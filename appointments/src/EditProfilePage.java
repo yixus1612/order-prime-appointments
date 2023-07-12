@@ -125,7 +125,7 @@ public class EditProfilePage {
 
     public VBox mainPage(Stage primaryStage){
         VBox center = new VBox();
-        center.setAlignment(Pos.CENTER);
+        center.setAlignment(Pos.TOP_CENTER);
         Button submitButton = new Button("Submit");
         Button deleteButton = new Button("Delete");
         Button backButton = new Button("Back");
@@ -139,17 +139,17 @@ public class EditProfilePage {
         imageView.setFitHeight(100);
         imageView.setFitWidth(100);
 
-        Label firstNameLabel = new Label("First Name: ");
+        Label firstNameLabel = new Label("\t\t\t\tFirst Name: ");
         TextField firstName = new TextField(userLoggedin.getName().split(" (?!.* )")[0]);
         String userFirstName = firstName.getText();
         boxs[0].getChildren().addAll(firstNameLabel, firstName);
 
-        Label lastNameLabel = new Label("Last Name: ");
+        Label lastNameLabel = new Label("\t\t\t\tLast Name: ");
         TextField lastName = new TextField(userLoggedin.getName().split(" (?!.* )")[1]);
         String userLastName = lastName.getText();
         boxs[1].getChildren().addAll(lastNameLabel, lastName);
 
-        Label emailLabel = new Label("Email: ");
+        Label emailLabel = new Label("\t\t\t\tEmail:\t   ");
         TextField email = new TextField(userLoggedin.getEmail());
         String userEmail = email.getText();
         boxs[2].getChildren().addAll(emailLabel, email);
@@ -169,8 +169,19 @@ public class EditProfilePage {
 
         HBox buttons = new HBox();
         buttons.getChildren().addAll(submitButton, deleteButton);
+        buttons.setAlignment(Pos.CENTER);
+        buttons.setSpacing(2);
 
-        center.getChildren().addAll(imageView, boxs[0], boxs[1], boxs[2], buttons, backButton);
+        Label spacingBuffer1 = new Label(" ");
+        Label spacingBuffer2 = new Label(" ");
+        Label title = new Label("Edit Profile");
+        title.setFont(Font.font("Arial", FontWeight.BOLD, 28));
+        spacingBuffer1.setFont(Font.font("Arial", FontWeight.BOLD, 45));
+        spacingBuffer2.setFont(Font.font("Arial", FontWeight.BOLD, 5));
+
+
+        center.getChildren().addAll(spacingBuffer1, title, spacingBuffer2, imageView, boxs[0], boxs[1], boxs[2], buttons, backButton);
+        center.setSpacing(2);
         return center;
 
     }

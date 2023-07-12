@@ -115,7 +115,7 @@ public class SettingsPageBusiness {
 
     public VBox mainPage(Stage primaryStage){
         VBox center = new VBox();
-        center.setAlignment(Pos.CENTER);
+        center.setAlignment(Pos.TOP_CENTER);
         Button editButton = new Button("Edit");
         Button signOutButton = new Button("Sign Out");
 
@@ -138,8 +138,15 @@ public class SettingsPageBusiness {
             businessLoggedin = null;
             switcher.switchToLoginPage(settingsPage.getWindow(), primaryStage);
         });
+        
+        Label spacingBuffer1 = new Label(" ");
+        Label spacingBuffer2 = new Label(" ");
+        Label title = new Label("Profile");
+        title.setFont(Font.font("Arial", FontWeight.BOLD, 28));
+        spacingBuffer1.setFont(Font.font("Arial", FontWeight.BOLD, 45));
+        spacingBuffer2.setFont(Font.font("Arial", FontWeight.BOLD, 5));
 
-        center.getChildren().addAll(imageView, nameLabel, emailLabel, typeLabel, editButton, signOutButton);
+        center.getChildren().addAll(spacingBuffer1, title, spacingBuffer2, imageView, nameLabel, emailLabel, typeLabel, editButton, signOutButton);
         return center;
 
     }
