@@ -10,7 +10,6 @@ import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
-import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.Background;
 import javafx.scene.layout.BackgroundFill;
@@ -46,6 +45,9 @@ public class AppointmentSchedulingPage {
     Button searchButton = new Button("Search");
     List <Label> appointments = new ArrayList<Label>();
 
+    private String previousSearch = null;
+    private VBox searchResults = new VBox();
+
     public AppointmentSchedulingPage(Stage primaryStage){
 
         switcher = new SceneSwitcher(primaryStage);
@@ -59,6 +61,7 @@ public class AppointmentSchedulingPage {
         center.setPrefWidth(490);
         VBox mainpage= mainPage(primaryStage);
         center.add(mainpage, 1, 1);
+        center.setAlignment(Pos.TOP_CENTER);
 
         layout.setCenter(center);
 
@@ -138,10 +141,13 @@ public class AppointmentSchedulingPage {
         HBox setUp = new HBox();
         VBox appointmentColumn = new VBox();
         Label title = new Label("Schedule An Appointment");
+        Label spacingBuffer = new Label(" ");
+        spacingBuffer.setFont(Font.font("Arial", FontWeight.BOLD, 90));
 
         businessName.setPromptText("Business Name");
 
         setUp.setPrefWidth(200);
+        setUp.setSpacing(2);
         backButton.setMinWidth(97.5);
         searchButton.setMinWidth(97.5);
         setUp.getChildren().addAll(backButton, searchButton);
@@ -149,7 +155,7 @@ public class AppointmentSchedulingPage {
 
         backButton.setOnAction(e->switcher.switchToCalendarPage(appointmentSchedulingPage.getWindow(), primaryStage));
 
-        appointmentColumn.getChildren().addAll(title, businessName, setUp);
+        appointmentColumn.getChildren().addAll(spacingBuffer, title, businessName, setUp);
         appointmentColumn.setSpacing(5);
         appointmentColumn.setAlignment(Pos.CENTER);
 
@@ -162,7 +168,13 @@ public class AppointmentSchedulingPage {
 
     public void search(Stage primaryStage, VBox home){
         searchButton.setOnAction(e->{
+            home.getChildren().remove(searchResults);
+            searchResults.getChildren().clear();
+            searchResults = new VBox();
+            searchResults.setSpacing(2);
+
             String userInput = businessName.getText();
+                
             try{
                
                 //set up FileReader
@@ -189,10 +201,11 @@ public class AppointmentSchedulingPage {
                         HBox column = new HBox();
                         signUp(primaryStage, signUpButton, tempAppointment);
                         column.getChildren().addAll(new Label(tempBusiness.getType() + " " + tempArr[0] + " " + tempBusiness.getName() + "        "), signUpButton);
-                        home.getChildren().add(column);
+                        searchResults.getChildren().add(column);
                         counter++;
                     }
                 }
+                home.getChildren().add(searchResults);
                 br.close();
             }catch(IOException except){
                 System.out.println(except);
@@ -203,7 +216,8 @@ public class AppointmentSchedulingPage {
 
     public void signUp(Stage primaryStage, Button button, Appointment appointment){
         button.setOnAction(e->{
-            
+            previousSearch = null;
+
             Boolean alreadyExists = false;
             List<Appointment> appointmentList = new ArrayList<>();
             try{
