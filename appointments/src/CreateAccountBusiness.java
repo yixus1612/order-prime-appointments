@@ -33,7 +33,7 @@ public class CreateAccountBusiness {
    */
    private static final String EMAIL_PATTERN = "^(.+)@(\\S+)$";
    /*
-      password mustc contain:
+      password must contain:
          - at least one digit
          - at least one lowercase letter
          - at least one uppercase letter
@@ -234,7 +234,13 @@ public class CreateAccountBusiness {
       }else if(!emailMatcher.matches()){
          note.setText("Please enter a valid email");
       }else if(!passwordMatcher.matches()){
-         note.setText("Please enter a vaild password.");
+         note.setText("Please enter a vaild password." +
+               "    password must contain:\n" +
+               "         - at least one digit\n" +
+               "         - at least one lowercase letter\n" + 
+               "         - at least one uppercase letter\n" + 
+               "         - at least one special character\n" + 
+               "         - must be greater than 6 and less than 15 characters in length");
       }else if(business.isEmpty()){
          note.setText("Please enter a business");
       }

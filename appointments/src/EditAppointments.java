@@ -2,6 +2,8 @@ import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.time.ZonedDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -40,6 +42,7 @@ public class EditAppointments {
     Rectangle buffer1, buffer2;
     private SceneSwitcher switcher;
     private Business businessLoggedin;
+    private DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd hh:mm:ss a z");
 
     public EditAppointments(Stage primaryStage, Appointment appointment, List<Appointment> appointmentListForDay){
 
@@ -115,8 +118,9 @@ public class EditAppointments {
         HBox sidebar = new HBox(tabStack, sidebarSeparator);
         sidebar.setBackground(new Background(new BackgroundFill(Color.web("#4681e0"), null, null)));
 
-        createTabRectangle.setOnMouseClicked(e -> switcher.switchToAppointmentCreationPage(editAppointmentsPage.getWindow(), primaryStage));
-        createTabText.setOnMouseClicked(e -> switcher.switchToAppointmentCreationPage(editAppointmentsPage.getWindow(), primaryStage));
+        Label tempLabel = new Label();
+        createTabRectangle.setOnMouseClicked(e -> switcher.switchToAppointmentCreationPage(editAppointmentsPage.getWindow(), primaryStage, tempLabel));
+        createTabText.setOnMouseClicked(e -> switcher.switchToAppointmentCreationPage(editAppointmentsPage.getWindow(), primaryStage, tempLabel));
 
         calendarTabRectangle.setOnMouseClicked(e -> switcher.switchToCalendarPageBusiness(editAppointmentsPage.getWindow(), primaryStage));
         calendarTabText.setOnMouseClicked(e -> switcher.switchToCalendarPageBusiness(editAppointmentsPage.getWindow(), primaryStage));
@@ -143,10 +147,83 @@ public class EditAppointments {
         String userType = type.getText();
         boxs[0].getChildren().addAll(typeLabel, type);
 
-        Label dateLabel = new Label("\t\t\t\t\tDate:  ");
-        TextField date = new TextField(appointment.getDate());
-        String userDate = date.getText();
-        boxs[1].getChildren().addAll(dateLabel, date);
+        Label dateLabel = new Label("\t\t\t\t\tDate (MM/DD/YY) :  ");
+        ZonedDateTime date = ZonedDateTime.parse(appointment.getDate(), formatter);
+        String amPM = "AM";
+
+        ObservableList<String> months = FXCollections.observableArrayList(
+            "01", "02", "03", "04", "05", "06", "07", "08", "09", "10", "11", "12"
+        );
+        final ComboBox month = new ComboBox(months);
+        month.setPromptText("Month");
+        if(date.getMonthValue() < 10){
+            month.setValue("0" + Integer.toString(date.getMonthValue()));
+        }else{
+            month.setValue(date.getMonthValue());
+        }
+
+        ObservableList<String> days = FXCollections.observableArrayList(
+            "01", "02", "03", "04", "05", "06", "07", "08", "09", "10", "11", "12", "13", "14", "15", "16", "17", "18", "19", "20", "21", "22", "23", "24", "25", "26", "27", "28", "29", "30", "31"
+        );
+        final ComboBox day = new ComboBox(days);
+        day.setPromptText("Day");
+        if(date.getDayOfMonth() < 10){
+        day.setValue("0" + Integer.toString(date.getDayOfMonth()));
+        }else{
+            day.setValue(date.getDayOfMonth());
+        }
+
+        ObservableList<String> years = FXCollections.observableArrayList(
+            "2023", "2024", "2025", "2026", "2027", "2028", "2029", "2030", "2031", "2032", "2033", "2034"
+        );
+        final ComboBox year = new ComboBox(years);
+        year.setPromptText("Year");
+        year.setValue(date.getYear());
+
+        boxs[1].getChildren().addAll(dateLabel, month, day, year);
+
+        Label timeLabel = new Label("Time: (HH:SS)");
+        ObservableList<String> hours = FXCollections.observableArrayList(
+            "01", "02", "03", "04", "05", "06", "07", "08", "09", "10", "11", "12"
+        );
+        final ComboBox hour = new ComboBox(hours);
+        hour.setPromptText("Hour");
+        int tempHour = date.getHour();
+        if(tempHour > 12){
+            amPM = "PM";
+            if(tempHour < 10){
+                hour.setValue("0" + Integer.toString(tempHour - 11));
+            }else{
+                hour.setValue(tempHour - 11);
+            }
+
+        }else{
+            if(tempHour < 10){
+                hour.setValue("0" + Integer.toString(tempHour + 1));
+            }else{
+                hour.setValue(tempHour + 1);
+            }
+        }
+
+        ObservableList<String> mins = FXCollections.observableArrayList(
+            "00", "15", "30", "45"
+        );
+        final ComboBox min = new ComboBox(mins);
+        min.setPromptText("Min");
+        if(date.getMinute() < 10){
+            min.setValue("0" + Integer.toString(date.getMinute()));
+        }else{
+            min.setValue(date.getMinute());
+        }
+
+        ObservableList<String> time = FXCollections.observableArrayList(
+            "AM", "PM"
+        );
+        final ComboBox comboBox6 = new ComboBox(time);
+        comboBox6.setPromptText("AM/PM");
+        comboBox6.setValue(amPM);
+
+        boxs[2].getChildren().addAll(timeLabel, hour, min, comboBox6);
 
         Label availabilityLabel = new Label("\t\t\t\t\tAvailability:  ");
          ObservableList<String> availability = FXCollections.observableArrayList(
@@ -155,23 +232,30 @@ public class EditAppointments {
         final ComboBox comboBoxAvailability = new ComboBox(availability);
         comboBoxAvailability.setValue(Boolean.toString(appointment.getAvailability()));
         Boolean userAvailability = Boolean.parseBoolean((String) comboBoxAvailability.getSelectionModel().getSelectedItem());
-        boxs[2].getChildren().addAll(availabilityLabel, comboBoxAvailability);
+        boxs[3].getChildren().addAll(availabilityLabel, comboBoxAvailability);
 
         Label customerLabel = new Label("\t\t\t\t\tCustomer Name:  ");
         Label customer = new Label(appointment.getCustomer().getName());
-        boxs[3].getChildren().addAll(customerLabel, customer);
+        boxs[4].getChildren().addAll(customerLabel, customer);
 
         Label costLabel = new Label("\t\t\t\t\tCost:  ");
         TextField cost = new TextField(appointment.getCost());
         String userCost = cost.getText();
-        boxs[4].getChildren().addAll(costLabel, cost);
+        boxs[5].getChildren().addAll(costLabel, cost);
 
         submitButton.setOnAction(e->{
-            appointment.setType(userType);
-            appointment.setDate(userDate);
-            appointment.setAvailability(userAvailability);
-            appointment.setCost(userCost);
-            changeAppointment(primaryStage, appointment, appointmentListForDay);
+            Label errorLabel = new Label();
+            if(userType != null && date.isAfter(ZonedDateTime.now())){
+                appointment.setType(userType);
+                appointment.setDate((String) year.getSelectionModel().getSelectedItem() + "-" + (String) month.getSelectionModel().getSelectedItem() + "-" + (String) day.getSelectionModel().getSelectedItem() + " " + (String) hour.getSelectionModel().getSelectedItem() + ":" + (String) min.getSelectionModel().getSelectedItem() + ":00 " + (String) comboBox6.getSelectionModel().getSelectedItem() + " -05:00");
+                appointment.setAvailability(userAvailability);
+                appointment.setCost(userCost);
+                changeAppointment(primaryStage, appointment, appointmentListForDay);
+            }else if(userType == null){
+                errorLabel.setText("Please enter an appointment name");
+            }else if(date.isBefore(ZonedDateTime.now())){
+                errorLabel.setText("Please enter a valid date");
+            }
         });
 
         deleteButton.setOnAction(e->{
