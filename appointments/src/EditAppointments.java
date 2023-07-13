@@ -158,7 +158,13 @@ public class EditAppointments {
         boxs[2].getChildren().addAll(availabilityLabel, comboBoxAvailability);
 
         Label customerLabel = new Label("\t\t\t\t\tCustomer Name:  ");
-        Label customer = new Label(appointment.getCustomer().getName());
+        Label customer;
+        if (appointment.getCustomer().getName() == null){
+            customer = new Label("No Customer");
+        }
+        else{
+        customer = new Label(appointment.getCustomer().getName());
+    }
         boxs[3].getChildren().addAll(customerLabel, customer);
 
         Label costLabel = new Label("\t\t\t\t\tCost:  ");

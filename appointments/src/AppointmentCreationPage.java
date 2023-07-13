@@ -203,7 +203,7 @@ public class AppointmentCreationPage {
         setUp.getChildren().addAll(backButton, createButton);
         setUp.setAlignment(Pos.CENTER);
         setUp.setSpacing(3);
-        backButton.setOnAction(e->switcher.switchToCalendarPage(appointmentCreationPage.getWindow(), primaryStage));
+        backButton.setOnAction(e->switcher.switchToCalendarPageBusiness(appointmentCreationPage.getWindow(), primaryStage));
 
         appointmentColumn.getChildren().addAll(spacingBuffer,title, appointmentName, dateBox, cost, setUp);
         appointmentColumn.setSpacing(5);

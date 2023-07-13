@@ -157,6 +157,7 @@ public class EditProfilePage {
         submitButton.setOnAction(e->{
             userLoggedin.setName(userFirstName + " " + userLastName);
             userLoggedin.setEmail(userEmail);
+            changeAccount(primaryStage);
         });
 
         deleteButton.setOnAction(e->{
@@ -221,7 +222,7 @@ public class EditProfilePage {
         }
 
         try{              
-            FileWriter fileWriterUser = new FileWriter("appointmentList.csv", false);
+            FileWriter fileWriterUser = new FileWriter("userList.csv", false);
 
             for(User u : userList){
                 fileWriterUser.write(u.getName() + "," + u.getEmail() + "," + u.getID() + "\n");
