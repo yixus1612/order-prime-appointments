@@ -219,7 +219,7 @@ public class EditProfilePageBusiness {
         }
 
         try{              
-            FileWriter fileWriterUser = new FileWriter("appointmentList.csv", false);
+            FileWriter fileWriterUser = new FileWriter("businessList.csv", false);
 
             for(Business u : businessList){
                 fileWriterUser.write(u.getName() + "," + u.getEmail() + "," + u.getID() + "\n");
