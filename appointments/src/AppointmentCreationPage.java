@@ -149,11 +149,6 @@ public class AppointmentCreationPage {
         Label spacingBuffer = new Label(" ");
         spacingBuffer.setFont(Font.font("Arial", FontWeight.BOLD, 90));
 
-        HBox dateBox = new HBox();
-
-        cost.setPromptText("Cost");
-        cost.setPrefWidth(200);
-
         ObservableList<String> months = FXCollections.observableArrayList(
             "01", "02", "03", "04", "05", "06", "07", "08", "09", "10", "11", "12"
         );
@@ -192,10 +187,27 @@ public class AppointmentCreationPage {
 
         createAppointment(primaryStage, comboBox1, comboBox2, comboBox3, comboBox4, comboBox5, comboBox6);
 
-        dateBox.getChildren().addAll(comboBox1, comboBox2, comboBox3, comboBox4, comboBox5, comboBox6);
+        HBox dateBox = new HBox();
+        Label dateLabel= new Label("Date: ");
+        dateBox.getChildren().addAll(dateLabel, comboBox1, comboBox2, comboBox3);
         dateBox.setSpacing(1);
 
+        HBox timeBox = new HBox();
+        Label timeLabel = new Label("Time: ");
+        timeBox.getChildren().addAll(timeLabel, comboBox4, comboBox5, comboBox6);
+        timeBox.setSpacing(1);
+
+        HBox nameBox = new HBox();
+        Label name = new Label("Appointment Name: ");
         appointmentName.setPromptText("Appointment Name");
+        appointmentName.setMinWidth(200);
+        nameBox.getChildren().addAll(name, appointmentName);
+
+        HBox costBox = new HBox();
+        Label costLabel = new Label("Cost: ");
+        cost.setPromptText("Cost");
+        cost.setPrefWidth(200);
+        costBox.getChildren().addAll(costLabel, cost);
 
         setUp.setPrefWidth(200);
         backButton.setMinWidth(97.5);
@@ -205,7 +217,7 @@ public class AppointmentCreationPage {
         setUp.setSpacing(3);
         backButton.setOnAction(e->switcher.switchToCalendarPage(appointmentCreationPage.getWindow(), primaryStage));
 
-        appointmentColumn.getChildren().addAll(spacingBuffer,title, appointmentName, dateBox, cost, setUp);
+        appointmentColumn.getChildren().addAll(spacingBuffer,title, nameBox, dateBox, timeBox, costBox, setUp);
         appointmentColumn.setSpacing(5);
         appointmentColumn.setAlignment(Pos.CENTER);
 

@@ -58,12 +58,41 @@ public class CreateAccountBusiness {
        backButton = new Button("Back");
 
       //set up textfields
+      HBox businessBox = new HBox();
+      Label businessLabel = new Label("\t\t\t\t   Business Name: ");
       businessField = new TextField();
+      businessBox.getChildren().addAll(businessLabel, businessField);
+      businessLabel.setTextFill(Color.WHITE);
+
+      HBox emailBox = new HBox();
+      Label emailLabel = new Label("\t\t\t\t\t\t   Email: ");
       newEmailField = new TextField();
+      emailBox.getChildren().addAll(emailLabel, newEmailField);
+      emailLabel.setTextFill(Color.WHITE);
+
+      HBox newPasswordBox = new HBox();
+      Label newPasswordLabel = new Label("\t\t\t\t\t    Password: ");
       newPasswordField = new PasswordField();
+      newPasswordBox.getChildren().addAll(newPasswordLabel, newPasswordField);
+      newPasswordLabel.setTextFill(Color.WHITE);
+
+      HBox confirmPasswordBox = new HBox();
+      Label confirmLabel = new Label("\t\t\t      Confirm Password: ");
       confirmPasswordField = new PasswordField();
+      confirmPasswordBox.getChildren().addAll(confirmLabel, confirmPasswordField);
+      confirmLabel.setTextFill(Color.WHITE);
+
+      HBox firstNameBox = new HBox();
+      Label firstNameLabel = new Label("\t\t\t\t\t  First Name: ");
       firstNameField = new TextField();
+      firstNameBox.getChildren().addAll(firstNameLabel, firstNameField);
+      firstNameLabel.setTextFill(Color.WHITE);
+
+      HBox lastNameBox = new HBox();
+      Label lastNameLabel = new Label("\t\t\t\t\t  Last Name: ");
       lastNameField = new TextField();
+      lastNameBox.getChildren().addAll(lastNameLabel, lastNameField);
+      lastNameLabel.setTextFill(Color.WHITE);
 
        //set prompt text for each textfield
        businessField.setPromptText("Business Name");
@@ -73,12 +102,12 @@ public class CreateAccountBusiness {
        firstNameField.setPromptText("First Name");
        lastNameField.setPromptText("Last Name");
        
-       newEmailField.setMaxWidth(200);
-       newPasswordField.setMaxWidth(200);
-       confirmPasswordField.setMaxWidth(200);
-       firstNameField.setMaxWidth(200);
-       lastNameField.setMaxWidth(200);
-       businessField.setMaxWidth(200);
+       newEmailField.setMinWidth(200);
+       newPasswordField.setMinWidth(200);
+       confirmPasswordField.setMinWidth(200);
+       firstNameField.setMinWidth(200);
+       lastNameField.setMinWidth(200);
+       businessField.setMinWidth(200);
 
       HBox hButtonsCreateAcc = new HBox();
       VBox createAccColumn = new VBox();
@@ -100,7 +129,7 @@ public class CreateAccountBusiness {
       createAccColumn.setBackground(new Background(new BackgroundFill(Color.web("#4681e0"), null, null)));
       createAccColumn.setAlignment(Pos.CENTER);
       createAccColumn.setSpacing(5);
-      createAccColumn.getChildren().addAll(title, businessField, firstNameField, lastNameField, newEmailField, newPasswordField, confirmPasswordField, hButtonsCreateAcc, accountCreation);
+      createAccColumn.getChildren().addAll(title, businessBox, firstNameBox, lastNameBox, emailBox, newPasswordBox, confirmPasswordBox, hButtonsCreateAcc, accountCreation);
 
       createAccountPage = new Scene(createAccColumn, 600, 500);
 
