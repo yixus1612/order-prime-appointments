@@ -1,8 +1,8 @@
+
 import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
-import java.time.ZonedDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -10,7 +10,6 @@ import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
-import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.Background;
 import javafx.scene.layout.BackgroundFill;
@@ -26,34 +25,38 @@ import javafx.stage.Stage;
 import javafx.scene.text.Font;
 import javafx.scene.text.FontWeight;
 
-public class AppointmentsPage {
+public class ViewAppointment {
 
-    public Scene appointmentsPage;
+    public Scene viewAppointmentPage;
     public Rectangle scheduleTabRectangle, calendarTabRectangle, appointmentsTabRectangle, settingsTabRectangle;
     Text scheduleTabText, calendarTabText, appointmentsTabText, settingsTabText;
     Rectangle profilePicture;
     Rectangle buffer1, buffer2;
-    private User userLoggedin;
+    private User userLoggedin = new User();
     private SceneSwitcher switcher;
-    private List<Appointment> appointmentlist;
+    private Appointment appointment;
 
-    public AppointmentsPage(Stage primaryStage, List<Appointment> appointmentListForDay){
+    public ViewAppointment(Stage primaryStage, Appointment userAppointment){
 
         switcher = new SceneSwitcher(primaryStage);
-    
+
+        this.appointment = userAppointment;
+
         userLoggedin = (User) primaryStage.getUserData();
 
-        HBox sidebar = sideBar(primaryStage);
-
         BorderPane layout = new BorderPane();
+
+        VBox mainPage = mainPage(primaryStage, appointment);
+        layout.setCenter(mainPage);
+
+        HBox sidebar = sideBar(primaryStage);
         layout.setLeft(sidebar);
 
-        VBox center = mainPage(primaryStage, appointmentListForDay);
-        layout.setCenter(center);
+        viewAppointmentPage = new Scene(layout, 600, 500);
 
-        appointmentsPage = new Scene(layout, 600, 500);
     }
-    
+
+
     public HBox sideBar(Stage primaryStage){
         ImageView imageView = new ImageView();
         imageView.setImage(userLoggedin.getProfilePic());
@@ -75,16 +78,16 @@ public class AppointmentsPage {
         scheduleTab.setAlignment(Pos.CENTER_LEFT);
 
         calendarTabText = new Text("  Calendar");
-        calendarTabText.setFill(Color.WHITE);
         calendarTabText.setFont(Font.font ("Arial", FontWeight.BOLD, 12));
-        calendarTabRectangle = new Rectangle(110,25, Color.web("#3064b8"));
+        calendarTabRectangle = new Rectangle(110,25, Color.web("#f2efd0"));
         StackPane calendarTab = new StackPane();
         calendarTab.getChildren().addAll(calendarTabRectangle, calendarTabText);
         calendarTab.setAlignment(Pos.CENTER_LEFT);
 
         appointmentsTabText = new Text("  Appointments");
+        appointmentsTabText.setFill(Color.WHITE);
         appointmentsTabText.setFont(Font.font ("Arial", FontWeight.BOLD, 12));
-        appointmentsTabRectangle = new Rectangle(110,25, Color.web("#f2efd0"));
+        appointmentsTabRectangle = new Rectangle(110,25, Color.web("#3064b8"));
         StackPane appointmentsTab = new StackPane();
         appointmentsTab.getChildren().addAll(appointmentsTabRectangle, appointmentsTabText);
         appointmentsTab.setAlignment(Pos.CENTER_LEFT);
@@ -110,66 +113,59 @@ public class AppointmentsPage {
         sidebar.setBackground(new Background(new BackgroundFill(Color.web("#4681e0"), null, null)));
 
         Label tempLabel = new Label();
-        scheduleTabRectangle.setOnMouseClicked(e -> switcher.switchToAppointmentSchedulingPage(appointmentsPage.getWindow(), primaryStage, tempLabel));
-        scheduleTabText.setOnMouseClicked(e -> switcher.switchToAppointmentSchedulingPage(appointmentsPage.getWindow(), primaryStage, tempLabel));
+        scheduleTabRectangle.setOnMouseClicked(e -> switcher.switchToAppointmentSchedulingPage(viewAppointmentPage.getWindow(), primaryStage, tempLabel));
+        scheduleTabText.setOnMouseClicked(e -> switcher.switchToAppointmentSchedulingPage(viewAppointmentPage.getWindow(), primaryStage, tempLabel));
 
-        calendarTabRectangle.setOnMouseClicked(e -> switcher.switchToCalendarPage(appointmentsPage.getWindow(), primaryStage));
-        calendarTabText.setOnMouseClicked(e -> switcher.switchToCalendarPage(appointmentsPage.getWindow(), primaryStage));
+        appointmentsTabRectangle.setOnMouseClicked(e->switcher.switchToAppointmentsPage(viewAppointmentPage.getWindow(), primaryStage, userLoggedin.appointmentList));
+        appointmentsTabText.setOnMouseClicked(e -> switcher.switchToAppointmentsPage(viewAppointmentPage.getWindow(), primaryStage, userLoggedin.appointmentList));
 
-        settingsTabRectangle.setOnMouseClicked(e -> switcher.switchToSettingsPage(appointmentsPage.getWindow(), primaryStage));
-        settingsTabText.setOnMouseClicked(e -> switcher.switchToSettingsPage(appointmentsPage.getWindow(), primaryStage));
+        settingsTabRectangle.setOnMouseClicked(e -> switcher.switchToSettingsPage(viewAppointmentPage.getWindow(), primaryStage));
+        settingsTabText.setOnMouseClicked(e -> switcher.switchToSettingsPage(viewAppointmentPage.getWindow(), primaryStage));
 
         return sidebar;
+
     }
 
-    public VBox mainPage(Stage primaryStage, List<Appointment> appointmentListForDay){
+    public VBox mainPage(Stage primaryStage, Appointment appointment){
         VBox center = new VBox();
         center.setAlignment(Pos.TOP_CENTER);
+        Button cancelButton = new Button("Cancel");
+        Button backButton = new Button("Back");
 
+        Label typeLabel = new Label("Appointment Name: " + appointment.getType());
+
+        Label dateLabel = new Label("Date: " + appointment.getDate());
+
+        Label nameLabel = new Label("Provider Name: " + appointment.getProvider().getName());
+
+        Label emailLabel = new Label("Provider's Email: " + appointment.getProvider().getEmail());
+
+        Label costLabel = new Label("Cost: " + appointment.getCost());
+
+        backButton.setOnAction(e->{
+            switcher.switchToCalendarPage(viewAppointmentPage.getWindow(), primaryStage);
+        });
+
+        cancelButton.setOnAction(e->{
+            editAppointment(appointment, primaryStage);
+        });
+        
         Label spacingBuffer1 = new Label(" ");
         Label spacingBuffer2 = new Label(" ");
-        Label title = new Label("Your Appointments");
+        Label title = new Label("View Appointment");
         title.setFont(Font.font("Arial", FontWeight.BOLD, 28));
         spacingBuffer1.setFont(Font.font("Arial", FontWeight.BOLD, 45));
         spacingBuffer2.setFont(Font.font("Arial", FontWeight.BOLD, 5));
-        center.getChildren().addAll(spacingBuffer1, title, spacingBuffer2);
 
-        int counter = 0;
-        for(Appointment appointment : appointmentListForDay){
-            Rectangle rowRectangle;
-            if(counter % 2 == 0){
-                rowRectangle = new Rectangle(400, 32, Color.WHITE);
-            }
-            else{rowRectangle = new Rectangle(400, 32, Color.LIGHTGRAY);}
-            
-
-            Label appointmentType = new Label(appointment.getType() + " " + appointment.getDate() + " " + appointment.getProvider().getName() + " " + appointment.getCost() + "       ");
-            appointmentType.setOnMouseClicked(e->{
-                switcher.switchToViewAppointmentPage(appointmentsPage.getWindow(), primaryStage, appointment);
-            });
-            Button editButton = new Button("Cancel");
-            editButton.setMinWidth(97.5);
-            editButton.setOnAction(e-> editAppointment(appointment, primaryStage, appointmentListForDay));
-            HBox appointmentData = new HBox();
-            appointmentData.setAlignment(Pos.CENTER);
-            appointmentData.getChildren().addAll(appointmentType, editButton);
-
-            StackPane row = new StackPane();
-            row.setAlignment(Pos.CENTER);
-            row.getChildren().addAll(rowRectangle, appointmentData);
-
-            center.getChildren().add(row);
-
-            counter++;
-        }
-
+        center.getChildren().addAll(spacingBuffer1, title, spacingBuffer2, typeLabel, dateLabel, nameLabel, emailLabel, costLabel, backButton, cancelButton);
+        center.setSpacing(2);
         return center;
+
     }
 
-    public void editAppointment(Appointment appointment, Stage primaryStage, List<Appointment> appointmentListForDay){
+    public void editAppointment(Appointment appointment, Stage primaryStage){
 
         List<Appointment> totalAppointmentList = new ArrayList<>();
-        int index = 0;
         try{
             //set up FileReader
             FileReader fileReaderAccount = new FileReader("appointmentList.csv");
@@ -177,7 +173,6 @@ public class AppointmentsPage {
             String line = "";
             String[] tempArr;
             Appointment tempAppointment;
-            int counter = 0;
    
             //read in data and determine if appointment already exists
             while((line = br.readLine()) != null){
@@ -188,10 +183,8 @@ public class AppointmentsPage {
                 if(appointment.getID() == tempAppointment.getID()){
                     tempAppointment.setAvailability(true);
                     tempAppointment.getCustomer().setID(0);
-                    index = counter;
                 }
 
-                counter++;
                 totalAppointmentList.add(tempAppointment);
 
             }
@@ -213,9 +206,8 @@ public class AppointmentsPage {
             System.out.println(except);
         }
 
-        appointmentListForDay.remove(index);
-        switcher.switchToAppointmentsPage(appointmentsPage.getWindow(), primaryStage, appointmentListForDay);
+        switcher.switchToCalendarPage(viewAppointmentPage.getWindow(), primaryStage);
     }
 
-}
 
+}

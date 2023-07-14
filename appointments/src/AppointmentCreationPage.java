@@ -47,13 +47,16 @@ public class AppointmentCreationPage {
     Button createButton = new Button("Create");
     TextField cost = new TextField();
     TextField appointmentName = new TextField();
+    private Label errorLabel;
 
     private BorderPane layout = new BorderPane();
     private SceneSwitcher switcher;
 
-    public AppointmentCreationPage(Stage primaryStage){
+    public AppointmentCreationPage(Stage primaryStage, Label label){
 
         switcher = new SceneSwitcher(primaryStage);
+
+        errorLabel = label;
         
         businessLoggedin = (Business) primaryStage.getUserData();
 
@@ -223,7 +226,7 @@ public class AppointmentCreationPage {
         setUp.setSpacing(3);
         backButton.setOnAction(e->switcher.switchToCalendarPageBusiness(appointmentCreationPage.getWindow(), primaryStage));
 
-        appointmentColumn.getChildren().addAll(spacingBuffer,title, nameBox, dateBox, timeBox, costBox, setUp);
+        appointmentColumn.getChildren().addAll(spacingBuffer,title, nameBox, dateBox, timeBox, costBox, setUp, errorLabel);
         appointmentColumn.setSpacing(5);
         appointmentColumn.setAlignment(Pos.CENTER);
 
@@ -237,68 +240,77 @@ public class AppointmentCreationPage {
         createButton.setOnAction(e->{
 
             //sets up current info for appointemnt
-            createdAppointment.setType(appointmentName.getText());
-            createdAppointment.setProvider(businessLoggedin.getID());
-            createdAppointment.setCost(cost.getText());
-            if(((String) amPM.getSelectionModel().getSelectedItem()).equals("PM")){}
-            createdAppointment.setDate((String) year.getSelectionModel().getSelectedItem() + "-" + (String) month.getSelectionModel().getSelectedItem() + "-" + (String) day.getSelectionModel().getSelectedItem() + " " + (String) hour.getSelectionModel().getSelectedItem() + ":" + (String) min.getSelectionModel().getSelectedItem() + ":00 " + (String) amPM.getSelectionModel().getSelectedItem() + " -05:00");
-            Random random = new Random();
-            createdAppointment.setID(random.nextInt(1000000000));
+            if(appointmentName.getText() != null && month.getValue() != null && day.getValue() != null && year.getValue() != null && hour.getValue() != null && min.getValue() != null && amPM.getValue() != null){
+                createdAppointment.setType(appointmentName.getText());
+                createdAppointment.setProvider(businessLoggedin.getID());
+                createdAppointment.setCost(cost.getText());
+                createdAppointment.setDate((String) year.getSelectionModel().getSelectedItem() + "-" + (String) month.getSelectionModel().getSelectedItem() + "-" + (String) day.getSelectionModel().getSelectedItem() + " " + (String) hour.getSelectionModel().getSelectedItem() + ":" + (String) min.getSelectionModel().getSelectedItem() + ":00 " + (String) amPM.getSelectionModel().getSelectedItem() + " -05:00");
+                Random random = new Random();
+                createdAppointment.setID(random.nextInt(1000000000));
 
-            //checks to see if appointment is already created
-            Boolean alreadyExists = false;
+                //checks to see if appointment is already created
+                Boolean alreadyExists = false;
              
-            if(new File("appointmentList.csv").exists()){
-                try{
+                if(new File("appointmentList.csv").exists()){
+                    try{
                
-                    //set up FileReader
-                    FileReader fileReaderAccount = new FileReader("appointmentList.csv");
-                    BufferedReader br = new BufferedReader(fileReaderAccount);
-                    String line = "";
-                    String[] tempArr;
-                    int tempProvider;
-                    ZonedDateTime tempDate;
+                        //set up FileReader
+                        FileReader fileReaderAccount = new FileReader("appointmentList.csv");
+                        BufferedReader br = new BufferedReader(fileReaderAccount);
+                        String line = "";
+                        String[] tempArr;
+                        int tempProvider;
+                        ZonedDateTime tempDate;
        
-                    //read in data and determine if appointment already exists
-                    while((line = br.readLine()) != null){
-                        tempArr = line.split(",");
-                        System.out.println(tempArr[1]);
-                        tempDate = ZonedDateTime.parse(tempArr[1], formatter);
-                        tempProvider = Integer.parseInt(tempArr[3]);
+                        //read in data and determine if appointment already exists
+                        while((line = br.readLine()) != null){
+                            tempArr = line.split(",");
+                            tempDate = ZonedDateTime.parse(tempArr[1], formatter);
+                            tempProvider = Integer.parseInt(tempArr[3]);
        
-                        //keep note if email is found
-                        if(tempProvider == createdAppointment.getProvider().getID() && tempDate.isEqual(createdAppointment.stringToDate())){
-                            alreadyExists = true;
-                            System.out.println("Appointment already exists");
+                            //keep note if email is found
+                            if(tempProvider == createdAppointment.getProvider().getID() && tempDate.isEqual(createdAppointment.stringToDate())){
+                                alreadyExists = true;
+                                errorLabel.setText("Appointment already exists");
+                            }
                         }
+                        br.close();
+                    }catch(IOException except){
+                        System.out.println(except);
                     }
-                    br.close();
+                }
+
+                //writes appointment to file
+                try{              
+                    FileWriter fileWriterUser = new FileWriter("appointmentList.csv", true);
+
+                    //checks to see if appointment is before current time
+                    if(createdAppointment.stringToDate().isBefore(ZonedDateTime.now()) || alreadyExists){
+                        if(alreadyExists){
+                            errorLabel.setText("An appointment already exists at this time");
+                        }else{
+                            errorLabel.setText("Please choose a valid date");
+                        }
+                    }else{
+                        fileWriterUser.write(createdAppointment.getType() + "," + createdAppointment.getDate() + "," + createdAppointment.getAvailability() + "," + createdAppointment.getProvider().getID() + "," + 0 + "," + createdAppointment.getCost() + "," + createdAppointment.getID() + "\n");
+                        Business businessLoggedIn = (Business) primaryStage.getUserData();
+                        businessLoggedin.addAppointment(createdAppointment);
+                        primaryStage.setUserData(businessLoggedIn);
+                    }
+
+                    fileWriterUser.close();
+
                 }catch(IOException except){
                     System.out.println(except);
                 }
+
+                switcher.switchToAppointmentCreationPage(appointmentCreationPage.getWindow(), primaryStage, errorLabel);
+
+            }else if(appointmentName.getText() == null){
+                errorLabel.setText("Please enter an appoinment name");
+            }else if(month.getValue() == null || day.getValue() == null || year.getValue() == null || hour.getValue() == null || min.getValue() == null || amPM.getValue() == null){
+                errorLabel.setText("Please enter a valid date");
             }
-
-            //writes appointment to file
-            try{              
-                FileWriter fileWriterUser = new FileWriter("appointmentList.csv", true);
-
-                //checks to see if appointment is before current time
-                if(createdAppointment.stringToDate().isBefore(ZonedDateTime.now()) || alreadyExists){
-                    System.out.println("Please choose a valid date");
-                }else{
-                    fileWriterUser.write(createdAppointment.getType() + "," + createdAppointment.getDate() + "," + createdAppointment.getAvailability() + "," + createdAppointment.getProvider().getID() + "," + 0 + "," + createdAppointment.getCost() + "," + createdAppointment.getID() + "\n");
-                    Business businessLoggedIn = (Business) primaryStage.getUserData();
-                    businessLoggedin.addAppointment(createdAppointment);
-                    primaryStage.setUserData(businessLoggedIn);
-                }
-
-                fileWriterUser.close();
-
-            }catch(IOException except){
-                System.out.println(except);
-            }
-
-            switcher.switchToAppointmentCreationPage(appointmentCreationPage.getWindow(), primaryStage);
         });
     }
 

@@ -109,8 +109,9 @@ public class AppointmentsPageBusiness {
         HBox sidebar = new HBox(tabStack, sidebarSeparator);
         sidebar.setBackground(new Background(new BackgroundFill(Color.web("#4681e0"), null, null)));
 
-        createTabRectangle.setOnMouseClicked(e -> switcher.switchToAppointmentCreationPage(appointmentsPage.getWindow(), primaryStage));
-        createTabText.setOnMouseClicked(e -> switcher.switchToAppointmentCreationPage(appointmentsPage.getWindow(), primaryStage));
+        Label tempLabel = new Label();
+        createTabRectangle.setOnMouseClicked(e -> switcher.switchToAppointmentCreationPage(appointmentsPage.getWindow(), primaryStage, tempLabel));
+        createTabText.setOnMouseClicked(e -> switcher.switchToAppointmentCreationPage(appointmentsPage.getWindow(), primaryStage, tempLabel));
 
         calendarTabRectangle.setOnMouseClicked(e -> switcher.switchToCalendarPageBusiness(appointmentsPage.getWindow(), primaryStage));
         calendarTabText.setOnMouseClicked(e -> switcher.switchToCalendarPageBusiness(appointmentsPage.getWindow(), primaryStage));

@@ -1,6 +1,7 @@
 import java.util.List;
 
 import javafx.scene.Scene;
+import javafx.scene.control.Label;
 import javafx.stage.Stage;
 import javafx.stage.Window;
 
@@ -22,6 +23,7 @@ public class SceneSwitcher {
     AppointmentsPageBusiness AppointmentsPageBusiness;
     EditProfilePage EditProfilePage;
     EditProfilePageBusiness EditProfilePageBusiness;
+    ViewAppointment ViewAppointmentPage;
     
     public SceneSwitcher(Stage primaryStage){
         this.primaryStage = primaryStage;
@@ -60,16 +62,16 @@ public class SceneSwitcher {
         }
     }
 
-    public void switchToAppointmentCreationPage(Window w, Stage primaryStage){
-        AppointmentCreationPage = new AppointmentCreationPage(primaryStage);
+    public void switchToAppointmentCreationPage(Window w, Stage primaryStage, Label errorLabel){
+        AppointmentCreationPage = new AppointmentCreationPage(primaryStage, errorLabel);
         if(w instanceof Stage){
             Stage s = (Stage) w;
             s.setScene(AppointmentCreationPage.appointmentCreationPage);
         }
     }
 
-    public void switchToAppointmentSchedulingPage(Window w, Stage primaryStage){
-        AppointmentSchedulingPage = new AppointmentSchedulingPage(primaryStage);
+    public void switchToAppointmentSchedulingPage(Window w, Stage primaryStage, Label errorLabel){
+        AppointmentSchedulingPage = new AppointmentSchedulingPage(primaryStage, errorLabel);
         if(w instanceof Stage){
             Stage s = (Stage) w;
             s.setScene(AppointmentSchedulingPage.appointmentSchedulingPage);
@@ -145,6 +147,14 @@ public class SceneSwitcher {
         if(w instanceof Stage){
             Stage s = (Stage) w;
             s.setScene(EditProfilePageBusiness.settingsPage);
+        }
+    }
+
+    public void switchToViewAppointmentPage(Window w, Stage primaryStage, Appointment appointment){
+        ViewAppointmentPage = new ViewAppointment(primaryStage, appointment);
+        if(w instanceof Stage){
+            Stage s = (Stage) w;
+            s.setScene(ViewAppointmentPage.viewAppointmentPage);
         }
     }
 }

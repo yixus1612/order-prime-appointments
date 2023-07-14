@@ -224,7 +224,13 @@ public class CreateAccountPage {
       }else if(!emailMatcher.matches()){
          note.setText("Please enter a valid email");
       }else if(!passwordMatcher.matches()){
-         note.setText("Please enter a vaild password.");
+         note.setText("Please enter a vaild password." +
+               "    password must contain:\n" +
+               "         - at least one digit\n" +
+               "         - at least one lowercase letter\n" + 
+               "         - at least one uppercase letter\n" + 
+               "         - at least one special character\n" + 
+               "         - must be greater than 6 and less than 15 characters in length");
       }
 
       //clear text fields after attempt

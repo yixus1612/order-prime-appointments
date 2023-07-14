@@ -46,10 +46,13 @@ public class AppointmentSchedulingPage {
     private TextField businessName = new TextField();
 
     private VBox searchResults = new VBox();
+    private Label errorLabel = new Label();
 
-    public AppointmentSchedulingPage(Stage primaryStage){
+    public AppointmentSchedulingPage(Stage primaryStage, Label label){
 
         switcher = new SceneSwitcher(primaryStage);
+
+        errorLabel = label;
 
         userLoggedin = (User) primaryStage.getUserData();
 
@@ -189,7 +192,6 @@ public class AppointmentSchedulingPage {
 
                 Appointment tempAppointment;
                 Business tempBusiness = new Business();
-                User tempCustomer = new User();
     
                 int counter = 0;
                 //read in data and create list of available appointments
@@ -205,7 +207,7 @@ public class AppointmentSchedulingPage {
                         HBox column = new HBox();
                         signUp(primaryStage, signUpButton, tempAppointment);
                         column.getChildren().addAll(new Label(tempBusiness.getType() + " " + tempArr[0] + " " + tempBusiness.getName() + "        "), signUpButton);
-                        searchResults.getChildren().add(column);
+                        searchResults.getChildren().addAll(column, errorLabel);
                         counter++;
                     }
                 }
@@ -245,18 +247,18 @@ public class AppointmentSchedulingPage {
                     tempAppointment = new Appointment(tempArr[0], tempArr[1], Boolean.parseBoolean(tempArr[2]), Integer.parseInt(tempArr[3]), Integer.parseInt(tempArr[4]), tempArr[5], Integer.parseInt(tempArr[6]));
                     tempDate = ZonedDateTime.parse(tempArr[1], formatter);
                     tempCustomer = Integer.parseInt(tempArr[4]);
-                    System.out.println(tempAppointment.findUser(tempCustomer).getName());
    
                     //keep note if email is found
                     if(tempCustomer == userLoggedin.getID() && tempDate.isEqual(appointment.stringToDate())){
                         alreadyExists = true;
-                        System.out.println("You already scheduled an appointment at this time");
+                        errorLabel.setText("An appointment is already schedule for this time.");
                         break;
                     }else if(appointment.getID() == Integer.parseInt(tempArr[6])){
                         tempAppointment.setCustomer(userLoggedin.getID());
                         tempAppointment.setAvailability(false);
                         userLoggedin.addAppointment(tempAppointment);
                         primaryStage.setUserData(userLoggedin);
+                        errorLabel.setText("");
                     }
 
                     appointmentList.add(tempAppointment);
@@ -281,7 +283,7 @@ public class AppointmentSchedulingPage {
                 System.out.println(except);
             }
 
-            switcher.switchToAppointmentSchedulingPage(appointmentSchedulingPage.getWindow(), primaryStage);
+            switcher.switchToAppointmentSchedulingPage(appointmentSchedulingPage.getWindow(), primaryStage, errorLabel);
 
         });
     }

@@ -131,14 +131,15 @@ public class LoginPage{
                     System.out.println(appointment.getType());
                 }*/
                 
+                Label tempLabel = new Label();
                 if(isUser){
                     primaryStage.setUserData(userLoggedin);
-                    switcher.switchToAppointmentSchedulingPage(loginPage.getWindow(), primaryStage);
+                    switcher.switchToAppointmentSchedulingPage(loginPage.getWindow(), primaryStage, tempLabel);
                 }else{
                     Business businessLoggedin = findBusiness(email);
                     businessLoggedin.createAppointmentList();
                     primaryStage.setUserData(businessLoggedin);
-                    switcher.switchToAppointmentCreationPage(loginPage.getWindow(), primaryStage);
+                    switcher.switchToAppointmentCreationPage(loginPage.getWindow(), primaryStage, tempLabel);
                 }
 
             //if not, make them try again and update label

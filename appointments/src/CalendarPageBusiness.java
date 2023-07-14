@@ -16,21 +16,18 @@ import javafx.stage.Stage;
 import javafx.scene.text.Font;
 import javafx.scene.text.FontWeight;
 import javafx.scene.control.Button;
+import javafx.scene.control.Label;
 import javafx.scene.image.ImageView;
 
 import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
-import java.time.DayOfWeek;
 import java.time.ZonedDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Random;
-import java.time.ZoneId;
-import javafx.geometry.Insets;
 
 public class CalendarPageBusiness {
 
@@ -52,6 +49,7 @@ public class CalendarPageBusiness {
     private Business businessLoggedin = new Business();
     private DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd hh:mm:ss a z");
     private SceneSwitcher switcher;
+    private Label label = new Label();
 
 
     public CalendarPageBusiness(Stage primaryStage){
@@ -140,8 +138,8 @@ public class CalendarPageBusiness {
         HBox sidebar = new HBox(tabStack, sidebarSeparator);
         sidebar.setBackground(new Background(new BackgroundFill(Color.web("#4681e0"), null, null)));
 
-        createTabRectangle.setOnMouseClicked(e -> switcher.switchToAppointmentCreationPage(calendarPage.getWindow(), primaryStage));
-        createTabText.setOnMouseClicked(e -> switcher.switchToAppointmentCreationPage(calendarPage.getWindow(), primaryStage));
+        createTabRectangle.setOnMouseClicked(e -> switcher.switchToAppointmentCreationPage(calendarPage.getWindow(), primaryStage, label));
+        createTabText.setOnMouseClicked(e -> switcher.switchToAppointmentCreationPage(calendarPage.getWindow(), primaryStage, label));
 
         appointmentsTabRectangle.setOnMouseClicked(e->switcher.switchToAppointmentsPageBusiness(calendarPage.getWindow(), primaryStage, businessLoggedin.appointmentList));
         appointmentsTabText.setOnMouseClicked(e -> switcher.switchToAppointmentsPageBusiness(calendarPage.getWindow(), primaryStage, businessLoggedin.appointmentList));
@@ -220,7 +218,6 @@ public class CalendarPageBusiness {
                 calendarRectangles.setStroke(Color.BLACK);
                 calendarRectangles.setWidth(rectangleWidth);
                 calendarRectangles.setHeight(rectangeHeight);
-                calendarRectangles.setOnMouseClicked(e->switcher.switchToAppointmentCreationPage(calendarPage.getWindow(), primaryStage));
                 stackPane.getChildren().add(calendarRectangles);
 
                 //put numbers on calendar
@@ -231,6 +228,7 @@ public class CalendarPageBusiness {
                         Text date = new Text(String.valueOf(currentDate));
                         date.setTranslateY(-(rectangeHeight/2)* .75);
                         stackPane.getChildren().add(date);
+                        calendarRectangles.setOnMouseClicked(e->switcher.switchToAppointmentCreationPage(calendarPage.getWindow(), primaryStage, label));
 
                         List<Appointment> appointmentList = appointmentMap.get(currentDate);
                         if(appointmentList != null){
@@ -250,8 +248,9 @@ public class CalendarPageBusiness {
     public void createAppointment(List<Appointment> appointments, double height, double width, StackPane stack, Stage primaryStage){
         VBox appointmentBox = new VBox();
         for(int i = 0; i < appointments.size(); i++){
-            if(i >= 2){
+            if(i >= 1){
                 Text moreActivities = new Text("...");
+                moreActivities.setFill(Color.WHITE);
                 appointmentBox.getChildren().add(moreActivities);
                 moreActivities.setOnMouseClicked(e-> {
                     switcher.switchToAppointmentsPageBusiness(calendarPage.getWindow(), primaryStage, appointments);
@@ -259,6 +258,7 @@ public class CalendarPageBusiness {
                 break;
             }
             Text text = new Text(appointments.get(i).getType());
+            text.setFill(Color.WHITE);
             appointmentBox.getChildren().add(text);
             int app = i;
             text.setOnMouseClicked(e->{
@@ -268,7 +268,7 @@ public class CalendarPageBusiness {
         appointmentBox.setTranslateY((height/2) * .2);
         appointmentBox.setMaxHeight(height * .1);
         appointmentBox.setMaxWidth(width * .8);
-        appointmentBox.setStyle("-fx-background-color:GRAY");
+        appointmentBox.setStyle("-fx-background-color:BLUE");
         stack.getChildren().add(appointmentBox);
 
     }
