@@ -221,8 +221,10 @@ public class AppointmentCreationPage {
         comboBox3.setMaxWidth(63);
         comboBox6.setMaxWidth(82.5);
         startTimeBox.setSpacing(1);
+        startTimeBox.setAlignment(Pos.CENTER);
 
         HBox endTimeBox = new HBox();
+        Label endTimeLabel = new Label("\t\t End Time: ");
         Label endTimeLabel = new Label("\t\t End Time: ");
         endTimeBox.getChildren().addAll(endTimeLabel, comboBox7, comboBox8, comboBox9);
         comboBox7.setMaxWidth(69);
