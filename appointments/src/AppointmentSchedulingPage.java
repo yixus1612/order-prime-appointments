@@ -45,7 +45,6 @@ public class AppointmentSchedulingPage {
     private List <Label> appointments = new ArrayList<Label>();
     private TextField businessName = new TextField();
 
-    private String previousSearch = null;
     private VBox searchResults = new VBox();
     private Label errorLabel = new Label();
 
@@ -149,13 +148,16 @@ public class AppointmentSchedulingPage {
 
         HBox businessBox = new HBox();
         Label businessLabel = new Label("Business Name: ");
+        Label businessBuffer = new Label("\t\t\t  ");
         businessName.setPromptText("Business Name");
-        businessBox.getChildren().addAll(businessLabel, businessName);
+        businessName.setMinWidth(182);
+        businessBox.getChildren().addAll(businessLabel, businessName, businessBuffer);
+        businessBox.setAlignment(Pos.CENTER_LEFT);
 
         setUp.setPrefWidth(200);
         setUp.setSpacing(2);
-        backButton.setMinWidth(97.5);
-        searchButton.setMinWidth(97.5);
+        backButton.setMinWidth(90);
+        searchButton.setMinWidth(90);
         setUp.getChildren().addAll(backButton, searchButton);
         setUp.setAlignment(Pos.CENTER);
 
@@ -236,7 +238,6 @@ public class AppointmentSchedulingPage {
 
     public void signUp(Stage primaryStage, Button button, Appointment appointment){
         button.setOnAction(e->{
-            previousSearch = null;
 
             Boolean alreadyExists = false;
             List<Appointment> appointmentList = new ArrayList<>();

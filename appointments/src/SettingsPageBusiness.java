@@ -115,7 +115,7 @@ public class SettingsPageBusiness {
     }
 
     public VBox mainPage(Stage primaryStage){
-        VBox center = new VBox();
+        VBox center = new VBox(2);
         center.setAlignment(Pos.TOP_CENTER);
         Button editButton = new Button("Edit");
         Button signOutButton = new Button("Sign Out");
@@ -147,7 +147,10 @@ public class SettingsPageBusiness {
         spacingBuffer1.setFont(Font.font("Arial", FontWeight.BOLD, 45));
         spacingBuffer2.setFont(Font.font("Arial", FontWeight.BOLD, 5));
 
-        center.getChildren().addAll(spacingBuffer1, title, spacingBuffer2, imageView, nameLabel, emailLabel, typeLabel, editButton, signOutButton);
+        HBox buttons = new HBox(2, editButton, signOutButton);
+        buttons.setAlignment(Pos.CENTER);;
+
+        center.getChildren().addAll(spacingBuffer1, title, spacingBuffer2, imageView, nameLabel, emailLabel, typeLabel, buttons);
         return center;
 
     }

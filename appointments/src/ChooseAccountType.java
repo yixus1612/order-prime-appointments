@@ -32,12 +32,16 @@ public class ChooseAccountType {
         businessButton = new Button("Business");
         userButton = new Button("User");
         backButton = new Button("Back");
+        businessButton.setMinWidth(60);
+        userButton.setMinWidth(60);
+        backButton.setMinWidth(125);
+
 
         backButton.setOnAction(e-> switcher.switchToLoginPage(chooseAccountType.getWindow(), primaryStage));
         userButton.setOnAction(e-> switcher.switchToAccountCreationPage(chooseAccountType.getWindow(), primaryStage));
         businessButton.setOnAction(e-> switcher.switchToBusinessAccountCreation(chooseAccountType.getWindow(), primaryStage));
 
-        hButtonsCreateAcc.getChildren().addAll(businessButton, userButton, backButton);
+        hButtonsCreateAcc.getChildren().addAll(businessButton, userButton);
         hButtonsCreateAcc.setAlignment(Pos.CENTER);
         hButtonsCreateAcc.setSpacing(5);
         hButtonsCreateAcc.setPrefWidth(200);
@@ -45,7 +49,7 @@ public class ChooseAccountType {
         createAccColumn.setBackground(new Background(new BackgroundFill(Color.web("#4681e0"), null, null)));
         createAccColumn.setAlignment(Pos.CENTER);
         createAccColumn.setSpacing(5);
-        createAccColumn.getChildren().addAll(title, hButtonsCreateAcc);
+        createAccColumn.getChildren().addAll(title, hButtonsCreateAcc, backButton);
 
         chooseAccountType = new Scene(createAccColumn, 600, 500);
     }

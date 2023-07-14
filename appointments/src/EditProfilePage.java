@@ -158,6 +158,7 @@ public class EditProfilePage {
         submitButton.setOnAction(e->{
             userLoggedin.setName(userFirstName + " " + userLastName);
             userLoggedin.setEmail(userEmail);
+            changeAccount(primaryStage);
         });
 
         deleteButton.setOnAction(e->{

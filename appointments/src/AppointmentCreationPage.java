@@ -209,8 +209,9 @@ public class AppointmentCreationPage {
         createAppointment(primaryStage, comboBox1, comboBox2, comboBox3, comboBox4, comboBox5, comboBox6, comboBox7, comboBox8, comboBox9);
 
         HBox dateBox = new HBox();
-        Label dateLabel= new Label("Date: ");
+        Label dateLabel= new Label("\t\t\tDate: ");
         dateBox.getChildren().addAll(dateLabel, comboBox1, comboBox2, comboBox3);
+        comboBox3.setMinWidth(75);
         dateBox.setSpacing(1);
 
         HBox startTimeBox = new HBox();
@@ -225,23 +226,25 @@ public class AppointmentCreationPage {
 
         HBox nameBox = new HBox();
         Label name = new Label("Appointment Name: ");
+        Label nameBuffer = new Label("\t\t\t\t");
         appointmentName.setPromptText("Appointment Name");
-        appointmentName.setMinWidth(200);
-        nameBox.getChildren().addAll(name, appointmentName);
+        appointmentName.setMinWidth(218);
+        nameBox.getChildren().addAll(name, appointmentName, nameBuffer);
 
         HBox costBox = new HBox();
-        Label costLabel = new Label("Cost: ");
+        Label costLabel = new Label("\t\t\t Cost: ");
         cost.setPromptText("Cost");
-        cost.setPrefWidth(200);
+        cost.setMinWidth(218);
+        //cost.setPrefWidth(200);
         costBox.getChildren().addAll(costLabel, cost);
 
-        setUp.setPrefWidth(200);
+        //setUp.setPrefWidth(200);
         backButton.setMinWidth(97.5);
         createButton.setMinWidth(97.5);
         setUp.getChildren().addAll(backButton, createButton);
         setUp.setAlignment(Pos.CENTER);
         setUp.setSpacing(3);
-        backButton.setOnAction(e->switcher.switchToCalendarPage(appointmentCreationPage.getWindow(), primaryStage));
+        backButton.setOnAction(e->switcher.switchToCalendarPageBusiness(appointmentCreationPage.getWindow(), primaryStage));
 
         appointmentColumn.getChildren().addAll(spacingBuffer,title, nameBox, dateBox, startTimeBox, endTimeBox, costBox, setUp, errorLabel);
         appointmentColumn.setSpacing(5);

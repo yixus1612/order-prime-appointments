@@ -168,7 +168,7 @@ public class EditProfilePageBusiness {
             switcher.switchToSettingsPageBusiness(settingsPage.getWindow(), primaryStage);
         });
 
-        HBox buttons = new HBox(submitButton, deleteButton);
+        HBox buttons = new HBox(submitButton, deleteButton, backButton);
         buttons.setAlignment(Pos.CENTER);
         buttons.setSpacing(2);
         
@@ -179,7 +179,7 @@ public class EditProfilePageBusiness {
         spacingBuffer1.setFont(Font.font("Arial", FontWeight.BOLD, 45));
         spacingBuffer2.setFont(Font.font("Arial", FontWeight.BOLD, 5));
 
-        center.getChildren().addAll(spacingBuffer1, title, spacingBuffer2, boxs[0], boxs[1], boxs[2], boxs[3], buttons, backButton);
+        center.getChildren().addAll(spacingBuffer1, title, spacingBuffer2, boxs[0], boxs[1], boxs[2], boxs[3], buttons);
         center.setSpacing(2);
         return center;
 
