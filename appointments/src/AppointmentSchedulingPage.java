@@ -42,7 +42,6 @@ public class AppointmentSchedulingPage {
     private BorderPane layout = new BorderPane();
     private Button backButton = new Button("Back");
     private Button searchButton = new Button("Search");
-    private List <Label> appointments = new ArrayList<Label>();
     private TextField businessName = new TextField();
 
     private VBox searchResults = new VBox();
@@ -163,7 +162,7 @@ public class AppointmentSchedulingPage {
 
         backButton.setOnAction(e->switcher.switchToCalendarPage(appointmentSchedulingPage.getWindow(), primaryStage));
 
-        appointmentColumn.getChildren().addAll(spacingBuffer, title, businessBox, setUp);
+        appointmentColumn.getChildren().addAll(spacingBuffer, title, businessBox, setUp, errorLabel);
         appointmentColumn.setSpacing(5);
         appointmentColumn.setAlignment(Pos.CENTER);
 
@@ -225,8 +224,6 @@ public class AppointmentSchedulingPage {
                 System.out.println(except);
             }
 
-            searchResults.getChildren().add(errorLabel);
-
         });
     }
 
@@ -260,7 +257,7 @@ public class AppointmentSchedulingPage {
                     tempCustomer = Integer.parseInt(tempArr[5]);
    
                     //keep note if email is found
-                    if((appointment.stringToStartDate().isBefore(tempEndDate) && appointment.stringToStartDate().isAfter(tempStartDate)) || (appointment.stringToEndDate().isBefore(tempStartDate) && appointment.stringToEndDate().isAfter(tempEndDate))){
+                    if(tempCustomer == userLoggedin.getID() && ((appointment.stringToStartDate().isBefore(tempEndDate) && appointment.stringToStartDate().isAfter(tempStartDate)) || (appointment.stringToEndDate().isBefore(tempStartDate) && appointment.stringToEndDate().isAfter(tempEndDate)))){
                         alreadyExists = true;
                         errorLabel.setText("An appointment is already schedule for this time.");
                         break;

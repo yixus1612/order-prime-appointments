@@ -132,7 +132,8 @@ public class SettingsPageBusiness {
         Label typeLabel = new Label("Business Name: " + businessLoggedin.getType());
 
         editButton.setOnAction(e->{
-            switcher.switchToEditProfilePageBusiness(settingsPage.getWindow(), primaryStage);
+            Label label = new Label();
+            switcher.switchToEditProfilePageBusiness(settingsPage.getWindow(), primaryStage, label);
         });
 
         signOutButton.setOnAction(e->{

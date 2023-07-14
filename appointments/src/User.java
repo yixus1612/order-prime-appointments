@@ -16,7 +16,7 @@ public class User extends Account{
 
     User(){
         super(null);
-        this.name = null;
+        this.name = "None";
         this.iD = 0;
         this.profilePic = new Image(getClass().getResourceAsStream("/images/BlankImage.jpg"));
     }

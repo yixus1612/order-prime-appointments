@@ -155,55 +155,55 @@ public class AppointmentCreationPage {
         ObservableList<String> months = FXCollections.observableArrayList(
             "01", "02", "03", "04", "05", "06", "07", "08", "09", "10", "11", "12"
         );
-        final ComboBox comboBox1 = new ComboBox(months);
+        final ComboBox<String> comboBox1 = new ComboBox<String>(months);
         comboBox1.setPromptText("Month");
 
         ObservableList<String> days = FXCollections.observableArrayList(
             "01", "02", "03", "04", "05", "06", "07", "08", "09", "10", "11", "12", "13", "14", "15", "16", "17", "18", "19", "20", "21", "22", "23", "24", "25", "26", "27", "28", "29", "30", "31"
         );
-        final ComboBox comboBox2 = new ComboBox(days);
+        final ComboBox<String> comboBox2 = new ComboBox<String>(days);
         comboBox2.setPromptText("Day");
 
         ObservableList<String> years = FXCollections.observableArrayList(
             "2023", "2024", "2025", "2026", "2027", "2028", "2029", "2030", "2031", "2032", "2033", "2034"
         );
-        final ComboBox comboBox3 = new ComboBox(years);
+        final ComboBox<String> comboBox3 = new ComboBox<String>(years);
         comboBox3.setPromptText("Year");
 
         ObservableList<String> hours = FXCollections.observableArrayList(
             "01", "02", "03", "04", "05", "06", "07", "08", "09", "10", "11", "12"
         );
-        final ComboBox comboBox4 = new ComboBox(hours);
+        final ComboBox<String> comboBox4 = new ComboBox<String>(hours);
         comboBox4.setPromptText("Hour");
 
         ObservableList<String> mins = FXCollections.observableArrayList(
             "00", "15", "30", "45"
         );
-        final ComboBox comboBox5 = new ComboBox(mins);
+        final ComboBox<String> comboBox5 = new ComboBox<String>(mins);
         comboBox5.setPromptText("Min");
 
         ObservableList<String> time = FXCollections.observableArrayList(
             "AM", "PM"
         );
-        final ComboBox comboBox6 = new ComboBox(time);
+        final ComboBox<String> comboBox6 = new ComboBox<String>(time);
         comboBox6.setPromptText("AM/PM");
 
         ObservableList<String> endHours = FXCollections.observableArrayList(
             "01", "02", "03", "04", "05", "06", "07", "08", "09", "10", "11", "12"
         );
-        final ComboBox comboBox7= new ComboBox(endHours);
+        final ComboBox<String> comboBox7= new ComboBox<String>(endHours);
         comboBox7.setPromptText("Hour");
 
         ObservableList<String> endMins = FXCollections.observableArrayList(
             "00", "15", "30", "45"
         );
-        final ComboBox comboBox8 = new ComboBox(endMins);
+        final ComboBox<String> comboBox8 = new ComboBox<String>(endMins);
         comboBox8.setPromptText("Min");
 
         ObservableList<String> endTime = FXCollections.observableArrayList(
             "AM", "PM"
         );
-        final ComboBox comboBox9 = new ComboBox(endTime);
+        final ComboBox<String> comboBox9 = new ComboBox<String>(endTime);
         comboBox9.setPromptText("AM/PM");
 
         createAppointment(primaryStage, comboBox1, comboBox2, comboBox3, comboBox4, comboBox5, comboBox6, comboBox7, comboBox8, comboBox9);
@@ -215,13 +215,19 @@ public class AppointmentCreationPage {
         dateBox.setSpacing(1);
 
         HBox startTimeBox = new HBox();
-        Label startTimeLabel = new Label("Start Time: ");
+        Label startTimeLabel = new Label("\t\tStart Time: ");
         startTimeBox.getChildren().addAll(startTimeLabel, comboBox4, comboBox5, comboBox6);
+        comboBox4.setMaxWidth(69);
+        comboBox3.setMaxWidth(63);
+        comboBox6.setMaxWidth(82.5);
         startTimeBox.setSpacing(1);
 
         HBox endTimeBox = new HBox();
-        Label endTimeLabel = new Label("End Time: ");
+        Label endTimeLabel = new Label("\t\t End Time: ");
         endTimeBox.getChildren().addAll(endTimeLabel, comboBox7, comboBox8, comboBox9);
+        comboBox7.setMaxWidth(69);
+        comboBox8.setMaxWidth(63);
+        comboBox9.setMaxWidth(82.5);
         endTimeBox.setSpacing(1);
 
         HBox nameBox = new HBox();
@@ -256,14 +262,18 @@ public class AppointmentCreationPage {
 
     }
 
-    public void createAppointment(Stage primaryStage, ComboBox month, ComboBox day, ComboBox year, ComboBox hour, ComboBox min, ComboBox amPM, ComboBox endHour, ComboBox endMin, ComboBox endAMPM){
+    public void createAppointment(Stage primaryStage, ComboBox<String> month, ComboBox<String> day, ComboBox<String> year, ComboBox<String> hour, ComboBox<String> min, ComboBox<String> amPM, ComboBox<String> endHour, ComboBox<String> endMin, ComboBox<String> endAMPM){
         createButton.setOnAction(e->{
 
             //sets up current info for appointemnt
             if(appointmentName.getText() != null && month.getValue() != null && day.getValue() != null && year.getValue() != null && hour.getValue() != null && min.getValue() != null && amPM.getValue() != null && endHour.getValue() != null && endMin.getValue() != null && endAMPM.getValue() != null){
                 createdAppointment.setType(appointmentName.getText());
                 createdAppointment.setProvider(businessLoggedin.getID());
-                createdAppointment.setCost(cost.getText());
+                if(cost.getText() != null){
+                    createdAppointment.setCost(cost.getText());
+                }else{
+                    createdAppointment.setCost("No cost");
+                }
                 createdAppointment.setStartDate((String) year.getSelectionModel().getSelectedItem() + "-" + (String) month.getSelectionModel().getSelectedItem() + "-" + (String) day.getSelectionModel().getSelectedItem() + " " + (String) hour.getSelectionModel().getSelectedItem() + ":" + (String) min.getSelectionModel().getSelectedItem() + ":00 " + (String) amPM.getSelectionModel().getSelectedItem() + " -05:00");
                 createdAppointment.setEndDate((String) year.getSelectionModel().getSelectedItem() + "-" + (String) month.getSelectionModel().getSelectedItem() + "-" + (String) day.getSelectionModel().getSelectedItem() + " " + (String) endHour.getSelectionModel().getSelectedItem() + ":" + (String) endMin.getSelectionModel().getSelectedItem() + ":00 " + (String) endAMPM.getSelectionModel().getSelectedItem() + " -05:00");
                 Random random = new Random();
@@ -291,7 +301,7 @@ public class AppointmentCreationPage {
                             tempProvider = Integer.parseInt(tempArr[4]);
        
                             //keep note if email is found
-                            if((createdAppointment.stringToStartDate().isBefore(tempEndDate) && createdAppointment.stringToStartDate().isAfter(tempStartDate)) || (createdAppointment.stringToEndDate().isBefore(tempStartDate) && createdAppointment.stringToEndDate().isAfter(tempEndDate))){
+                            if(tempProvider == businessLoggedin.getID() && ((createdAppointment.stringToStartDate().isBefore(tempEndDate) && createdAppointment.stringToStartDate().isAfter(tempStartDate)) || (createdAppointment.stringToEndDate().isBefore(tempEndDate) && createdAppointment.stringToEndDate().isAfter(tempStartDate)))){
                                 alreadyExists = true;
                             }
                         }

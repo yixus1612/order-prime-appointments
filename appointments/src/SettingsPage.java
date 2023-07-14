@@ -132,7 +132,8 @@ public class SettingsPage {
         Label emailLabel = new Label("Email: " + userLoggedin.getEmail());
 
         editButton.setOnAction(e->{
-            switcher.switchToEditProfilePage(settingsPage.getWindow(), primaryStage);
+            Label label = new Label();
+            switcher.switchToEditProfilePage(settingsPage.getWindow(), primaryStage, label);
         });
 
         signOutButton.setOnAction(e->{

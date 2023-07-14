@@ -1,6 +1,5 @@
 import java.util.List;
 
-import javafx.scene.Scene;
 import javafx.scene.control.Label;
 import javafx.stage.Stage;
 import javafx.stage.Window;
@@ -110,8 +109,8 @@ public class SceneSwitcher {
         }
     }
 
-    public void switchToEditAppointmentsPage(Window w, Stage primaryStage, Appointment appointment, List<Appointment> appointmentList){
-        EditAppointments = new EditAppointments(primaryStage, appointment, appointmentList);
+    public void switchToEditAppointmentsPage(Window w, Stage primaryStage, Appointment appointment, List<Appointment> appointmentList, Label errorLabel){
+        EditAppointments = new EditAppointments(primaryStage, appointment, appointmentList, errorLabel);
         if(w instanceof Stage){
             Stage s = (Stage) w;
             s.setScene(EditAppointments.editAppointmentsPage);
@@ -134,16 +133,16 @@ public class SceneSwitcher {
         }
     }
 
-    public void switchToEditProfilePage(Window w, Stage primaryStage){
-        EditProfilePage = new EditProfilePage(primaryStage);
+    public void switchToEditProfilePage(Window w, Stage primaryStage, Label errorLabel){
+        EditProfilePage = new EditProfilePage(primaryStage, errorLabel);
         if(w instanceof Stage){
             Stage s = (Stage) w;
             s.setScene(EditProfilePage.settingsPage);
         }
     }
 
-    public void switchToEditProfilePageBusiness(Window w, Stage primaryStage){
-        EditProfilePageBusiness = new EditProfilePageBusiness(primaryStage);
+    public void switchToEditProfilePageBusiness(Window w, Stage primaryStage, Label errorLabel){
+        EditProfilePageBusiness = new EditProfilePageBusiness(primaryStage, errorLabel);
         if(w instanceof Stage){
             Stage s = (Stage) w;
             s.setScene(EditProfilePageBusiness.settingsPage);

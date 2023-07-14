@@ -1,5 +1,8 @@
 
 import java.io.*;
+import java.time.ZonedDateTime;
+import java.util.ArrayList;
+import java.util.List;
 
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
@@ -216,5 +219,49 @@ public class LoginPage{
         }
 
         return tempBusiness;
+    }
+
+    public void refresh(){
+        List<Appointment> totalAppointmentList = new ArrayList<>();
+        try{
+            //set up FileReader
+            FileReader fileReaderAccount = new FileReader("appointmentList.csv");
+            BufferedReader br = new BufferedReader(fileReaderAccount);
+            String line = "";
+            String[] tempArr;
+            Appointment tempAppointment;
+            ZonedDateTime  tempStartDate;
+   
+            //read in data and determine if appointment already exists
+            while((line = br.readLine()) != null){
+                tempArr = line.split(",");
+                tempAppointment = new Appointment(tempArr[0], tempArr[1], tempArr[2], Boolean.parseBoolean(tempArr[3]), Integer.parseInt(tempArr[4]), Integer.parseInt(tempArr[5]), tempArr[6], Integer.parseInt(tempArr[7]));
+                tempStartDate = tempAppointment.stringToStartDate();
+
+                //keep note if email is found
+                if(tempStartDate.isAfter(ZonedDateTime.now())){
+                    totalAppointmentList.add(tempAppointment);
+                }
+                    
+            }
+
+            br.close();
+
+        }catch(IOException except){
+            System.out.println(except);
+        }
+
+        try{              
+            FileWriter fileWriterUser = new FileWriter("appointmentList.csv", false);
+
+            for(Appointment a : totalAppointmentList){
+                fileWriterUser.write(a.getType() + "," + a.getStartDate() + "," + a.getEndDate() + "," + a.getAvailability() + "," + a.getProvider().getID() + "," + a.getCustomer().getID() + "," + a.getCost() + "," + a.getID() + "\n");
+            }
+
+            fileWriterUser.close();
+
+        }catch(IOException except){
+            System.out.println(except);
+        }
     }
 };

@@ -1,9 +1,3 @@
-import java.io.BufferedReader;
-import java.io.FileReader;
-import java.io.FileWriter;
-import java.io.IOException;
-import java.time.ZonedDateTime;
-import java.util.ArrayList;
 import java.util.List;
 
 import javafx.geometry.Pos;
@@ -11,7 +5,6 @@ import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.image.ImageView;
-import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.Background;
 import javafx.scene.layout.BackgroundFill;
 import javafx.scene.layout.BorderPane;
@@ -34,7 +27,6 @@ public class AppointmentsPageBusiness {
     Rectangle profilePicture;
     Rectangle buffer1, buffer2;
     private SceneSwitcher switcher;
-    private List<Appointment> appointmentlist;
     private Business businessLoggedin;
 
     public AppointmentsPageBusiness(Stage primaryStage, List<Appointment> appointmentListForDay){
@@ -138,39 +130,39 @@ public class AppointmentsPageBusiness {
             center.getChildren().add(noAppointments);
         }else{
          int counter = 0;
-        for(Appointment appointment : appointmentListForDay){
-            Rectangle rowRectangle;
-            if(counter % 2 == 0){
-                rowRectangle = new Rectangle(400, 32, Color.WHITE);
-            }
-            else{rowRectangle = new Rectangle(400, 32, Color.LIGHTGRAY);}
+            for(Appointment appointment : appointmentListForDay){
+                Rectangle rowRectangle;
+                if(counter % 2 == 0){
+                    rowRectangle = new Rectangle(400, 32, Color.WHITE);
+                }
+                else{
+                    rowRectangle = new Rectangle(400, 32, Color.LIGHTGRAY);
+                }
             
+                String start = appointment.getStartDate().substring(0, 16) + appointment.getStartDate().substring(19, 22);
+                String end = appointment.getEndDate().substring(11, 16) + appointment.getEndDate().substring(19, 22);
 
-            Label appointmentType = new Label(appointment.getType() + " " + appointment.getStartDate() + " " + appointment.getProvider().getName() + " " + appointment.getCost() + "       ");
-            HBox appointmentData = new HBox();
-            appointmentData.setAlignment(Pos.CENTER);
-            Button cancelButton = new Button("Edit");
-            cancelButton.setMinWidth(97.5);
-            cancelButton.setOnAction(e-> switcher.switchToEditAppointmentsPage(appointmentsPage.getWindow(), primaryStage, appointment, appointmentListForDay));
+                Label appointmentType = new Label(appointment.getType() + " " + start  + " to " + end + " " + appointment.getCustomer().getName() + " " + appointment.getCost() + "       ");
+                HBox appointmentData = new HBox();
+                appointmentData.setAlignment(Pos.CENTER);
+                Button cancelButton = new Button("Edit");
+                cancelButton.setMinWidth(97.5);
+                Label label = new Label();
+                cancelButton.setOnAction(e-> switcher.switchToEditAppointmentsPage(appointmentsPage.getWindow(), primaryStage, appointment, appointmentListForDay, label));
 
-            appointmentData.getChildren().addAll(appointmentType, cancelButton);
+                appointmentData.getChildren().addAll(appointmentType, cancelButton);
 
-            StackPane row = new StackPane();
-            row.setAlignment(Pos.CENTER);
-            row.getChildren().addAll(rowRectangle, appointmentData);
+                StackPane row = new StackPane();
+                row.setAlignment(Pos.CENTER);
+                row.getChildren().addAll(rowRectangle, appointmentData);
 
-            center.getChildren().add(row);
+                center.getChildren().add(row);
 
-            counter++;
-        }
+                counter++;
+            }
 
        
-        }
-
-        
-
-
-        
+        }  
 
         return center;
     }

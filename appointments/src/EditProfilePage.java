@@ -4,7 +4,8 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
-
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
@@ -29,16 +30,20 @@ import javafx.scene.text.FontWeight;
 public class EditProfilePage {
 
     public Scene settingsPage;
+    private static final String EMAIL_PATTERN = "^(.+)@(\\S+)$";
     public Rectangle scheduleTabRectangle, calendarTabRectangle, appointmentsTabRectangle, settingsTabRectangle;
     Text scheduleTabText, calendarTabText, appointmentsTabText, settingsTabText;
     Rectangle profilePicture;
     Rectangle buffer1, buffer2;
     private User userLoggedin = new User();
     private SceneSwitcher switcher;
+    private Label errorLabel = new Label();
 
-    public EditProfilePage(Stage primaryStage){
+    public EditProfilePage(Stage primaryStage, Label label){
 
         switcher = new SceneSwitcher(primaryStage);
+
+        errorLabel = label;
 
         userLoggedin = (User) primaryStage.getUserData();
 
@@ -142,23 +147,28 @@ public class EditProfilePage {
 
         Label firstNameLabel = new Label("\t\t\t\tFirst Name: ");
         TextField firstName = new TextField(userLoggedin.getName().split(" (?!.* )")[0]);
-        String userFirstName = firstName.getText();
         boxs[0].getChildren().addAll(firstNameLabel, firstName);
 
         Label lastNameLabel = new Label("\t\t\t\tLast Name: ");
         TextField lastName = new TextField(userLoggedin.getName().split(" (?!.* )")[1]);
-        String userLastName = lastName.getText();
         boxs[1].getChildren().addAll(lastNameLabel, lastName);
 
+        Pattern emailPattern = Pattern.compile(EMAIL_PATTERN);
         Label emailLabel = new Label("\t\t\t\tEmail:\t   ");
         TextField email = new TextField(userLoggedin.getEmail());
-        String userEmail = email.getText();
         boxs[2].getChildren().addAll(emailLabel, email);
 
         submitButton.setOnAction(e->{
-            userLoggedin.setName(userFirstName + " " + userLastName);
-            userLoggedin.setEmail(userEmail);
-            changeAccount(primaryStage);
+            Matcher emailMatcher = emailPattern.matcher(email.getText());
+            if(emailMatcher.matches() && !(firstName.getText() == null || firstName.getText().trim().isEmpty()) && !(lastName.getText() == null || lastName.getText().trim().isEmpty())){
+                userLoggedin.setName(firstName.getText() + " " + lastName.getText());
+                userLoggedin.setEmail(email.getText());
+                changeAccount(primaryStage);
+            }else if((firstName.getText() == null || firstName.getText().trim().isEmpty()) || (lastName.getText() == null || lastName.getText().trim().isEmpty())){
+                errorLabel.setText("Please enter a name");
+            }else{
+                errorLabel.setText("Please enter a valid email");
+            }
         });
 
         deleteButton.setOnAction(e->{
@@ -182,7 +192,7 @@ public class EditProfilePage {
         spacingBuffer2.setFont(Font.font("Arial", FontWeight.BOLD, 5));
 
 
-        center.getChildren().addAll(spacingBuffer1, title, spacingBuffer2, imageView, boxs[0], boxs[1], boxs[2], buttons, backButton);
+        center.getChildren().addAll(spacingBuffer1, title, spacingBuffer2, imageView, boxs[0], boxs[1], boxs[2], buttons, backButton, errorLabel);
         center.setSpacing(2);
         return center;
 
@@ -223,7 +233,7 @@ public class EditProfilePage {
         }
 
         try{              
-            FileWriter fileWriterUser = new FileWriter("accountList.csv", false);
+            FileWriter fileWriterUser = new FileWriter("userList.csv", false);
 
             for(User u : userList){
                 fileWriterUser.write(u.getName() + "," + u.getEmail() + "," + u.getID() + "\n");
@@ -350,9 +360,51 @@ public class EditProfilePage {
             System.out.println(except);
         }
 
+        List<Appointment> totalAppointmentList = new ArrayList<>();
+        try{
+            //set up FileReader
+            FileReader fileReaderAccount = new FileReader("appointmentList.csv");
+            BufferedReader br = new BufferedReader(fileReaderAccount);
+            String line = "";
+            String[] tempArr;
+            Appointment tempAppointment;
+   
+            //read in data and determine if appointment already exists
+            while((line = br.readLine()) != null){
+                tempArr = line.split(",");
+                tempAppointment = new Appointment(tempArr[0], tempArr[1], tempArr[2], Boolean.parseBoolean(tempArr[3]), Integer.parseInt(tempArr[4]), Integer.parseInt(tempArr[5]), tempArr[6], Integer.parseInt(tempArr[7]));
+   
+                //keep note if email is found
+                if(userLoggedin.getID() == tempAppointment.getCustomer().getID()){
+                    tempAppointment.setAvailability(true);
+                    tempAppointment.getCustomer().setID(0);
+                }
+
+                totalAppointmentList.add(tempAppointment);
+
+            }
+            br.close();
+        }catch(IOException except){
+            System.out.println(except);
+        }
+
+        try{              
+            FileWriter fileWriterUser = new FileWriter("appointmentList.csv", false);
+
+            for(Appointment a : totalAppointmentList){
+                fileWriterUser.write(a.getType() + "," + a.getStartDate() + "," + a.getEndDate() + "," + a.getAvailability() + "," + a.getProvider().getID() + "," + a.getCustomer().getID() + "," + a.getCost() + "," + a.getID() + "\n");
+            }
+
+            fileWriterUser.close();
+
+        }catch(IOException except){
+            System.out.println(except);
+        }
 
         userLoggedin = null;
         switcher.switchToLoginPage(settingsPage.getWindow(), primaryStage);
     }
+
+
 
 }

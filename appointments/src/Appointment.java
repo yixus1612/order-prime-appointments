@@ -19,8 +19,8 @@ public class Appointment {
         this.appointmentStartDate = null;
         this.appointmentEndDate = null;
         this.availability = true;
-        this.provider = null;
-        this.customer = null;
+        this.provider = new Business();
+        this.customer = new User();
         this.cost = null;
         this.id = 0;
     }

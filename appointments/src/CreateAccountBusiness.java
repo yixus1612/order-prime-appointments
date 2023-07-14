@@ -118,7 +118,7 @@ public class CreateAccountBusiness {
       backButton.setPrefWidth(97.5);
       backButton.minWidth(97.5);
 
-      backButton.setOnAction(e-> switcher.switchToChooseAccountPage(createAccountPage.getWindow(), primaryStage));
+      backButton.setOnAction(e-> switcher.switchToLoginPage(createAccountPage.getWindow(), primaryStage));
 
       //set up layout
       hButtonsCreateAcc.getChildren().addAll(backButton, signUpButton);
@@ -217,6 +217,9 @@ public class CreateAccountBusiness {
                }
 
             //update bottom text
+            firstNameField.clear();
+            lastNameField.clear();
+            newEmailField.clear();
             note.setText("Account Created!");
 
          //if the email already exists, print message saying so
@@ -239,16 +242,13 @@ public class CreateAccountBusiness {
                "         - at least one digit\n" +
                "         - at least one lowercase letter\n" + 
                "         - at least one uppercase letter\n" + 
-               "         - at least one special character\n" + 
+               "         - at least one special character *!@#&()-[{}]:;',?/*~$^+=<>\n" + 
                "         - must be greater than 6 and less than 15 characters in length");
       }else if(business.isEmpty()){
          note.setText("Please enter a business");
       }
 
       //clear text fields after attempt
-      firstNameField.clear();
-      lastNameField.clear();
-      newEmailField.clear();
       newPasswordField.clear();
       confirmPasswordField.clear();
 

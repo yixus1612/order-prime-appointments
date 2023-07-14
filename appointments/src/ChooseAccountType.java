@@ -36,7 +36,6 @@ public class ChooseAccountType {
         userButton.setMinWidth(60);
         backButton.setMinWidth(125);
 
-
         backButton.setOnAction(e-> switcher.switchToLoginPage(chooseAccountType.getWindow(), primaryStage));
         userButton.setOnAction(e-> switcher.switchToAccountCreationPage(chooseAccountType.getWindow(), primaryStage));
         businessButton.setOnAction(e-> switcher.switchToBusinessAccountCreation(chooseAccountType.getWindow(), primaryStage));

@@ -72,12 +72,12 @@ public class CalendarPageBusiness {
         calendarBox.getChildren().addAll(calendar);
 
         background.getChildren().addAll(yearBar, weekBar, calendar);
-        background.setLeftAnchor(yearBar, 190.0);
-        background.setTopAnchor(yearBar, 0.0);
-        background.setTopAnchor(weekBar, 30.0);
-        background.setLeftAnchor(weekBar, 30.0);
-        background.setTopAnchor(calendar, 50.0);
-        background.setLeftAnchor(calendar, 10.0);
+        AnchorPane.setLeftAnchor(yearBar, 190.0);
+        AnchorPane.setTopAnchor(yearBar, 0.0);
+        AnchorPane.setTopAnchor(weekBar, 30.0);
+        AnchorPane.setLeftAnchor(weekBar, 30.0);
+        AnchorPane.setTopAnchor(calendar, 50.0);
+        AnchorPane.setLeftAnchor(calendar, 10.0);
         layout.setCenter(background);
 
         calendarPage = new Scene(layout, 600, 500);
@@ -262,7 +262,8 @@ public class CalendarPageBusiness {
             appointmentBox.getChildren().add(text);
             int app = i;
             text.setOnMouseClicked(e->{
-                switcher.switchToEditAppointmentsPage(calendarPage.getWindow(),primaryStage, appointments.get(app), appointments);
+                Label label = new Label();
+                switcher.switchToEditAppointmentsPage(calendarPage.getWindow(),primaryStage, appointments.get(app), appointments, label);
             });
         }
         appointmentBox.setTranslateY((height/2) * .2);

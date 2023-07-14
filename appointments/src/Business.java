@@ -1,13 +1,8 @@
-
 import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
-import java.sql.Date;
-import java.time.ZonedDateTime;
-import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Scanner;
 
 import javafx.scene.image.Image;
 
@@ -85,7 +80,6 @@ public class Business extends Account{
             BufferedReader br = new BufferedReader(fileReaderAccount);
             String line = "";
             String[] tempArr;
-            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss z");
 
             //read account file
             while((line = br.readLine()) != null){

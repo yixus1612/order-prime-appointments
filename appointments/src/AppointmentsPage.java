@@ -2,7 +2,6 @@ import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
-import java.time.ZonedDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -10,7 +9,6 @@ import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
-import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.Background;
 import javafx.scene.layout.BackgroundFill;
@@ -35,7 +33,6 @@ public class AppointmentsPage {
     Rectangle buffer1, buffer2;
     private User userLoggedin;
     private SceneSwitcher switcher;
-    private List<Appointment> appointmentlist;
 
     public AppointmentsPage(Stage primaryStage, List<Appointment> appointmentListForDay){
 
@@ -142,8 +139,10 @@ public class AppointmentsPage {
             }
             else{rowRectangle = new Rectangle(400, 32, Color.LIGHTGRAY);}
             
+            String start = appointment.getStartDate().substring(0, 16) + appointment.getStartDate().substring(19, 22);
+            String end = appointment.getEndDate().substring(11, 16) + appointment.getEndDate().substring(19, 22);
 
-            Label appointmentType = new Label(appointment.getType() + " " + appointment.getStartDate() + " " + appointment.getProvider().getName() + " " + appointment.getCost() + "       ");
+            Label appointmentType = new Label(appointment.getType() + " " + start  + " to " + end + " " + appointment.getProvider().getName() + " " + appointment.getCost() + "       ");
             appointmentType.setOnMouseClicked(e->{
                 switcher.switchToViewAppointmentPage(appointmentsPage.getWindow(), primaryStage, appointment);
             });

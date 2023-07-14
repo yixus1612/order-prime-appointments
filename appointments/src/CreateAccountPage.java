@@ -109,7 +109,7 @@ public class CreateAccountPage {
       backButton.setPrefWidth(97.5);
       backButton.minWidth(97.5);
 
-      backButton.setOnAction(e-> switcher.switchToChooseAccountPage(createAccountPage.getWindow(), primaryStage));
+      backButton.setOnAction(e-> switcher.switchToLoginPage(createAccountPage.getWindow(), primaryStage));
 
       //set up layout
       hButtonsCreateAcc.getChildren().addAll(backButton, signUpButton);
@@ -234,9 +234,6 @@ public class CreateAccountPage {
       }
 
       //clear text fields after attempt
-      firstNameField.clear();
-      lastNameField.clear();
-      newEmailField.clear();
       newPasswordField.clear();
       confirmPasswordField.clear();
 

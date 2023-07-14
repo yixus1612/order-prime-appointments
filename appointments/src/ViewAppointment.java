@@ -134,11 +134,16 @@ public class ViewAppointment {
 
         Label typeLabel = new Label("Appointment Name: " + appointment.getType());
 
-        Label startDateLabel = new Label("Start Date: " + appointment.getStartDate());
+        String date = appointment.getStartDate().substring(0,11);
+        Label dateLabel = new Label("Date: " + date);
 
-        Label endDateLabel = new Label("End Date: " + appointment.getEndDate());
+        String start = appointment.getStartDate().substring(11, 16) + appointment.getStartDate().substring(19, 22);
+        Label startDateLabel = new Label("Start Time: " + start);
 
-        Label nameLabel = new Label("Provider Name: " + appointment.getProvider().getName());
+        String end = appointment.getEndDate().substring(11, 16) + appointment.getEndDate().substring(19, 22);
+        Label endDateLabel = new Label("End Time: " + end);
+
+        Label nameLabel = new Label("Provider's Name: " + appointment.getProvider().getName());
 
         Label emailLabel = new Label("Provider's Email: " + appointment.getProvider().getEmail());
 
@@ -159,7 +164,7 @@ public class ViewAppointment {
         spacingBuffer1.setFont(Font.font("Arial", FontWeight.BOLD, 45));
         spacingBuffer2.setFont(Font.font("Arial", FontWeight.BOLD, 5));
 
-        center.getChildren().addAll(spacingBuffer1, title, spacingBuffer2, typeLabel, startDateLabel, endDateLabel, nameLabel, emailLabel, costLabel, backButton, cancelButton);
+        center.getChildren().addAll(spacingBuffer1, title, spacingBuffer2, typeLabel, dateLabel, startDateLabel, endDateLabel, nameLabel, emailLabel, costLabel, backButton, cancelButton);
         center.setSpacing(2);
         return center;
 
