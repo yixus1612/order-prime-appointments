@@ -7,7 +7,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import javafx.geometry.Pos;
-import javafx.scene.Group;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
@@ -32,22 +31,20 @@ public class AppointmentSchedulingPage {
 
     public Scene appointmentSchedulingPage;
 
-    public Rectangle scheduleTabRectangle, calendarTabRectangle, appointmentsTabRectangle, settingsTabRectangle;
-    Text scheduleTabText, calendarTabText, appointmentsTabText, settingsTabText;
-    public Rectangle profilePicture;
-    public Rectangle buffer1, buffer2;
-    public GridPane center;
+    private Rectangle scheduleTabRectangle, calendarTabRectangle, appointmentsTabRectangle, settingsTabRectangle;
+    private Text scheduleTabText, calendarTabText, appointmentsTabText, settingsTabText;
+    private Rectangle buffer1, buffer2;
+    private GridPane center;
     private DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd hh:mm:ss a z");
     private User userLoggedin;
     private SceneSwitcher switcher;
 
     private BorderPane layout = new BorderPane();
-    TextField businessName = new TextField();
-    Button backButton = new Button("Back");
-    Button searchButton = new Button("Search");
-    List <Label> appointments = new ArrayList<Label>();
+    private Button backButton = new Button("Back");
+    private Button searchButton = new Button("Search");
+    private List <Label> appointments = new ArrayList<Label>();
+    private TextField businessName = new TextField();
 
-    private String previousSearch = null;
     private VBox searchResults = new VBox();
 
     public AppointmentSchedulingPage(Stage primaryStage){
@@ -146,18 +143,24 @@ public class AppointmentSchedulingPage {
         Label spacingBuffer = new Label(" ");
         spacingBuffer.setFont(Font.font("Arial", FontWeight.BOLD, 90));
 
+        HBox businessBox = new HBox();
+        Label businessLabel = new Label("Business Name: ");
+        Label businessBuffer = new Label("\t\t\t  ");
         businessName.setPromptText("Business Name");
+        businessName.setMinWidth(182);
+        businessBox.getChildren().addAll(businessLabel, businessName, businessBuffer);
+        businessBox.setAlignment(Pos.CENTER_LEFT);
 
         setUp.setPrefWidth(200);
         setUp.setSpacing(2);
-        backButton.setMinWidth(97.5);
-        searchButton.setMinWidth(97.5);
+        backButton.setMinWidth(90);
+        searchButton.setMinWidth(90);
         setUp.getChildren().addAll(backButton, searchButton);
         setUp.setAlignment(Pos.CENTER);
 
         backButton.setOnAction(e->switcher.switchToCalendarPage(appointmentSchedulingPage.getWindow(), primaryStage));
 
-        appointmentColumn.getChildren().addAll(spacingBuffer, title, businessName, setUp);
+        appointmentColumn.getChildren().addAll(spacingBuffer, title, businessBox, setUp);
         appointmentColumn.setSpacing(5);
         appointmentColumn.setAlignment(Pos.CENTER);
 
@@ -223,7 +226,6 @@ public class AppointmentSchedulingPage {
 
     public void signUp(Stage primaryStage, Button button, Appointment appointment){
         button.setOnAction(e->{
-            previousSearch = null;
 
             Boolean alreadyExists = false;
             List<Appointment> appointmentList = new ArrayList<>();

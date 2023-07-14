@@ -53,28 +53,52 @@ public class CreateAccountPage {
       accountCreation.setTextFill(Color.WHITE);
 
       //set up buttons
-       signUpButton = new Button("Sign Up");
-       backButton = new Button("Back");
+      signUpButton = new Button("Sign Up");
+      backButton = new Button("Back");
 
-       //set up textfields
-       newEmailField = new TextField();
-       newPasswordField = new PasswordField();
-       confirmPasswordField = new PasswordField();
-       firstNameField = new TextField();
-       lastNameField = new TextField();
+      //set up textfields
+      HBox emailBox = new HBox();
+      Label emailLabel = new Label("\t\t\t\t\t\t   Email: ");
+      newEmailField = new TextField();
+      emailBox.getChildren().addAll(emailLabel, newEmailField);
+      emailLabel.setTextFill(Color.WHITE);
 
-       //set prompt text for each textfield
-       newEmailField.setPromptText("Email");
-       newPasswordField.setPromptText("Password");
-       confirmPasswordField.setPromptText("Confirm Password");
-       firstNameField.setPromptText("First Name");
-       lastNameField.setPromptText("Last Name");
+      HBox passwordBox = new HBox();
+      Label passwordLabel = new Label("\t\t\t\t\t    Password: ");
+      newPasswordField = new PasswordField();
+      passwordBox.getChildren().addAll(passwordLabel, newPasswordField);
+      passwordLabel.setTextFill(Color.WHITE);
+
+      HBox confirmBox = new HBox();
+      Label confirmLabel = new Label("\t\t\t      Confirm Password: ");
+      confirmPasswordField = new PasswordField();
+      confirmBox.getChildren().addAll(confirmLabel, confirmPasswordField);
+      confirmLabel.setTextFill(Color.WHITE);
+
+      HBox firstNameBox = new HBox();
+      Label firstNameLabel = new Label("\t\t\t\t\t  First Name: ");
+      firstNameField = new TextField();
+      firstNameBox.getChildren().addAll(firstNameLabel, firstNameField);
+      firstNameLabel.setTextFill(Color.WHITE);
+
+      HBox lastNameBox = new HBox();
+      Label lastNameLabel = new Label("\t\t\t\t\t  Last Name: ");
+      lastNameField = new TextField();
+      lastNameBox.getChildren().addAll(lastNameLabel, lastNameField);
+      lastNameLabel.setTextFill(Color.WHITE);
+
+      //set prompt text for each textfield
+      newEmailField.setPromptText("Email");
+      newPasswordField.setPromptText("Password");
+      confirmPasswordField.setPromptText("Confirm Password");
+      firstNameField.setPromptText("First Name");
+      lastNameField.setPromptText("Last Name");
        
-       newEmailField.setMaxWidth(200);
-       newPasswordField.setMaxWidth(200);
-       confirmPasswordField.setMaxWidth(200);
-       firstNameField.setMaxWidth(200);
-      lastNameField.setMaxWidth(200); 
+      newEmailField.setMinWidth(200);
+      newPasswordField.setMinWidth(200);
+      confirmPasswordField.setMinWidth(200);
+      firstNameField.setMinWidth(200);
+      lastNameField.setMinWidth(200); 
 
       HBox hButtonsCreateAcc = new HBox();
       VBox createAccColumn = new VBox();
@@ -96,7 +120,7 @@ public class CreateAccountPage {
       createAccColumn.setBackground(new Background(new BackgroundFill(Color.web("#4681e0"), null, null)));
       createAccColumn.setAlignment(Pos.CENTER);
       createAccColumn.setSpacing(5);
-      createAccColumn.getChildren().addAll(title, firstNameField, lastNameField, newEmailField, newPasswordField, confirmPasswordField, hButtonsCreateAcc, accountCreation);
+      createAccColumn.getChildren().addAll(title, firstNameBox, lastNameBox, emailBox, passwordBox, confirmBox, hButtonsCreateAcc, accountCreation);
 
       createAccountPage = new Scene(createAccColumn, 600, 500);
 

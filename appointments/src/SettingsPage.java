@@ -123,8 +123,8 @@ public class SettingsPage {
 
         ImageView imageView = new ImageView();
         imageView.setImage(userLoggedin.getProfilePic());
-        imageView.setFitHeight(200);
-        imageView.setFitWidth(200);
+        imageView.setFitHeight(100);
+        imageView.setFitWidth(100);
 
         Label nameLabel = new Label("Name: " + userLoggedin.getName());
 

@@ -222,7 +222,7 @@ public class EditProfilePage {
         }
 
         try{              
-            FileWriter fileWriterUser = new FileWriter("userList.csv", false);
+            FileWriter fileWriterUser = new FileWriter("accountList.csv", false);
 
             for(User u : userList){
                 fileWriterUser.write(u.getName() + "," + u.getEmail() + "," + u.getID() + "\n");

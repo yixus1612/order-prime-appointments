@@ -149,11 +149,6 @@ public class AppointmentCreationPage {
         Label spacingBuffer = new Label(" ");
         spacingBuffer.setFont(Font.font("Arial", FontWeight.BOLD, 90));
 
-        HBox dateBox = new HBox();
-
-        cost.setPromptText("Cost");
-        cost.setPrefWidth(200);
-
         ObservableList<String> months = FXCollections.observableArrayList(
             "01", "02", "03", "04", "05", "06", "07", "08", "09", "10", "11", "12"
         );
@@ -192,12 +187,35 @@ public class AppointmentCreationPage {
 
         createAppointment(primaryStage, comboBox1, comboBox2, comboBox3, comboBox4, comboBox5, comboBox6);
 
-        dateBox.getChildren().addAll(comboBox1, comboBox2, comboBox3, comboBox4, comboBox5, comboBox6);
+        HBox dateBox = new HBox();
+        Label dateLabel= new Label("\t\t\tDate: ");
+        dateBox.getChildren().addAll(dateLabel, comboBox1, comboBox2, comboBox3);
+        comboBox3.setMinWidth(75);
         dateBox.setSpacing(1);
 
-        appointmentName.setPromptText("Appointment Name");
+        HBox timeBox = new HBox();
+        Label timeLabel = new Label("\t\t\tTime: ");
+        timeBox.getChildren().addAll(timeLabel, comboBox4, comboBox5, comboBox6);
+        comboBox4.setMaxWidth(69);
+        comboBox5.setMaxWidth(63);
+        comboBox6.setMaxWidth(82.5);
+        timeBox.setSpacing(1);
 
-        setUp.setPrefWidth(200);
+        HBox nameBox = new HBox();
+        Label name = new Label("Appointment Name: ");
+        Label nameBuffer = new Label("\t\t\t\t");
+        appointmentName.setPromptText("Appointment Name");
+        appointmentName.setMinWidth(218);
+        nameBox.getChildren().addAll(name, appointmentName, nameBuffer);
+
+        HBox costBox = new HBox();
+        Label costLabel = new Label("\t\t\t Cost: ");
+        cost.setPromptText("Cost");
+        cost.setMinWidth(218);
+        //cost.setPrefWidth(200);
+        costBox.getChildren().addAll(costLabel, cost);
+
+        //setUp.setPrefWidth(200);
         backButton.setMinWidth(97.5);
         createButton.setMinWidth(97.5);
         setUp.getChildren().addAll(backButton, createButton);
@@ -205,7 +223,7 @@ public class AppointmentCreationPage {
         setUp.setSpacing(3);
         backButton.setOnAction(e->switcher.switchToCalendarPageBusiness(appointmentCreationPage.getWindow(), primaryStage));
 
-        appointmentColumn.getChildren().addAll(spacingBuffer,title, appointmentName, dateBox, cost, setUp);
+        appointmentColumn.getChildren().addAll(spacingBuffer,title, nameBox, dateBox, timeBox, costBox, setUp);
         appointmentColumn.setSpacing(5);
         appointmentColumn.setAlignment(Pos.CENTER);
 

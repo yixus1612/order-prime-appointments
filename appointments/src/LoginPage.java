@@ -38,17 +38,26 @@ public class LoginPage{
 
         loginButton = new Button("Login");
         createAccButton = new Button("Create Account");
+
+        HBox emailBox = new HBox();
+        Label emailLabel = new Label("\t\t\t\t\t\t   Email: ");
         emailField = new TextField();
+        emailBox.getChildren().addAll(emailLabel, emailField);
+        emailLabel.setTextFill(Color.WHITE);
+
+        HBox passwordBox = new HBox();
+        Label passwordLabel = new Label("\t\t\t\t\t    Password: ");
         passwordField = new PasswordField();
+        passwordBox.getChildren().addAll(passwordLabel, passwordField);
+        passwordLabel.setTextFill(Color.WHITE);
 
         HBox hButtonsLogin = new HBox();
         VBox loginColumn = new VBox();
 
-
         emailField.setPromptText("Email");
         passwordField.setPromptText("Password");
-        emailField.setMaxWidth(200);
-        passwordField.setMaxWidth(200);
+        emailField.setMinWidth(200);
+        passwordField.setMinWidth(200);
 
         hButtonsLogin.setPrefWidth(200);
         loginButton.setMinWidth(97.5);
@@ -61,7 +70,7 @@ public class LoginPage{
         hButtonsLogin.setSpacing(5);
         hButtonsLogin.setAlignment(Pos.CENTER);
 
-        loginColumn.getChildren().addAll(title, emailField, passwordField, hButtonsLogin, note);
+        loginColumn.getChildren().addAll(title, emailBox, passwordBox, hButtonsLogin, note);
         loginColumn.setSpacing(5);
         loginColumn.setAlignment(Pos.CENTER);
         loginColumn.setBackground(new Background( new BackgroundFill(Color.web("#4681e0"), null, null)));
