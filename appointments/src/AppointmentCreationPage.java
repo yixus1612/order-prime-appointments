@@ -216,11 +216,13 @@ public class AppointmentCreationPage {
 
         HBox startTimeBox = new HBox();
         Label startTimeLabel = new Label("Start Time: ");
-        startTimeBox.getChildren().addAll(startTimeLabel, comboBox4, comboBox5, comboBox6);
+        Label buffer = new Label("\t\t ");
+        startTimeBox.getChildren().addAll(startTimeLabel, comboBox4, comboBox5, comboBox6, buffer);
         startTimeBox.setSpacing(1);
+        startTimeBox.setAlignment(Pos.CENTER);
 
         HBox endTimeBox = new HBox();
-        Label endTimeLabel = new Label("End Time: ");
+        Label endTimeLabel = new Label("\t\t End Time: ");
         endTimeBox.getChildren().addAll(endTimeLabel, comboBox7, comboBox8, comboBox9);
         endTimeBox.setSpacing(1);
 
