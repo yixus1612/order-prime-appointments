@@ -225,7 +225,6 @@ public class AppointmentCreationPage {
 
         HBox endTimeBox = new HBox();
         Label endTimeLabel = new Label("\t\t End Time: ");
-        Label endTimeLabel = new Label("\t\t End Time: ");
         endTimeBox.getChildren().addAll(endTimeLabel, comboBox7, comboBox8, comboBox9);
         comboBox7.setMaxWidth(69);
         comboBox8.setMaxWidth(63);
