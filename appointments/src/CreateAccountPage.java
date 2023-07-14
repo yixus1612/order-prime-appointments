@@ -224,7 +224,7 @@ public class CreateAccountPage {
       }else if(!emailMatcher.matches()){
          note.setText("Please enter a valid email");
       }else if(!passwordMatcher.matches()){
-         note.setText("Please enter a vaild password." +
+         note.setText("Please enter a vaild password.\n" +
                "    password must contain:\n" +
                "         - at least one digit\n" +
                "         - at least one lowercase letter\n" + 

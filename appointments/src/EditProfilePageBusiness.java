@@ -109,8 +109,9 @@ public class EditProfilePageBusiness {
         HBox sidebar = new HBox(tabStack, sidebarSeparator);
         sidebar.setBackground(new Background(new BackgroundFill(Color.web("#4681e0"), null, null)));
 
-        scheduleTabRectangle.setOnMouseClicked(e -> switcher.switchToAppointmentCreationPage(settingsPage.getWindow(), primaryStage));
-        scheduleTabText.setOnMouseClicked(e -> switcher.switchToAppointmentCreationPage(settingsPage.getWindow(), primaryStage));
+        Label label = new Label();
+        scheduleTabRectangle.setOnMouseClicked(e -> switcher.switchToAppointmentCreationPage(settingsPage.getWindow(), primaryStage, label));
+        scheduleTabText.setOnMouseClicked(e -> switcher.switchToAppointmentCreationPage(settingsPage.getWindow(), primaryStage, label));
 
         appointmentsTabRectangle.setOnMouseClicked(e->switcher.switchToAppointmentsPageBusiness(settingsPage.getWindow(), primaryStage, businessLoggedin.appointmentList));
         appointmentsTabText.setOnMouseClicked(e -> switcher.switchToAppointmentsPageBusiness(settingsPage.getWindow(), primaryStage, businessLoggedin.appointmentList));

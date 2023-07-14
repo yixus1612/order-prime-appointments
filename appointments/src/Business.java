@@ -35,7 +35,7 @@ public class Business extends Account{
         this.profilePic = new Image(getClass().getResourceAsStream("/images/BlankImage.jpg"));
     }
 
-    public void displayAppointments(Business business){
+    /*public void displayAppointments(Business business){
         //this will display the appointments that have been created under a specific business account  (eventually) sorted by their due dates
         for(int i = 0; i < business.appointmentList.size(); i++)
         {
@@ -44,7 +44,7 @@ public class Business extends Account{
         }
 
 
-    }
+    }*/
 
     public String getName(){
         return name;
@@ -92,15 +92,16 @@ public class Business extends Account{
                 tempArr = line.split(",");
 
                 //check to see if email and password are correctly inputted
-                if(Integer.parseInt(tempArr[3]) == this.id){
+                if(Integer.parseInt(tempArr[4]) == this.id){
                     Appointment tempAppointment = new Appointment();
                     tempAppointment.setType(tempArr[0]);
-                    tempAppointment.setDate(tempArr[1]);
-                    tempAppointment.setAvailability(Boolean.parseBoolean(tempArr[2]));
-                    tempAppointment.setProvider(Integer.parseInt(tempArr[3]));
-                    tempAppointment.setCustomer(Integer.parseInt(tempArr[4]));
-                    tempAppointment.setCost(tempArr[5]);
-                    tempAppointment.setID(Integer.parseInt(tempArr[6]));
+                    tempAppointment.setStartDate(tempArr[1]);
+                    tempAppointment.setEndDate(tempArr[2]);
+                    tempAppointment.setAvailability(Boolean.parseBoolean(tempArr[3]));
+                    tempAppointment.setProvider(Integer.parseInt(tempArr[4]));
+                    tempAppointment.setCustomer(Integer.parseInt(tempArr[5]));
+                    tempAppointment.setCost(tempArr[6]);
+                    tempAppointment.setID(Integer.parseInt(tempArr[7]));
                     appointmentList.add(tempAppointment);
                 }
             }

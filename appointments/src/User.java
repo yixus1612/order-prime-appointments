@@ -66,15 +66,16 @@ public class User extends Account{
                 tempArr = line.split(",");
                     
                 //check if id matches user and add it to their appointment list.
-                if(Integer.parseInt(tempArr[4]) == this.iD){
+                if(Integer.parseInt(tempArr[5]) == this.iD){
                     Appointment tempAppointment = new Appointment();
                     tempAppointment.setType(tempArr[0]);
-                    tempAppointment.setDate(tempArr[1]);
-                    tempAppointment.setAvailability(Boolean.parseBoolean(tempArr[2]));
-                    tempAppointment.setProvider(Integer.parseInt(tempArr[3]));
-                    tempAppointment.setCustomer(Integer.parseInt(tempArr[4]));
-                    tempAppointment.setCost(tempArr[5]);
-                    tempAppointment.setID(Integer.parseInt(tempArr[6]));
+                    tempAppointment.setStartDate(tempArr[1]);
+                    tempAppointment.setEndDate(tempArr[2]);
+                    tempAppointment.setAvailability(Boolean.parseBoolean(tempArr[3]));
+                    tempAppointment.setProvider(Integer.parseInt(tempArr[4]));
+                    tempAppointment.setCustomer(Integer.parseInt(tempArr[5]));
+                    tempAppointment.setCost(tempArr[6]);
+                    tempAppointment.setID(Integer.parseInt(tempArr[7]));
                     tempList.add(tempAppointment);
                 }
 

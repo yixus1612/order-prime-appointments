@@ -6,42 +6,45 @@ import java.time.format.DateTimeFormatter;
 
 public class Appointment {
     private String appointmentType;
-    private String appointmentDate;
+    private String appointmentStartDate;
+    private String appointmentEndDate;
     private Boolean availability;
     private Business provider;
     private User customer;
     private String cost;
     private int id;
 
-    public void sendNotification(){
-        //this function will inform the user they have an upcoming appointment
-    }
-
     Appointment(){
-            this.appointmentType = null;
-            this.appointmentDate = null;
-            this.availability = true;
-            this.provider = null;
-            this.customer = null;
-            this.cost = null;
-            this.id = 0;
+        this.appointmentType = null;
+        this.appointmentStartDate = null;
+        this.appointmentEndDate = null;
+        this.availability = true;
+        this.provider = null;
+        this.customer = null;
+        this.cost = null;
+        this.id = 0;
     }
     
-    Appointment(String appointmentType, String appointmentDate, Boolean availability, int businessID, int customerID, String cost, int id){
-            this.appointmentType = appointmentType;
-            this.appointmentDate = appointmentDate;
-            this.availability = availability;
-            this.provider = findBusiness(businessID);
-            this.customer = findUser(customerID);
-            this.cost = cost;
-            this.id = id;
+    Appointment(String appointmentType, String appointmentStartDate, String appointmentEndDate, Boolean availability, int businessID, int customerID, String cost, int id){
+        this.appointmentType = appointmentType;
+        this.appointmentStartDate = appointmentStartDate;
+        this.appointmentEndDate = appointmentEndDate;
+        this.availability = availability;
+        this.provider = findBusiness(businessID);
+        this.customer = findUser(customerID);
+        this.cost = cost;
+        this.id = id;
     }
     public String getType(){
-            return appointmentType;
+        return appointmentType;
     }
 
-    public String getDate(){
-            return appointmentDate;
+    public String getStartDate(){
+        return appointmentStartDate;
+    }
+
+    public String getEndDate(){
+        return appointmentEndDate;
     }
 
     public Boolean getAvailability(){
@@ -49,15 +52,15 @@ public class Appointment {
     }
 
     public Business getProvider(){
-            return provider;
+        return provider;
     }
 
     public User getCustomer(){
-            return customer;
+        return customer;
     }
 
     public String getCost(){
-            return cost;
+        return cost;
     }
 
     public int getID(){
@@ -68,8 +71,12 @@ public class Appointment {
         this.appointmentType = newType;
     }
 
-    public void setDate(String newDate){
-        this.appointmentDate = newDate;
+    public void setStartDate(String newDate){
+        this.appointmentStartDate = newDate;
+    }
+
+    public void setEndDate(String newDate){
+        this.appointmentEndDate = newDate;
     }
 
     public void setAvailability(Boolean newAvail){
@@ -161,9 +168,15 @@ public class Appointment {
         return tempBusiness;
     }
 
-    public ZonedDateTime stringToDate(){
+    public ZonedDateTime stringToStartDate(){
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd hh:mm:ss a z");
-        ZonedDateTime dateTime = ZonedDateTime.parse(this.appointmentDate, formatter);
+        ZonedDateTime dateTime = ZonedDateTime.parse(this.appointmentStartDate, formatter);
+        return dateTime;
+    }
+
+    public ZonedDateTime stringToEndDate(){
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd hh:mm:ss a z");
+        ZonedDateTime dateTime = ZonedDateTime.parse(this.appointmentEndDate, formatter);
         return dateTime;
     }
 }

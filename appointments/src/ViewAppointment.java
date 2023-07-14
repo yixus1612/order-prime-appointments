@@ -134,7 +134,9 @@ public class ViewAppointment {
 
         Label typeLabel = new Label("Appointment Name: " + appointment.getType());
 
-        Label dateLabel = new Label("Date: " + appointment.getDate());
+        Label startDateLabel = new Label("Start Date: " + appointment.getStartDate());
+
+        Label endDateLabel = new Label("End Date: " + appointment.getEndDate());
 
         Label nameLabel = new Label("Provider Name: " + appointment.getProvider().getName());
 
@@ -157,7 +159,7 @@ public class ViewAppointment {
         spacingBuffer1.setFont(Font.font("Arial", FontWeight.BOLD, 45));
         spacingBuffer2.setFont(Font.font("Arial", FontWeight.BOLD, 5));
 
-        center.getChildren().addAll(spacingBuffer1, title, spacingBuffer2, typeLabel, dateLabel, nameLabel, emailLabel, costLabel, backButton, cancelButton);
+        center.getChildren().addAll(spacingBuffer1, title, spacingBuffer2, typeLabel, startDateLabel, endDateLabel, nameLabel, emailLabel, costLabel, backButton, cancelButton);
         center.setSpacing(2);
         return center;
 
@@ -177,7 +179,7 @@ public class ViewAppointment {
             //read in data and determine if appointment already exists
             while((line = br.readLine()) != null){
                 tempArr = line.split(",");
-                tempAppointment = new Appointment(tempArr[0], tempArr[1], Boolean.parseBoolean(tempArr[2]), Integer.parseInt(tempArr[3]), Integer.parseInt(tempArr[4]), tempArr[5], Integer.parseInt(tempArr[6]));
+                tempAppointment = new Appointment(tempArr[0], tempArr[1], tempArr[2], Boolean.parseBoolean(tempArr[3]), Integer.parseInt(tempArr[4]), Integer.parseInt(tempArr[5]), tempArr[6], Integer.parseInt(tempArr[7]));
    
                 //keep note if email is found
                 if(appointment.getID() == tempAppointment.getID()){
@@ -197,7 +199,7 @@ public class ViewAppointment {
             FileWriter fileWriterUser = new FileWriter("appointmentList.csv", false);
 
             for(Appointment a : totalAppointmentList){
-                fileWriterUser.write(a.getType() + "," + a.getDate() + "," + a.getAvailability() + "," + a.getProvider().getID() + "," + a.getCustomer().getID() + "," + a.getCost() + "," + a.getID() + "\n");
+                fileWriterUser.write(a.getType() + "," + a.getStartDate() + "," + a.getEndDate() + "," + a.getAvailability() + "," + a.getProvider().getID() + "," + a.getCustomer().getID() + "," + a.getCost() + "," + a.getID() + "\n");
             }
 
             fileWriterUser.close();

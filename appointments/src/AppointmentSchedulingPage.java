@@ -195,17 +195,19 @@ public class AppointmentSchedulingPage {
                 //read in data and create list of available appointments
                 while((line = br.readLine()) != null){
                     tempArr = line.split(",");
-                    tempAppointment = new Appointment(tempArr[0], tempArr[1], Boolean.parseBoolean(tempArr[2]), Integer.parseInt(tempArr[3]), Integer.parseInt(tempArr[4]), tempArr[5], Integer.parseInt(tempArr[6]));
+                    tempAppointment = new Appointment(tempArr[0], tempArr[1], tempArr[2], Boolean.parseBoolean(tempArr[3]), Integer.parseInt(tempArr[4]), Integer.parseInt(tempArr[5]), tempArr[6], Integer.parseInt(tempArr[7]));
 
                     tempBusiness = tempAppointment.getProvider();
                     Button signUpButton = new Button("Schedule");
        
                     
-                    if(userInput.equals(tempBusiness.getType()) && Boolean.parseBoolean(tempArr[2])){
+                    if(userInput.equals(tempBusiness.getType()) && Boolean.parseBoolean(tempArr[3])){
                         HBox column = new HBox();
                         signUp(primaryStage, signUpButton, tempAppointment);
-                        column.getChildren().addAll(new Label(tempBusiness.getType() + " " + tempArr[0] + " " + tempBusiness.getName() + "        "), signUpButton);
-                        searchResults.getChildren().addAll(column, errorLabel);
+                        Label app = new Label(tempBusiness.getType() + " " + tempArr[0] + " " + tempBusiness.getName() + "        ");
+                        column.getChildren().addAll(app, signUpButton);
+                        viewApp(column, primaryStage, tempAppointment);
+                        searchResults.getChildren().addAll(column);
                         counter++;
                     }
                 }
@@ -221,6 +223,14 @@ public class AppointmentSchedulingPage {
                 System.out.println(except);
             }
 
+            searchResults.getChildren().add(errorLabel);
+
+        });
+    }
+
+    public void viewApp(HBox column, Stage primaryStage, Appointment appointment){
+        column.setOnMouseClicked(e->{
+            switcher.switchToViewAppointmentPage(appointmentSchedulingPage.getWindow(), primaryStage, appointment);
         });
     }
 
@@ -237,27 +247,28 @@ public class AppointmentSchedulingPage {
                 String line = "";
                 String[] tempArr;
                 int tempCustomer;
-                ZonedDateTime tempDate;
+                ZonedDateTime tempStartDate, tempEndDate;
                 Appointment tempAppointment;
    
                 //read in data and determine if appointment already exists
                 while((line = br.readLine()) != null){
                     tempArr = line.split(",");
-                    tempAppointment = new Appointment(tempArr[0], tempArr[1], Boolean.parseBoolean(tempArr[2]), Integer.parseInt(tempArr[3]), Integer.parseInt(tempArr[4]), tempArr[5], Integer.parseInt(tempArr[6]));
-                    tempDate = ZonedDateTime.parse(tempArr[1], formatter);
-                    tempCustomer = Integer.parseInt(tempArr[4]);
+                    tempAppointment = new Appointment(tempArr[0], tempArr[1], tempArr[2], Boolean.parseBoolean(tempArr[3]), Integer.parseInt(tempArr[4]), Integer.parseInt(tempArr[5]), tempArr[6], Integer.parseInt(tempArr[7]));
+                    tempStartDate = ZonedDateTime.parse(tempArr[1], formatter);
+                    tempEndDate = ZonedDateTime.parse(tempArr[2], formatter);
+                    tempCustomer = Integer.parseInt(tempArr[5]);
    
                     //keep note if email is found
-                    if(tempCustomer == userLoggedin.getID() && tempDate.isEqual(appointment.stringToDate())){
+                    if((appointment.stringToStartDate().isBefore(tempEndDate) && appointment.stringToStartDate().isAfter(tempStartDate)) || (appointment.stringToEndDate().isBefore(tempStartDate) && appointment.stringToEndDate().isAfter(tempEndDate))){
                         alreadyExists = true;
                         errorLabel.setText("An appointment is already schedule for this time.");
                         break;
-                    }else if(appointment.getID() == Integer.parseInt(tempArr[6])){
+                    }else if(appointment.getID() == Integer.parseInt(tempArr[7])){
                         tempAppointment.setCustomer(userLoggedin.getID());
                         tempAppointment.setAvailability(false);
                         userLoggedin.addAppointment(tempAppointment);
                         primaryStage.setUserData(userLoggedin);
-                        errorLabel.setText("");
+                        errorLabel.setText("Appointment Scheduled");
                     }
 
                     appointmentList.add(tempAppointment);
@@ -272,7 +283,7 @@ public class AppointmentSchedulingPage {
 
                 if(!alreadyExists){
                     for(Appointment a : appointmentList){
-                        fileWriterUser.write(a.getType() + "," + a.getDate() + "," + a.getAvailability() + "," + a.getProvider().getID() + "," + a.getCustomer().getID() + "," + a.getCost() + "," + a.getID() + "\n");
+                        fileWriterUser.write(a.getType() + "," + a.getStartDate() + "," + a.getEndDate() + "," + a.getAvailability() + "," + a.getProvider().getID() + "," + a.getCustomer().getID() + "," + a.getCost() + "," + a.getID() + "\n");
                     }
                 }
 

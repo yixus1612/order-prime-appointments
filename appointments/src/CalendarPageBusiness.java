@@ -277,7 +277,7 @@ public class CalendarPageBusiness {
         Map<Integer, List<Appointment>> appointmentMap = new HashMap<>();
 
         for(Appointment appointment: appointments){
-            int appointmentDate = appointment.stringToDate().getDayOfMonth();
+            int appointmentDate = appointment.stringToStartDate().getDayOfMonth();
             if(!appointmentMap.containsKey(appointmentDate)){
                 appointmentMap.put(appointmentDate, List.of(appointment));
             }else{
@@ -310,10 +310,10 @@ public class CalendarPageBusiness {
                 tempArr = line.split(",");
 
                 tempDate = ZonedDateTime.parse(tempArr[1], formatter);
-                tempProvider = Integer.parseInt(tempArr[3]);
+                tempProvider = Integer.parseInt(tempArr[4]);
                 //keep note if email is found
                 if(tempProvider == businessLoggedin.getID() && tempDate.getYear() == year && tempDate.getMonth().getValue() == month){
-                    appointments.add(new Appointment(tempArr[0], tempArr[1], Boolean.parseBoolean(tempArr[2]), Integer.parseInt(tempArr[3]), Integer.parseInt(tempArr[4]), tempArr[5], Integer.parseInt(tempArr[6])));
+                    appointments.add(new Appointment(tempArr[0], tempArr[1], tempArr[2], Boolean.parseBoolean(tempArr[3]), Integer.parseInt(tempArr[4]), Integer.parseInt(tempArr[5]), tempArr[6], Integer.parseInt(tempArr[7])));
                 }
             }
             br.close();

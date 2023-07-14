@@ -188,17 +188,40 @@ public class AppointmentCreationPage {
         final ComboBox comboBox6 = new ComboBox(time);
         comboBox6.setPromptText("AM/PM");
 
-        createAppointment(primaryStage, comboBox1, comboBox2, comboBox3, comboBox4, comboBox5, comboBox6);
+        ObservableList<String> endHours = FXCollections.observableArrayList(
+            "01", "02", "03", "04", "05", "06", "07", "08", "09", "10", "11", "12"
+        );
+        final ComboBox comboBox7= new ComboBox(endHours);
+        comboBox7.setPromptText("Hour");
+
+        ObservableList<String> endMins = FXCollections.observableArrayList(
+            "00", "15", "30", "45"
+        );
+        final ComboBox comboBox8 = new ComboBox(endMins);
+        comboBox8.setPromptText("Min");
+
+        ObservableList<String> endTime = FXCollections.observableArrayList(
+            "AM", "PM"
+        );
+        final ComboBox comboBox9 = new ComboBox(endTime);
+        comboBox9.setPromptText("AM/PM");
+
+        createAppointment(primaryStage, comboBox1, comboBox2, comboBox3, comboBox4, comboBox5, comboBox6, comboBox7, comboBox8, comboBox9);
 
         HBox dateBox = new HBox();
         Label dateLabel= new Label("Date: ");
         dateBox.getChildren().addAll(dateLabel, comboBox1, comboBox2, comboBox3);
         dateBox.setSpacing(1);
 
-        HBox timeBox = new HBox();
-        Label timeLabel = new Label("Time: ");
-        timeBox.getChildren().addAll(timeLabel, comboBox4, comboBox5, comboBox6);
-        timeBox.setSpacing(1);
+        HBox startTimeBox = new HBox();
+        Label startTimeLabel = new Label("Start Time: ");
+        startTimeBox.getChildren().addAll(startTimeLabel, comboBox4, comboBox5, comboBox6);
+        startTimeBox.setSpacing(1);
+
+        HBox endTimeBox = new HBox();
+        Label endTimeLabel = new Label("End Time: ");
+        endTimeBox.getChildren().addAll(endTimeLabel, comboBox7, comboBox8, comboBox9);
+        endTimeBox.setSpacing(1);
 
         HBox nameBox = new HBox();
         Label name = new Label("Appointment Name: ");
@@ -220,7 +243,7 @@ public class AppointmentCreationPage {
         setUp.setSpacing(3);
         backButton.setOnAction(e->switcher.switchToCalendarPage(appointmentCreationPage.getWindow(), primaryStage));
 
-        appointmentColumn.getChildren().addAll(spacingBuffer,title, nameBox, dateBox, timeBox, costBox, setUp, errorLabel);
+        appointmentColumn.getChildren().addAll(spacingBuffer,title, nameBox, dateBox, startTimeBox, endTimeBox, costBox, setUp, errorLabel);
         appointmentColumn.setSpacing(5);
         appointmentColumn.setAlignment(Pos.CENTER);
 
@@ -230,15 +253,16 @@ public class AppointmentCreationPage {
 
     }
 
-    public void createAppointment(Stage primaryStage, ComboBox month, ComboBox day, ComboBox year, ComboBox hour, ComboBox min, ComboBox amPM){
+    public void createAppointment(Stage primaryStage, ComboBox month, ComboBox day, ComboBox year, ComboBox hour, ComboBox min, ComboBox amPM, ComboBox endHour, ComboBox endMin, ComboBox endAMPM){
         createButton.setOnAction(e->{
 
             //sets up current info for appointemnt
-            if(appointmentName.getText() != null && month.getValue() != null && day.getValue() != null && year.getValue() != null && hour.getValue() != null && min.getValue() != null && amPM.getValue() != null){
+            if(appointmentName.getText() != null && month.getValue() != null && day.getValue() != null && year.getValue() != null && hour.getValue() != null && min.getValue() != null && amPM.getValue() != null && endHour.getValue() != null && endMin.getValue() != null && endAMPM.getValue() != null){
                 createdAppointment.setType(appointmentName.getText());
                 createdAppointment.setProvider(businessLoggedin.getID());
                 createdAppointment.setCost(cost.getText());
-                createdAppointment.setDate((String) year.getSelectionModel().getSelectedItem() + "-" + (String) month.getSelectionModel().getSelectedItem() + "-" + (String) day.getSelectionModel().getSelectedItem() + " " + (String) hour.getSelectionModel().getSelectedItem() + ":" + (String) min.getSelectionModel().getSelectedItem() + ":00 " + (String) amPM.getSelectionModel().getSelectedItem() + " -05:00");
+                createdAppointment.setStartDate((String) year.getSelectionModel().getSelectedItem() + "-" + (String) month.getSelectionModel().getSelectedItem() + "-" + (String) day.getSelectionModel().getSelectedItem() + " " + (String) hour.getSelectionModel().getSelectedItem() + ":" + (String) min.getSelectionModel().getSelectedItem() + ":00 " + (String) amPM.getSelectionModel().getSelectedItem() + " -05:00");
+                createdAppointment.setEndDate((String) year.getSelectionModel().getSelectedItem() + "-" + (String) month.getSelectionModel().getSelectedItem() + "-" + (String) day.getSelectionModel().getSelectedItem() + " " + (String) endHour.getSelectionModel().getSelectedItem() + ":" + (String) endMin.getSelectionModel().getSelectedItem() + ":00 " + (String) endAMPM.getSelectionModel().getSelectedItem() + " -05:00");
                 Random random = new Random();
                 createdAppointment.setID(random.nextInt(1000000000));
 
@@ -254,18 +278,18 @@ public class AppointmentCreationPage {
                         String line = "";
                         String[] tempArr;
                         int tempProvider;
-                        ZonedDateTime tempDate;
+                        ZonedDateTime tempStartDate, tempEndDate;
        
                         //read in data and determine if appointment already exists
                         while((line = br.readLine()) != null){
                             tempArr = line.split(",");
-                            tempDate = ZonedDateTime.parse(tempArr[1], formatter);
-                            tempProvider = Integer.parseInt(tempArr[3]);
+                            tempStartDate = ZonedDateTime.parse(tempArr[1], formatter);
+                            tempEndDate = ZonedDateTime.parse(tempArr[2], formatter);
+                            tempProvider = Integer.parseInt(tempArr[4]);
        
                             //keep note if email is found
-                            if(tempProvider == createdAppointment.getProvider().getID() && tempDate.isEqual(createdAppointment.stringToDate())){
+                            if((createdAppointment.stringToStartDate().isBefore(tempEndDate) && createdAppointment.stringToStartDate().isAfter(tempStartDate)) || (createdAppointment.stringToEndDate().isBefore(tempStartDate) && createdAppointment.stringToEndDate().isAfter(tempEndDate))){
                                 alreadyExists = true;
-                                errorLabel.setText("Appointment already exists");
                             }
                         }
                         br.close();
@@ -279,17 +303,20 @@ public class AppointmentCreationPage {
                     FileWriter fileWriterUser = new FileWriter("appointmentList.csv", true);
 
                     //checks to see if appointment is before current time
-                    if(createdAppointment.stringToDate().isBefore(ZonedDateTime.now()) || alreadyExists){
+                    if(createdAppointment.stringToStartDate().isBefore(ZonedDateTime.now()) || alreadyExists || createdAppointment.stringToEndDate().isBefore(createdAppointment.stringToStartDate())){
                         if(alreadyExists){
                             errorLabel.setText("An appointment already exists at this time");
+                        }else if(createdAppointment.stringToStartDate().isBefore(ZonedDateTime.now())){
+                            errorLabel.setText("Please choose a valid start date");
                         }else{
-                            errorLabel.setText("Please choose a valid date");
+                            errorLabel.setText("Please choose a valid end date");
                         }
                     }else{
-                        fileWriterUser.write(createdAppointment.getType() + "," + createdAppointment.getDate() + "," + createdAppointment.getAvailability() + "," + createdAppointment.getProvider().getID() + "," + 0 + "," + createdAppointment.getCost() + "," + createdAppointment.getID() + "\n");
+                        fileWriterUser.write(createdAppointment.getType() + "," + createdAppointment.getStartDate() + "," + createdAppointment.getEndDate() + "," + createdAppointment.getAvailability() + "," + createdAppointment.getProvider().getID() + "," + 0 + "," + createdAppointment.getCost() + "," + createdAppointment.getID() + "\n");
                         Business businessLoggedIn = (Business) primaryStage.getUserData();
                         businessLoggedin.addAppointment(createdAppointment);
                         primaryStage.setUserData(businessLoggedIn);
+                        errorLabel.setText("Appointment Created");
                     }
 
                     fileWriterUser.close();
@@ -303,7 +330,9 @@ public class AppointmentCreationPage {
             }else if(appointmentName.getText() == null){
                 errorLabel.setText("Please enter an appoinment name");
             }else if(month.getValue() == null || day.getValue() == null || year.getValue() == null || hour.getValue() == null || min.getValue() == null || amPM.getValue() == null){
-                errorLabel.setText("Please enter a valid date");
+                errorLabel.setText("Please enter a valid start date");
+            }else if(endHour.getValue() == null || endMin.getValue() == null || endAMPM.getValue() == null){
+                errorLabel.setText("Please enter a valid end time");
             }
         });
     }

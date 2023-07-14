@@ -143,7 +143,7 @@ public class AppointmentsPage {
             else{rowRectangle = new Rectangle(400, 32, Color.LIGHTGRAY);}
             
 
-            Label appointmentType = new Label(appointment.getType() + " " + appointment.getDate() + " " + appointment.getProvider().getName() + " " + appointment.getCost() + "       ");
+            Label appointmentType = new Label(appointment.getType() + " " + appointment.getStartDate() + " " + appointment.getProvider().getName() + " " + appointment.getCost() + "       ");
             appointmentType.setOnMouseClicked(e->{
                 switcher.switchToViewAppointmentPage(appointmentsPage.getWindow(), primaryStage, appointment);
             });
@@ -182,7 +182,7 @@ public class AppointmentsPage {
             //read in data and determine if appointment already exists
             while((line = br.readLine()) != null){
                 tempArr = line.split(",");
-                tempAppointment = new Appointment(tempArr[0], tempArr[1], Boolean.parseBoolean(tempArr[2]), Integer.parseInt(tempArr[3]), Integer.parseInt(tempArr[4]), tempArr[5], Integer.parseInt(tempArr[6]));
+                tempAppointment = new Appointment(tempArr[0], tempArr[1], tempArr[2], Boolean.parseBoolean(tempArr[3]), Integer.parseInt(tempArr[4]), Integer.parseInt(tempArr[5]), tempArr[6], Integer.parseInt(tempArr[7]));
    
                 //keep note if email is found
                 if(appointment.getID() == tempAppointment.getID()){
@@ -204,7 +204,7 @@ public class AppointmentsPage {
             FileWriter fileWriterUser = new FileWriter("appointmentList.csv", false);
 
             for(Appointment a : totalAppointmentList){
-                fileWriterUser.write(a.getType() + "," + a.getDate() + "," + a.getAvailability() + "," + a.getProvider().getID() + "," + a.getCustomer().getID() + "," + a.getCost() + "," + a.getID() + "\n");
+                fileWriterUser.write(a.getType() + "," + a.getStartDate() + "," + a.getEndDate() + "," + a.getAvailability() + "," + a.getProvider().getID() + "," + a.getCustomer().getID() + "," + a.getCost() + "," + a.getID() + "\n");
             }
 
             fileWriterUser.close();

@@ -136,8 +136,8 @@ public class EditAppointments {
         center.setAlignment(Pos.TOP_CENTER);
         Button submitButton = new Button("Submit");
         Button deleteButton = new Button("Delete");
-        HBox [] boxs = new HBox[6];
-        for(int i = 0; i < 6; i++){
+        HBox [] boxs = new HBox[7];
+        for(int i = 0; i < 7; i++){
             boxs[i] = new HBox();
             boxs[i].setAlignment(Pos.CENTER_LEFT);
         }
@@ -148,7 +148,8 @@ public class EditAppointments {
         boxs[0].getChildren().addAll(typeLabel, type);
 
         Label dateLabel = new Label("\t\t\t\t\tDate (MM/DD/YY) :  ");
-        ZonedDateTime date = ZonedDateTime.parse(appointment.getDate(), formatter);
+        ZonedDateTime startDate = ZonedDateTime.parse(appointment.getStartDate(), formatter);
+        ZonedDateTime endDate = ZonedDateTime.parse(appointment.getEndDate(), formatter);
         String amPM = "AM";
 
         ObservableList<String> months = FXCollections.observableArrayList(
@@ -156,10 +157,10 @@ public class EditAppointments {
         );
         final ComboBox month = new ComboBox(months);
         month.setPromptText("Month");
-        if(date.getMonthValue() < 10){
-            month.setValue("0" + Integer.toString(date.getMonthValue()));
+        if(startDate.getMonthValue() < 10){
+            month.setValue("0" + Integer.toString(startDate.getMonthValue()));
         }else{
-            month.setValue(date.getMonthValue());
+            month.setValue(startDate.getMonthValue());
         }
 
         ObservableList<String> days = FXCollections.observableArrayList(
@@ -167,10 +168,10 @@ public class EditAppointments {
         );
         final ComboBox day = new ComboBox(days);
         day.setPromptText("Day");
-        if(date.getDayOfMonth() < 10){
-        day.setValue("0" + Integer.toString(date.getDayOfMonth()));
+        if(startDate.getDayOfMonth() < 10){
+        day.setValue("0" + Integer.toString(startDate.getDayOfMonth()));
         }else{
-            day.setValue(date.getDayOfMonth());
+            day.setValue(startDate.getDayOfMonth());
         }
 
         ObservableList<String> years = FXCollections.observableArrayList(
@@ -178,17 +179,17 @@ public class EditAppointments {
         );
         final ComboBox year = new ComboBox(years);
         year.setPromptText("Year");
-        year.setValue(date.getYear());
+        year.setValue(startDate.getYear());
 
         boxs[1].getChildren().addAll(dateLabel, month, day, year);
 
-        Label timeLabel = new Label("Time: (HH:SS)");
+        Label timeLabel = new Label("End Time: (HH:SS)");
         ObservableList<String> hours = FXCollections.observableArrayList(
             "01", "02", "03", "04", "05", "06", "07", "08", "09", "10", "11", "12"
         );
         final ComboBox hour = new ComboBox(hours);
         hour.setPromptText("Hour");
-        int tempHour = date.getHour();
+        int tempHour = startDate.getHour();
         if(tempHour > 12){
             amPM = "PM";
             if(tempHour < 10){
@@ -210,10 +211,10 @@ public class EditAppointments {
         );
         final ComboBox min = new ComboBox(mins);
         min.setPromptText("Min");
-        if(date.getMinute() < 10){
-            min.setValue("0" + Integer.toString(date.getMinute()));
+        if(startDate.getMinute() < 10){
+            min.setValue("0" + Integer.toString(startDate.getMinute()));
         }else{
-            min.setValue(date.getMinute());
+            min.setValue(startDate.getMinute());
         }
 
         ObservableList<String> time = FXCollections.observableArrayList(
@@ -234,6 +235,48 @@ public class EditAppointments {
         Boolean userAvailability = Boolean.parseBoolean((String) comboBoxAvailability.getSelectionModel().getSelectedItem());
         boxs[3].getChildren().addAll(availabilityLabel, comboBoxAvailability);
 
+        Label endTimeLabel = new Label("End Time: (HH:SS)");
+        ObservableList<String> endHours = FXCollections.observableArrayList(
+            "01", "02", "03", "04", "05", "06", "07", "08", "09", "10", "11", "12"
+        );
+        final ComboBox comboBox7 = new ComboBox(endHours);
+        comboBox7.setPromptText("Hour");
+        tempHour = startDate.getHour();
+        if(tempHour > 12){
+            amPM = "PM";
+            if(tempHour < 10){
+                hour.setValue("0" + Integer.toString(tempHour - 11));
+            }else{
+                hour.setValue(tempHour - 11);
+            }
+
+        }else{
+            if(tempHour < 10){
+                hour.setValue("0" + Integer.toString(tempHour + 1));
+            }else{
+                hour.setValue(tempHour + 1);
+            }
+        }
+
+        ObservableList<String> endMins = FXCollections.observableArrayList(
+            "00", "15", "30", "45"
+        );
+        final ComboBox comboBox8 = new ComboBox(endMins);
+        comboBox8.setPromptText("Min");
+        if(startDate.getMinute() < 10){
+            min.setValue("0" + Integer.toString(startDate.getMinute()));
+        }else{
+            min.setValue(startDate.getMinute());
+        }
+
+        ObservableList<String> endTime = FXCollections.observableArrayList(
+            "AM", "PM"
+        );
+        final ComboBox comboBox9 = new ComboBox(endTime);
+        comboBox9.setPromptText("AM/PM");
+
+        boxs[4].getChildren().addAll(endTimeLabel, comboBox7, comboBox8, comboBox9);
+
         Label customerLabel = new Label("\t\t\t\t\tCustomer Name:  ");
         Label customer = new Label(appointment.getCustomer().getName());
         boxs[4].getChildren().addAll(customerLabel, customer);
@@ -245,16 +288,18 @@ public class EditAppointments {
 
         submitButton.setOnAction(e->{
             Label errorLabel = new Label();
-            if(userType != null && date.isAfter(ZonedDateTime.now())){
+            if(userType != null && startDate.isAfter(ZonedDateTime.now()) && endDate.isAfter(startDate)){
                 appointment.setType(userType);
-                appointment.setDate((String) year.getSelectionModel().getSelectedItem() + "-" + (String) month.getSelectionModel().getSelectedItem() + "-" + (String) day.getSelectionModel().getSelectedItem() + " " + (String) hour.getSelectionModel().getSelectedItem() + ":" + (String) min.getSelectionModel().getSelectedItem() + ":00 " + (String) comboBox6.getSelectionModel().getSelectedItem() + " -05:00");
+                appointment.setStartDate((String) year.getSelectionModel().getSelectedItem() + "-" + (String) month.getSelectionModel().getSelectedItem() + "-" + (String) day.getSelectionModel().getSelectedItem() + " " + (String) hour.getSelectionModel().getSelectedItem() + ":" + (String) min.getSelectionModel().getSelectedItem() + ":00 " + (String) comboBox6.getSelectionModel().getSelectedItem() + " -05:00");
                 appointment.setAvailability(userAvailability);
                 appointment.setCost(userCost);
                 changeAppointment(primaryStage, appointment, appointmentListForDay);
             }else if(userType == null){
                 errorLabel.setText("Please enter an appointment name");
-            }else if(date.isBefore(ZonedDateTime.now())){
-                errorLabel.setText("Please enter a valid date");
+            }else if(startDate.isBefore(ZonedDateTime.now())){
+                errorLabel.setText("Please enter a valid start date");
+            }else if(endDate.isAfter(startDate)){
+                errorLabel.setText("Please enter a valid end date");
             }
         });
 
@@ -293,7 +338,7 @@ public class EditAppointments {
             //read in data and determine if appointment already exists
             while((line = br.readLine()) != null){
                 tempArr = line.split(",");
-                tempAppointment = new Appointment(tempArr[0], tempArr[1], Boolean.parseBoolean(tempArr[2]), Integer.parseInt(tempArr[3]), Integer.parseInt(tempArr[4]), tempArr[5], Integer.parseInt(tempArr[6]));
+                tempAppointment = new Appointment(tempArr[0], tempArr[1], tempArr[2], Boolean.parseBoolean(tempArr[3]), Integer.parseInt(tempArr[4]), Integer.parseInt(tempArr[5]), tempArr[6], Integer.parseInt(tempArr[7]));
    
                 //keep note if email is found
                 if(appointment.getID() == tempAppointment.getID()){
@@ -312,7 +357,7 @@ public class EditAppointments {
             FileWriter fileWriterUser = new FileWriter("appointmentList.csv", false);
 
             for(Appointment a : totalAppointmentList){
-                fileWriterUser.write(a.getType() + "," + a.getDate() + "," + a.getAvailability() + "," + a.getProvider().getID() + "," + a.getCustomer().getID() + "," + a.getCost() + "," + a.getID() + "\n");
+                fileWriterUser.write(a.getType() + "," + a.getStartDate() + "," + a.getEndDate() + "," + a.getAvailability() + "," + a.getProvider().getID() + "," + a.getCustomer().getID() + "," + a.getCost() + "," + a.getID() + "\n");
             }
 
             fileWriterUser.close();
@@ -349,7 +394,7 @@ public class EditAppointments {
             //read in data and determine if appointment already exists
             while((line = br.readLine()) != null){
                 tempArr = line.split(",");
-                tempAppointment = new Appointment(tempArr[0], tempArr[1], Boolean.parseBoolean(tempArr[2]), Integer.parseInt(tempArr[3]), Integer.parseInt(tempArr[4]), tempArr[5], Integer.parseInt(tempArr[6]));
+                tempAppointment = new Appointment(tempArr[0], tempArr[1], tempArr[2], Boolean.parseBoolean(tempArr[3]), Integer.parseInt(tempArr[4]), Integer.parseInt(tempArr[5]), tempArr[6], Integer.parseInt(tempArr[7]));
    
                 //keep note if email is found
                 if(appointment.getID() == tempAppointment.getID()){
@@ -370,7 +415,7 @@ public class EditAppointments {
             FileWriter fileWriterUser = new FileWriter("appointmentList.csv", false);
 
             for(Appointment a : totalAppointmentList){
-                fileWriterUser.write(a.getType() + "," + a.getDate() + "," + a.getAvailability() + "," + a.getProvider().getID() + "," + a.getCustomer().getID() + "," + a.getCost() + "," + a.getID() + "\n");
+                fileWriterUser.write(a.getType() + "," + a.getStartDate() + "," + a.getEndDate() + "," + a.getAvailability() + "," + a.getProvider().getID() + "," + a.getCustomer().getID() + "," + a.getCost() + "," + a.getID() + "\n");
             }
 
             fileWriterUser.close();

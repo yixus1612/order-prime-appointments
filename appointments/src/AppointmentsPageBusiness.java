@@ -146,7 +146,7 @@ public class AppointmentsPageBusiness {
             else{rowRectangle = new Rectangle(400, 32, Color.LIGHTGRAY);}
             
 
-            Label appointmentType = new Label(appointment.getType() + " " + appointment.getDate() + " " + appointment.getProvider().getName() + " " + appointment.getCost() + "       ");
+            Label appointmentType = new Label(appointment.getType() + " " + appointment.getStartDate() + " " + appointment.getProvider().getName() + " " + appointment.getCost() + "       ");
             HBox appointmentData = new HBox();
             appointmentData.setAlignment(Pos.CENTER);
             Button cancelButton = new Button("Edit");
