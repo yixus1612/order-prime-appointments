@@ -139,12 +139,15 @@ public class AppointmentSchedulingPage {
     }
 
     public VBox mainPage(Stage primaryStage){
+
+        //set up title
         HBox setUp = new HBox();
         VBox appointmentColumn = new VBox();
         Label title = new Label("Schedule An Appointment");
         Label spacingBuffer = new Label(" ");
         spacingBuffer.setFont(Font.font("Arial", FontWeight.BOLD, 90));
 
+        // set up business search box
         HBox businessBox = new HBox();
         Label businessLabel = new Label("Business Name: ");
         Label businessBuffer = new Label("\t\t\t  ");
@@ -153,6 +156,7 @@ public class AppointmentSchedulingPage {
         businessBox.getChildren().addAll(businessLabel, businessName, businessBuffer);
         businessBox.setAlignment(Pos.CENTER_LEFT);
 
+        //set sizes
         setUp.setPrefWidth(200);
         setUp.setSpacing(2);
         backButton.setMinWidth(90);
@@ -160,12 +164,15 @@ public class AppointmentSchedulingPage {
         setUp.getChildren().addAll(backButton, searchButton);
         setUp.setAlignment(Pos.CENTER);
 
+        //switch to calendar page with back button
         backButton.setOnAction(e->switcher.switchToCalendarPage(appointmentSchedulingPage.getWindow(), primaryStage));
 
+        //add everything to main page
         appointmentColumn.getChildren().addAll(spacingBuffer, title, businessBox, setUp, errorLabel);
         appointmentColumn.setSpacing(5);
         appointmentColumn.setAlignment(Pos.CENTER);
 
+        //search for business
         search(primaryStage, appointmentColumn);
 
         return appointmentColumn;
@@ -175,6 +182,8 @@ public class AppointmentSchedulingPage {
 
     public void search(Stage primaryStage, VBox home){
         searchButton.setOnAction(e->{
+
+            //clear past search
             home.getChildren().remove(searchResults);
             searchResults.getChildren().clear();
             searchResults = new VBox();
@@ -201,7 +210,7 @@ public class AppointmentSchedulingPage {
                     tempBusiness = tempAppointment.getProvider();
                     Button signUpButton = new Button("Schedule");
        
-                    
+                    //check to see if its the correct business and if the appointment is available then display
                     if(userInput.equals(tempBusiness.getType()) && Boolean.parseBoolean(tempArr[3])){
                         HBox column = new HBox();
                         signUp(primaryStage, signUpButton, tempAppointment);
@@ -213,6 +222,7 @@ public class AppointmentSchedulingPage {
                     }
                 }
 
+                //sent note if there are no appointments
                 if(counter == 0){
                     Label noAppointments = new Label("There are no appointments at this time.");
                     searchResults.getChildren().add(noAppointments);
@@ -256,7 +266,7 @@ public class AppointmentSchedulingPage {
                     tempEndDate = ZonedDateTime.parse(tempArr[2], formatter);
                     tempCustomer = Integer.parseInt(tempArr[5]);
    
-                    //keep note if email is found
+                    //check to see if another appointment is scheduled
                     if(tempCustomer == userLoggedin.getID() && ((appointment.stringToStartDate().isBefore(tempEndDate) && appointment.stringToStartDate().isAfter(tempStartDate)) || (appointment.stringToEndDate().isBefore(tempStartDate) && appointment.stringToEndDate().isAfter(tempEndDate)))){
                         alreadyExists = true;
                         errorLabel.setText("An appointment is already schedule for this time.");
@@ -276,6 +286,7 @@ public class AppointmentSchedulingPage {
                 System.out.println(except);
             }
 
+            //write to file with new information
             try{              
                 FileWriter fileWriterUser = new FileWriter("appointmentList.csv", false);
 
@@ -291,6 +302,7 @@ public class AppointmentSchedulingPage {
                 System.out.println(except);
             }
 
+            //refresh page
             switcher.switchToAppointmentSchedulingPage(appointmentSchedulingPage.getWindow(), primaryStage, errorLabel);
 
         });

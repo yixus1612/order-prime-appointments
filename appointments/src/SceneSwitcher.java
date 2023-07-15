@@ -6,23 +6,23 @@ import javafx.stage.Window;
 
 public class SceneSwitcher {
 
-    Stage primaryStage;
-    LoginPage LoginPage;
-    CreateAccountBusiness CreateAccountBusiness;
-    CreateAccountPage CreateAccountPage;
-    ChooseAccountType ChooseAccountType;
-    AppointmentCreationPage AppointmentCreationPage;
-    AppointmentSchedulingPage AppointmentSchedulingPage;
-    CalendarPage CalendarPage;
-    CalendarPageBusiness CalendarPageBusiness;
-    SettingsPage SettingsPage;
-    SettingsPageBusiness SettingsPageBusiness;
-    AppointmentsPage AppointmentsPage;
-    EditAppointments EditAppointments;
-    AppointmentsPageBusiness AppointmentsPageBusiness;
-    EditProfilePage EditProfilePage;
-    EditProfilePageBusiness EditProfilePageBusiness;
-    ViewAppointment ViewAppointmentPage;
+    private Stage primaryStage;
+    private LoginPage LoginPage;
+    private CreateAccountBusiness CreateAccountBusiness;
+    private CreateAccountPage CreateAccountPage;
+    private ChooseAccountType ChooseAccountType;
+    private AppointmentCreationPage AppointmentCreationPage;
+    private AppointmentSchedulingPage AppointmentSchedulingPage;
+    private CalendarPage CalendarPage;
+    private CalendarPageBusiness CalendarPageBusiness;
+    private SettingsPage SettingsPage;
+    private SettingsPageBusiness SettingsPageBusiness;
+    private AppointmentsPage AppointmentsPage;
+    private EditAppointments EditAppointments;
+    private AppointmentsPageBusiness AppointmentsPageBusiness;
+    private EditProfilePage EditProfilePage;
+    private EditProfilePageBusiness EditProfilePageBusiness;
+    private ViewAppointment ViewAppointmentPage;
     
     public SceneSwitcher(Stage primaryStage){
         this.primaryStage = primaryStage;
