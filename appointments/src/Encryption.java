@@ -8,7 +8,7 @@ public class Encryption {
         try{
         MessageDigest md = MessageDigest.getInstance("SHA-512");
 
-        String salted = password + email;
+        String salted = password + "CSCE3444";
 
         md.update(salted.getBytes());
 
