@@ -99,6 +99,7 @@ public class Appointment {
         this.id = id;
     }
 
+    // this function looks for the corresponding user given the user id
     public User findUser(int id){
         User tempUser;
         try{
@@ -114,7 +115,7 @@ public class Appointment {
                     tempUser.setEmail(tempArr[1]);
                     tempUser.setID(Integer.parseInt(tempArr[2]));
 
-                    //check to see if email and password are correctly inputted
+                    //check if the user is who we're looking for
                     if(tempUser.getID() == id){
                         br.close();
                         fileReaderUser.close();
@@ -133,6 +134,7 @@ public class Appointment {
         return tempUser;
     }
 
+    // this function looks for the business is who we're looking for given the corresponding id
     public Business findBusiness(int id){
         Business tempBusiness;
         try{
@@ -150,7 +152,7 @@ public class Appointment {
                 tempBusiness.setID(Integer.parseInt(tempArr[3]));
 
 
-                //check to see if email and password are correctly inputted
+                //check if the business is who we're looking for
                 if(tempBusiness.getID() == id){
                     br.close();
                     return tempBusiness;

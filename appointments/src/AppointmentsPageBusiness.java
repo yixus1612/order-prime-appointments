@@ -115,6 +115,7 @@ public class AppointmentsPageBusiness {
     }
 
     public VBox mainPage(Stage primaryStage, List<Appointment> appointmentListForDay){
+        // setting up the correct spacing and the title for the page
         VBox center = new VBox();
         center.setAlignment(Pos.TOP_CENTER);
         Label spacingBuffer1 = new Label(" ");
@@ -130,6 +131,7 @@ public class AppointmentsPageBusiness {
             center.getChildren().add(noAppointments);
         }else{
          int counter = 0;
+            // go through all the appointments the user has, create a new entry for the table in each one with the corresponding data
             for(Appointment appointment : appointmentListForDay){
                 Rectangle rowRectangle;
                 if(counter % 2 == 0){

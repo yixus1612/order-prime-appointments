@@ -130,10 +130,8 @@ public class LoginPage{
             if(login){
                 User userLoggedin = findUser(email);
                 userLoggedin.createAppointmentList();
-                /*for(Appointment appointment : userLoggedin.appointmentList){
-                    System.out.println(appointment.getType());
-                }*/
                 
+                // switch to business or user side of the program depending on the login
                 Label tempLabel = new Label();
                 if(isUser){
                     primaryStage.setUserData(userLoggedin);
@@ -168,7 +166,7 @@ public class LoginPage{
             while((line = br.readLine()) != null){
                     tempArr = line.split(",");
 
-                    //check to see if email and password are correctly inputted
+                    // finding the account with the email given by the user
                     if(userEmail.equals(tempArr[1])){
                         tempUser.setName(tempArr[0]);
                         tempUser.setEmail(tempArr[1]);
@@ -201,7 +199,7 @@ public class LoginPage{
                 tempArr = line.split(",");
 
 
-                //check to see if email and password are correctly inputted
+                //finding the account based on the email given by the user
                 if(userEmail.equals(tempArr[1])){
                     tempBusiness.setName(tempArr[0]);
                     tempBusiness.setEmail(tempArr[1]);

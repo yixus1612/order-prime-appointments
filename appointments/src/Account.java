@@ -1,5 +1,5 @@
 public class Account {
-    //this class will have create account and login functions. 
+    // this class is the parent class of business and user
     private String userEmail;
     private String password;
 

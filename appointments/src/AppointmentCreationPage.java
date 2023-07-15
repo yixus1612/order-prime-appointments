@@ -155,6 +155,8 @@ public class AppointmentCreationPage {
         ObservableList<String> months = FXCollections.observableArrayList(
             "01", "02", "03", "04", "05", "06", "07", "08", "09", "10", "11", "12"
         );
+
+        // set up the drop down boxes for the start/end date and time of the appointments
         final ComboBox<String> comboBox1 = new ComboBox<String>(months);
         comboBox1.setPromptText("Month");
 
@@ -208,6 +210,7 @@ public class AppointmentCreationPage {
 
         createAppointment(primaryStage, comboBox1, comboBox2, comboBox3, comboBox4, comboBox5, comboBox6, comboBox7, comboBox8, comboBox9);
 
+        // formatting!
         HBox dateBox = new HBox();
         Label dateLabel= new Label("\t\t\tDate: ");
         dateBox.getChildren().addAll(dateLabel, comboBox1, comboBox2, comboBox3);
@@ -242,10 +245,8 @@ public class AppointmentCreationPage {
         Label costLabel = new Label("\t\t\t Cost: ");
         cost.setPromptText("Cost");
         cost.setMinWidth(218);
-        //cost.setPrefWidth(200);
         costBox.getChildren().addAll(costLabel, cost);
 
-        //setUp.setPrefWidth(200);
         backButton.setMinWidth(97.5);
         createButton.setMinWidth(97.5);
         setUp.getChildren().addAll(backButton, createButton);
@@ -340,7 +341,7 @@ public class AppointmentCreationPage {
                 }
 
                 switcher.switchToAppointmentCreationPage(appointmentCreationPage.getWindow(), primaryStage, errorLabel);
-
+            // give error statements if the input isn't correct
             }else if(appointmentName.getText() == null){
                 errorLabel.setText("Please enter an appoinment name");
             }else if(month.getValue() == null || day.getValue() == null || year.getValue() == null || hour.getValue() == null || min.getValue() == null || amPM.getValue() == null){

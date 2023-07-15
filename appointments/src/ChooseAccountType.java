@@ -13,6 +13,7 @@ import javafx.scene.text.FontWeight;
 import javafx.stage.Stage;
 import javafx.scene.control.Label;
 
+// this is just an intermediary page for users to choose what kind of account they are making
 public class ChooseAccountType {
     public Scene chooseAccountType;
 
