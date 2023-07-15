@@ -130,6 +130,7 @@ public class EditProfilePage {
     }
 
     public VBox mainPage(Stage primaryStage){
+        //set up mainPage
         VBox center = new VBox();
         center.setAlignment(Pos.TOP_CENTER);
         Button submitButton = new Button("Submit");
@@ -140,19 +141,23 @@ public class EditProfilePage {
             boxs[i] = new HBox();
         }
 
+        //display profile pic
         ImageView imageView = new ImageView();
         imageView.setImage(userLoggedin.getProfilePic());
         imageView.setFitHeight(100);
         imageView.setFitWidth(100);
 
+        //display first name
         Label firstNameLabel = new Label("\t\t\t\tFirst Name: ");
         TextField firstName = new TextField(userLoggedin.getName().split(" (?!.* )")[0]);
         boxs[0].getChildren().addAll(firstNameLabel, firstName);
 
+        //display last name
         Label lastNameLabel = new Label("\t\t\t\tLast Name: ");
         TextField lastName = new TextField(userLoggedin.getName().split(" (?!.* )")[1]);
         boxs[1].getChildren().addAll(lastNameLabel, lastName);
 
+        //display email
         Pattern emailPattern = Pattern.compile(EMAIL_PATTERN);
         Label emailLabel = new Label("\t\t\t\tEmail:\t   ");
         TextField email = new TextField(userLoggedin.getEmail());
@@ -160,6 +165,7 @@ public class EditProfilePage {
 
         submitButton.setOnAction(e->{
             Matcher emailMatcher = emailPattern.matcher(email.getText());
+            //if email matches and name is valid then edit user else send message
             if(emailMatcher.matches() && !(firstName.getText() == null || firstName.getText().trim().isEmpty()) && !(lastName.getText() == null || lastName.getText().trim().isEmpty())){
                 userLoggedin.setName(firstName.getText() + " " + lastName.getText());
                 userLoggedin.setEmail(email.getText());
@@ -210,12 +216,12 @@ public class EditProfilePage {
             String[] tempArr;
             User tempUser;
    
-            //read in data and determine if appointment already exists
+            //read in data and find appointment
             while((line = br.readLine()) != null){
                 tempArr = line.split(",");
                 tempUser = new User(tempArr[0], tempArr[1], Integer.parseInt(tempArr[2]));
    
-                //keep note if email is found
+                //keep note if appointment is found and if email needs to be changed in account list
                 if(userLoggedin.getID() == tempUser.getID()){
                     if(userLoggedin.getEmail() != tempUser.getEmail()){
                         oldEmail = tempUser.getEmail();
@@ -232,6 +238,7 @@ public class EditProfilePage {
             System.out.println(except);
         }
 
+        //write new user list to file
         try{              
             FileWriter fileWriterUser = new FileWriter("userList.csv", false);
 
@@ -245,6 +252,7 @@ public class EditProfilePage {
             System.out.println(except);
         }
 
+        //write new account list if email is changed
         if(changeEmail){
             List<String[]> accountList = new ArrayList<>();
             try{
@@ -254,10 +262,10 @@ public class EditProfilePage {
                 String line = "";
                 String[] tempArr;
    
-                //read in data and determine if appointment already exists
+                //read in data and find account
                 while((line = br.readLine()) != null){
                     tempArr = line.split(",");
-                    //keep note if email is found
+                    //keep note if account is found
                     if(oldEmail.equals(tempArr[0])){
                         tempArr[0] = userLoggedin.getEmail();
                     }
@@ -269,6 +277,7 @@ public class EditProfilePage {
                 System.out.println(except);
             }
 
+            //write to account file
             try{              
                 FileWriter fileWriterUser = new FileWriter("accountList.csv", false);
 
@@ -296,12 +305,12 @@ public class EditProfilePage {
             String[] tempArr;
             User tempUser;
    
-            //read in data and determine if appointment already exists
+            //read in data and find user
             while((line = br.readLine()) != null){
                 tempArr = line.split(",");
                 tempUser = new User(tempArr[0], tempArr[1], Integer.parseInt(tempArr[2]));
    
-                //keep note if email is found
+                //keep note if user is found
                 if(userLoggedin.getID() != tempUser.getID()){
                     userList.add(tempUser);
                 }
@@ -312,6 +321,7 @@ public class EditProfilePage {
             System.out.println(except);
         }
 
+        //write new user list to file
         try{              
             FileWriter fileWriterUser = new FileWriter("userList.csv", false);
 
@@ -333,7 +343,7 @@ public class EditProfilePage {
             String line = "";
             String[] tempArr;
    
-            //read in data and determine if appointment already exists
+            //read in data and find account
             while((line = br.readLine()) != null){
                 tempArr = line.split(",");
                 //keep note if email is found
@@ -347,6 +357,7 @@ public class EditProfilePage {
             System.out.println(except);
         }
 
+        //write new account list to file
         try{              
             FileWriter fileWriterUser = new FileWriter("accountList.csv", false);
 
@@ -369,12 +380,12 @@ public class EditProfilePage {
             String[] tempArr;
             Appointment tempAppointment;
    
-            //read in data and determine if appointment already exists
+            //read in data and find appointment
             while((line = br.readLine()) != null){
                 tempArr = line.split(",");
                 tempAppointment = new Appointment(tempArr[0], tempArr[1], tempArr[2], Boolean.parseBoolean(tempArr[3]), Integer.parseInt(tempArr[4]), Integer.parseInt(tempArr[5]), tempArr[6], Integer.parseInt(tempArr[7]));
    
-                //keep note if email is found
+                //keep note if apointment is found and change appointment
                 if(userLoggedin.getID() == tempAppointment.getCustomer().getID()){
                     tempAppointment.setAvailability(true);
                     tempAppointment.getCustomer().setID(0);
@@ -388,6 +399,7 @@ public class EditProfilePage {
             System.out.println(except);
         }
 
+        //write appointment list to file
         try{              
             FileWriter fileWriterUser = new FileWriter("appointmentList.csv", false);
 

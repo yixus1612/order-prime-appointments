@@ -132,7 +132,6 @@ public class AppointmentsPage {
         center.getChildren().addAll(spacingBuffer1, title, spacingBuffer2);
 
         int counter = 0;
-        // go through all the appointments the user has, create a new entry for the table in each one with the corresponding data
         for(Appointment appointment : appointmentListForDay){
             Rectangle rowRectangle;
             if(counter % 2 == 0){
@@ -149,7 +148,7 @@ public class AppointmentsPage {
             });
             Button editButton = new Button("Cancel");
             editButton.setMinWidth(97.5);
-            editButton.setOnAction(e-> cancelAppointment(appointment, primaryStage, appointmentListForDay));
+            editButton.setOnAction(e-> editAppointment(appointment, primaryStage, appointmentListForDay));
             HBox appointmentData = new HBox();
             appointmentData.setAlignment(Pos.CENTER);
             appointmentData.getChildren().addAll(appointmentType, editButton);
@@ -166,7 +165,7 @@ public class AppointmentsPage {
         return center;
     }
 
-    public void cancelAppointment(Appointment appointment, Stage primaryStage, List<Appointment> appointmentListForDay){
+    public void editAppointment(Appointment appointment, Stage primaryStage, List<Appointment> appointmentListForDay){
 
         List<Appointment> totalAppointmentList = new ArrayList<>();
         int index = 0;
@@ -179,12 +178,12 @@ public class AppointmentsPage {
             Appointment tempAppointment;
             int counter = 0;
    
-            // read all the appointments, if the user id matches the current user add them to the list.
+            //read in data and determine if appointment already exists
             while((line = br.readLine()) != null){
                 tempArr = line.split(",");
                 tempAppointment = new Appointment(tempArr[0], tempArr[1], tempArr[2], Boolean.parseBoolean(tempArr[3]), Integer.parseInt(tempArr[4]), Integer.parseInt(tempArr[5]), tempArr[6], Integer.parseInt(tempArr[7]));
    
-                //look for match
+                //keep note if email is found
                 if(appointment.getID() == tempAppointment.getID()){
                     tempAppointment.setAvailability(true);
                     tempAppointment.getCustomer().setID(0);
@@ -200,8 +199,7 @@ public class AppointmentsPage {
             System.out.println(except);
         }
 
-        try{
-            // write the rest of the list           
+        try{              
             FileWriter fileWriterUser = new FileWriter("appointmentList.csv", false);
 
             for(Appointment a : totalAppointmentList){

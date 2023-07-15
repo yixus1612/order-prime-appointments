@@ -31,38 +31,48 @@ import java.util.Random;
 
 public class AppointmentCreationPage {
 
+    //declare scene
     public Scene appointmentCreationPage;
 
-    public Rectangle createTabRectangle, calendarTabRectangle, appointmentsTabRectangle, settingsTabRectangle;
-    Text createTabText, calendarTabText, appointmentsTabText, settingsTabText;
-    public Rectangle profilePicture;
-    public Rectangle buffer1, buffer2;
-    public GridPane center;
-    public Business businessLoggedin;
-    public ZonedDateTime date;
-    public Appointment createdAppointment = new Appointment();
+    //declare graphics
+    private Rectangle createTabRectangle, calendarTabRectangle, appointmentsTabRectangle, settingsTabRectangle;
+    private Text createTabText, calendarTabText, appointmentsTabText, settingsTabText;
+    private Rectangle buffer1, buffer2;
+    private GridPane center;
+    private Business businessLoggedin;
+    private Appointment createdAppointment = new Appointment();
     private DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd hh:mm:ss a z");
 
-    Button backButton = new Button("Back");
-    Button createButton = new Button("Create");
-    TextField cost = new TextField();
-    TextField appointmentName = new TextField();
+    //declare the interactive graphics
+    private Button backButton = new Button("Back");
+    private Button createButton = new Button("Create");
+    private TextField cost = new TextField();
+    private TextField appointmentName = new TextField();
     private Label errorLabel;
 
+    //declare layout for scene
     private BorderPane layout = new BorderPane();
+
+    //declare scene switcher for screen
     private SceneSwitcher switcher;
 
+    //AppointmentCreationPage constructor/initializer
     public AppointmentCreationPage(Stage primaryStage, Label label){
 
+        //declare scene switcher
         switcher = new SceneSwitcher(primaryStage);
 
+        //set the error label from the previous search if applicable
         errorLabel = label;
         
+        //find the business currently logged in
         businessLoggedin = (Business) primaryStage.getUserData();
 
+        //set up the side bar
         HBox sidebar = sideBar(primaryStage);
         layout.setLeft(sidebar);
 
+        //set up center page
         center = new GridPane();
         center.setPrefWidth(490);
         VBox mainpage = mainPage(primaryStage);
@@ -70,14 +80,14 @@ public class AppointmentCreationPage {
         center.setAlignment(Pos.TOP_CENTER);
         layout.setCenter(center);
         
-
-        
-
+        //create scene
         appointmentCreationPage = new Scene(layout, 600, 500);
     }
 
+    //create sidebar
     public HBox sideBar(Stage primaryStage){
 
+        //create profile image
         ImageView imageView = new ImageView();
         imageView.setImage(businessLoggedin.getProfilePic());
         imageView.setFitHeight(65);
@@ -85,10 +95,12 @@ public class AppointmentCreationPage {
         StackPane pfp = new StackPane(imageView);
         pfp.setAlignment(Pos.CENTER);
 
+        //create name
         Text nameText = new Text(businessLoggedin.getName());
         StackPane name = new StackPane(nameText);
         name.setAlignment(Pos.CENTER);
 
+        //create appointment creation tab
         createTabText = new Text("  Create");
         createTabText.setFont(Font.font ("Arial", FontWeight.BOLD, 12));
         createTabRectangle = new Rectangle(110,25, Color.web("#f2efd0"));
@@ -96,6 +108,7 @@ public class AppointmentCreationPage {
         homeTab.getChildren().addAll(createTabRectangle, createTabText);
         homeTab.setAlignment(Pos.CENTER_LEFT);
 
+        //create calendar tab
         calendarTabText = new Text("  Calendar");
         calendarTabText.setFill(Color.WHITE);
         calendarTabText.setFont(Font.font ("Arial", FontWeight.BOLD, 12));
@@ -104,6 +117,7 @@ public class AppointmentCreationPage {
         calendarTab.getChildren().addAll(calendarTabRectangle, calendarTabText);
         calendarTab.setAlignment(Pos.CENTER_LEFT);
 
+        //create appointments tab
         appointmentsTabText = new Text("  Appointments");
         appointmentsTabText.setFill(Color.WHITE);
         appointmentsTabText.setFont(Font.font ("Arial", FontWeight.BOLD, 12));
@@ -112,6 +126,7 @@ public class AppointmentCreationPage {
         appointmentsTab.getChildren().addAll(appointmentsTabRectangle, appointmentsTabText);
         appointmentsTab.setAlignment(Pos.CENTER_LEFT);
 
+        //create settings tab
         settingsTabText = new Text("  Settings");
         settingsTabText.setFill(Color.WHITE);
         settingsTabText.setFont(Font.font ("Arial", FontWeight.BOLD, 12));
@@ -132,12 +147,15 @@ public class AppointmentCreationPage {
         HBox sidebar = new HBox(tabStack, sidebarSeparator);
         sidebar.setBackground(new Background(new BackgroundFill(Color.web("#4681e0"), null, null)));
 
+        //sets up calendar page switching
         calendarTabRectangle.setOnMouseClicked(e -> switcher.switchToCalendarPageBusiness(appointmentCreationPage.getWindow(), primaryStage));
         calendarTabText.setOnMouseClicked(e -> switcher.switchToCalendarPageBusiness(appointmentCreationPage.getWindow(), primaryStage));
 
+        //sets up appointments page switching
         appointmentsTabRectangle.setOnMouseClicked(e->switcher.switchToAppointmentsPageBusiness(appointmentCreationPage.getWindow(), primaryStage, businessLoggedin.appointmentList));
         appointmentsTabText.setOnMouseClicked(e -> switcher.switchToAppointmentsPageBusiness(appointmentCreationPage.getWindow(), primaryStage, businessLoggedin.appointmentList));
 
+        //sets up settings page switching
         settingsTabRectangle.setOnMouseClicked(e -> switcher.switchToSettingsPageBusiness(appointmentCreationPage.getWindow(), primaryStage));
         settingsTabText.setOnMouseClicked(e -> switcher.switchToSettingsPageBusiness(appointmentCreationPage.getWindow(), primaryStage));
 
@@ -155,8 +173,6 @@ public class AppointmentCreationPage {
         ObservableList<String> months = FXCollections.observableArrayList(
             "01", "02", "03", "04", "05", "06", "07", "08", "09", "10", "11", "12"
         );
-
-        // set up the drop down boxes for the start/end date and time of the appointments
         final ComboBox<String> comboBox1 = new ComboBox<String>(months);
         comboBox1.setPromptText("Month");
 
@@ -210,7 +226,6 @@ public class AppointmentCreationPage {
 
         createAppointment(primaryStage, comboBox1, comboBox2, comboBox3, comboBox4, comboBox5, comboBox6, comboBox7, comboBox8, comboBox9);
 
-        // formatting!
         HBox dateBox = new HBox();
         Label dateLabel= new Label("\t\t\tDate: ");
         dateBox.getChildren().addAll(dateLabel, comboBox1, comboBox2, comboBox3);
@@ -245,8 +260,10 @@ public class AppointmentCreationPage {
         Label costLabel = new Label("\t\t\t Cost: ");
         cost.setPromptText("Cost");
         cost.setMinWidth(218);
+        //cost.setPrefWidth(200);
         costBox.getChildren().addAll(costLabel, cost);
 
+        //setUp.setPrefWidth(200);
         backButton.setMinWidth(97.5);
         createButton.setMinWidth(97.5);
         setUp.getChildren().addAll(backButton, createButton);
@@ -341,7 +358,7 @@ public class AppointmentCreationPage {
                 }
 
                 switcher.switchToAppointmentCreationPage(appointmentCreationPage.getWindow(), primaryStage, errorLabel);
-            // give error statements if the input isn't correct
+
             }else if(appointmentName.getText() == null){
                 errorLabel.setText("Please enter an appoinment name");
             }else if(month.getValue() == null || day.getValue() == null || year.getValue() == null || hour.getValue() == null || min.getValue() == null || amPM.getValue() == null){

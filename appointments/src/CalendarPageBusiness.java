@@ -152,20 +152,26 @@ public class CalendarPageBusiness {
     }
 
     public HBox yearBox(Stage primaryStage){
+        //set the year of the current selected year and month
         year.setText(String.valueOf(userDate.getYear()));
         month.setText(String.valueOf(userDate.getMonth()));
+
+        //create back button to switch to previous year
         leftButton = new Button("<");
         leftButton.setOnAction(e->{
             userDate = userDate.minusMonths(1);
             calendar.getChildren().clear();
             drawCalendar(primaryStage);
         });
+
+        //create forward button to switch to forward year
         rightButton = new Button(">");
         rightButton.setOnAction(e->{
             userDate = userDate.plusMonths(1);
             calendar.getChildren().clear();
             drawCalendar(primaryStage);
         });
+
         HBox yearBar = new HBox();
         yearBar.getChildren().addAll(leftButton, month, year, rightButton);
         yearBar.setSpacing(5);
@@ -174,6 +180,7 @@ public class CalendarPageBusiness {
         return yearBar;
     }
 
+    //creates week days on calendar
     public HBox weekBox(){
         Text monday = new Text("Mon");
         Text tuesday = new Text("Tue");
@@ -189,6 +196,7 @@ public class CalendarPageBusiness {
     }
 
     public void drawCalendar(Stage primaryStage){
+        //set the year of the current selected year and month
         year.setText(String.valueOf(userDate.getYear()));
         month.setText(String.valueOf(userDate.getMonth()));
 
@@ -198,16 +206,20 @@ public class CalendarPageBusiness {
         double rectangleWidth = (calendarWidth - 5)/8;
         double rectangeHeight = (calendarHeight - 5)/6;
 
+        //get appointments for the month
         Map<Integer, List<Appointment>> appointmentMap = getAppointments(userDate);
 
+        //get maximum days in the selected month
         int monthMaxDate = userDate.getMonth().maxLength();
 
         if(userDate.getYear() % 4 != 0 && monthMaxDate == 29){
             monthMaxDate = 28;
         }
 
+        //find the start day on the calendar
        int setOffset = ZonedDateTime.of(userDate.getYear(), userDate.getMonthValue(), 1, 0, 0, 0, 0, userDate.getZone()).getDayOfWeek().getValue();
 
+       //go through each rectangle
         for(int i = 0; i < 6; i++){
             for(int j = 0; j < 7; j++){
                 StackPane stackPane = new StackPane();
@@ -221,20 +233,25 @@ public class CalendarPageBusiness {
                 stackPane.getChildren().add(calendarRectangles);
 
                 //put numbers on calendar
-                int calculatedDate = (1+j)+(i*7);
+                int calculatedDate = (1+j)+(i*7);//calculate the "day" on the calendar
                 int currentDate = calculatedDate - setOffset;
-                if(calculatedDate > setOffset){
-                    if(currentDate <= monthMaxDate){
+                if(calculatedDate > setOffset){//if the calculated date is after the startDate then display date
+                    if(currentDate <= monthMaxDate){//if current date is before the max date then display date
+
+                        //add labels to day
                         Text date = new Text(String.valueOf(currentDate));
                         date.setTranslateY(-(rectangeHeight/2)* .75);
                         stackPane.getChildren().add(date);
                         calendarRectangles.setOnMouseClicked(e->switcher.switchToAppointmentCreationPage(calendarPage.getWindow(), primaryStage, label));
 
+                        //get appointments for the day
                         List<Appointment> appointmentList = appointmentMap.get(currentDate);
-                        if(appointmentList != null){
+                        if(appointmentList != null){//if there are appointments create a graphic list
                             createAppointment(appointmentList, rectangeHeight, rectangleWidth, stackPane, primaryStage);
                         }
                     }
+
+                    //find the current day and highlight it
                     if(today.getYear() == userDate.getYear() && today.getMonth() == userDate.getMonth() && today.getDayOfMonth() == currentDate){
                         calendarRectangles.setStroke(Color.RED);
                     }
@@ -245,10 +262,11 @@ public class CalendarPageBusiness {
           
     }
 
+    //create the appointments on calendar
     public void createAppointment(List<Appointment> appointments, double height, double width, StackPane stack, Stage primaryStage){
         VBox appointmentBox = new VBox();
-        for(int i = 0; i < appointments.size(); i++){
-            if(i >= 1){
+        for(int i = 0; i < appointments.size(); i++){//loop through appointment list
+            if(i >= 1){//add a see more option if it doesn't fit on calendar
                 Text moreActivities = new Text("...");
                 moreActivities.setFill(Color.WHITE);
                 appointmentBox.getChildren().add(moreActivities);
@@ -261,11 +279,13 @@ public class CalendarPageBusiness {
             text.setFill(Color.WHITE);
             appointmentBox.getChildren().add(text);
             int app = i;
+            //switch to view appointment if clicked on appointment
             text.setOnMouseClicked(e->{
                 Label label = new Label();
                 switcher.switchToEditAppointmentsPage(calendarPage.getWindow(),primaryStage, appointments.get(app), appointments, label);
             });
         }
+        //box details
         appointmentBox.setTranslateY((height/2) * .2);
         appointmentBox.setMaxHeight(height * .1);
         appointmentBox.setMaxWidth(width * .8);
@@ -274,14 +294,16 @@ public class CalendarPageBusiness {
 
     }
 
+    //create the appointment list map for calendar
     public Map<Integer, List<Appointment>> createCalendarMap(List<Appointment> appointments){
         Map<Integer, List<Appointment>> appointmentMap = new HashMap<>();
 
         for(Appointment appointment: appointments){
             int appointmentDate = appointment.stringToStartDate().getDayOfMonth();
+            //if key day doesnt correlate to day selected then add appointment list
             if(!appointmentMap.containsKey(appointmentDate)){
                 appointmentMap.put(appointmentDate, List.of(appointment));
-            }else{
+            }else{//if not then make a new list and assign it to the map
                 List<Appointment> OldListByDate = appointmentMap.get(appointmentDate);
                 List<Appointment> newList = new ArrayList<>(OldListByDate);
                 newList.add(appointment);
@@ -312,7 +334,7 @@ public class CalendarPageBusiness {
 
                 tempDate = ZonedDateTime.parse(tempArr[1], formatter);
                 tempProvider = Integer.parseInt(tempArr[4]);
-                //keep note if email is found
+                //keep note if customer id is found and has the same date
                 if(tempProvider == businessLoggedin.getID() && tempDate.getYear() == year && tempDate.getMonth().getValue() == month){
                     appointments.add(new Appointment(tempArr[0], tempArr[1], tempArr[2], Boolean.parseBoolean(tempArr[3]), Integer.parseInt(tempArr[4]), Integer.parseInt(tempArr[5]), tempArr[6], Integer.parseInt(tempArr[7])));
                 }

@@ -131,6 +131,7 @@ public class EditProfilePageBusiness {
     }
 
     public VBox mainPage(Stage primaryStage){
+        //set up mainpage
         VBox center = new VBox();
         center.setAlignment(Pos.TOP_CENTER);
         Button submitButton = new Button("Submit");
@@ -141,18 +142,22 @@ public class EditProfilePageBusiness {
             boxs[i] = new HBox();
         }
 
+        //set up first name field
         Label firstNameLabel = new Label("\t\t\t\tFirst Name:\t  ");
         TextField firstName = new TextField(businessLoggedin.getName().split(" (?!.* )")[0]);
         boxs[0].getChildren().addAll(firstNameLabel, firstName);
 
+        //set up last name field
         Label lastNameLabel = new Label("\t\t\t\tLast Name:\t  ");
         TextField lastName = new TextField(businessLoggedin.getName().split(" (?!.* )")[1]);
         boxs[1].getChildren().addAll(lastNameLabel, lastName);
 
+        //set up type field
         Label typeLabel = new Label("\t\t\t\tBusiness Name: ");
         TextField type = new TextField(businessLoggedin.getType());
         boxs[2].getChildren().addAll(typeLabel, type);
 
+        //set up email field
         Pattern emailPattern = Pattern.compile(EMAIL_PATTERN);
         Label emailLabel = new Label("\t\t\t\tEmail:\t\t  ");
         TextField email = new TextField(businessLoggedin.getEmail());
@@ -160,6 +165,7 @@ public class EditProfilePageBusiness {
 
         submitButton.setOnAction(e->{
             Matcher emailMatcher = emailPattern.matcher(email.getText());
+            //check for vaild name and email else send message
             if(emailMatcher.matches() && !(firstName.getText() == null || firstName.getText().trim().isEmpty()) && !(lastName.getText() == null || lastName.getText().trim().isEmpty())){
                 businessLoggedin.setName(firstName.getText() + " " + lastName.getText());
                 businessLoggedin.setEmail(email.getText());
@@ -213,16 +219,18 @@ public class EditProfilePageBusiness {
             String[] tempArr;
             Business tempBusiness;
    
-            //read in data and determine if appointment already exists
+            //read in data and find business
             while((line = br.readLine()) != null){
                 tempArr = line.split(",");
                 tempBusiness = new Business(tempArr[0], tempArr[1], tempArr[2], Integer.parseInt(tempArr[3]));
    
-                //keep note if email is found
+                //keep note if business is found
                 if(businessLoggedin.getID() == tempBusiness.getID()){
+                    //determine if email was changed
                     if(businessLoggedin.getEmail() != tempBusiness.getEmail()){
                         oldEmail = tempBusiness.getEmail();
                         changeEmail = true;
+                    //determine if business name was changed
                     }else if(businessLoggedin.getType() != tempBusiness.getType()){
                         changeAppointment(primaryStage, businessLoggedin.getType());
                     }
@@ -237,6 +245,7 @@ public class EditProfilePageBusiness {
             System.out.println(except);
         }
 
+        //write business list to file
         try{              
             FileWriter fileWriterUser = new FileWriter("businessList.csv", false);
 
@@ -250,6 +259,7 @@ public class EditProfilePageBusiness {
             System.out.println(except);
         }
 
+        //if the email is change then write to account file
         if(changeEmail){
             List<String[]> accountList = new ArrayList<>();
             try{
@@ -259,7 +269,7 @@ public class EditProfilePageBusiness {
                 String line = "";
                 String[] tempArr;
    
-                //read in data and determine if appointment already exists
+                //read in data and find account
                 while((line = br.readLine()) != null){
                     tempArr = line.split(",");
                     //keep note if email is found
@@ -274,6 +284,7 @@ public class EditProfilePageBusiness {
                 System.out.println(except);
             }
 
+            //write to account file with new list
             try{              
                 FileWriter fileWriterUser = new FileWriter("accountList.csv", false);
 
@@ -301,7 +312,7 @@ public class EditProfilePageBusiness {
             String[] tempArr;
             Appointment tempAppointment = new Appointment();
    
-            //read in data and determine if appointment already exists
+            //read in data and find appointment
             while((line = br.readLine()) != null){
                 tempArr = line.split(",");
                 tempAppointment.setType(tempArr[0]);
@@ -313,7 +324,7 @@ public class EditProfilePageBusiness {
                 tempAppointment.setCost(tempArr[6]);
                 tempAppointment.setID(Integer.parseInt(tempArr[7]));
    
-                //keep note if email is found
+                //keep note if appointment is found and add to list if it doent have the business id
                 if(businessLoggedin.getID() != tempAppointment.getProvider().getID()){
                     totalAppointmentList.add(tempAppointment);
                 }
@@ -324,6 +335,7 @@ public class EditProfilePageBusiness {
             System.out.println(except);
         }
 
+        //write new appointment list to file
         try{              
             FileWriter fileWriterUser = new FileWriter("appointmentList.csv", false);
 
@@ -338,7 +350,6 @@ public class EditProfilePageBusiness {
         }
 
         List<Business> businessList = new ArrayList<>();
-        System.out.println(businessLoggedin.getID());
         try{
             //set up FileReader
             FileReader fileReaderAccount = new FileReader("businessList.csv");
@@ -347,12 +358,12 @@ public class EditProfilePageBusiness {
             String[] tempArr;
             Business tempBusiness;
    
-            //read in data and determine if appointment already exists
+            //read in data and find businesss
             while((line = br.readLine()) != null){
                 tempArr = line.split(",");
                 tempBusiness = new Business(tempArr[0], tempArr[1], tempArr[2], Integer.parseInt(tempArr[3]));
    
-                //keep note if email is found
+                //keep note if business is found
                 if(businessLoggedin.getID() != tempBusiness.getID()){
                     System.out.println(tempBusiness.getID());
                     businessList.add(tempBusiness);
@@ -364,6 +375,7 @@ public class EditProfilePageBusiness {
             System.out.println(except);
         }
 
+        //write business list to file
         try{              
             FileWriter fileWriterUser = new FileWriter("businessList.csv", false);
 
@@ -385,7 +397,7 @@ public class EditProfilePageBusiness {
             String line = "";
             String[] tempArr;
    
-            //read in data and determine if appointment already exists
+            //read in data and find account
             while((line = br.readLine()) != null){
                 tempArr = line.split(",");
                 //keep note if email is found
@@ -399,6 +411,7 @@ public class EditProfilePageBusiness {
             System.out.println(except);
         }
 
+        //write new account list to file
         try{              
             FileWriter fileWriterUser = new FileWriter("accountList.csv", false);
 
@@ -426,12 +439,12 @@ public class EditProfilePageBusiness {
             String[] tempArr;
             Appointment tempAppointment;
    
-            //read in data and determine if appointment already exists
+            //read in data and find appointment
             while((line = br.readLine()) != null){
                 tempArr = line.split(",");
                 tempAppointment = new Appointment(tempArr[0], tempArr[1], tempArr[2], Boolean.parseBoolean(tempArr[3]), Integer.parseInt(tempArr[4]), Integer.parseInt(tempArr[5]), tempArr[6], Integer.parseInt(tempArr[7]));
 
-                //keep note if email is found
+                //keep note if appointment is found and change it
                 if(businessLoggedin.getID() == tempAppointment.getProvider().getID()){
                     tempAppointment.setType(newName);
                 }
@@ -444,6 +457,7 @@ public class EditProfilePageBusiness {
             System.out.println(except);
         }
 
+        //write new appointment list to file
         try{              
             FileWriter fileWriterUser = new FileWriter("appointmentList.csv", false);
 
