@@ -176,6 +176,7 @@ public class EditProfilePageBusiness {
         });
 
         deleteButton.setOnAction(e->{
+            System.out.println(businessLoggedin);
             delete(primaryStage);
         });
 
@@ -290,7 +291,54 @@ public class EditProfilePageBusiness {
     }
 
     public void delete(Stage primaryStage){
+
+        List<Appointment> totalAppointmentList = new ArrayList<>();
+        try{
+            //set up FileReader
+            FileReader fileReaderAccount = new FileReader("appointmentList.csv");
+            BufferedReader br = new BufferedReader(fileReaderAccount);
+            String line = "";
+            String[] tempArr;
+            Appointment tempAppointment = new Appointment();
+   
+            //read in data and determine if appointment already exists
+            while((line = br.readLine()) != null){
+                tempArr = line.split(",");
+                tempAppointment.setType(tempArr[0]);
+                tempAppointment.setStartDate(tempArr[1]);
+                tempAppointment.setEndDate(tempArr[2]);
+                tempAppointment.setAvailability(Boolean.parseBoolean(tempArr[3]));
+                tempAppointment.setProvider(businessLoggedin.getID());
+                tempAppointment.setCustomer(Integer.parseInt(tempArr[5]));
+                tempAppointment.setCost(tempArr[6]);
+                tempAppointment.setID(Integer.parseInt(tempArr[7]));
+   
+                //keep note if email is found
+                if(businessLoggedin.getID() != tempAppointment.getProvider().getID()){
+                    totalAppointmentList.add(tempAppointment);
+                }
+
+            }
+            br.close();
+        }catch(IOException except){
+            System.out.println(except);
+        }
+
+        try{              
+            FileWriter fileWriterUser = new FileWriter("appointmentList.csv", false);
+
+            for(Appointment a : totalAppointmentList){
+                fileWriterUser.write(a.getType() + "," + a.getStartDate() + "," + a.getEndDate() + "," + a.getAvailability() + "," + a.getProvider().getID() + "," + a.getCustomer().getID() + "," + a.getCost() + "," + a.getID() + "\n");
+            }
+
+            fileWriterUser.close();
+
+        }catch(IOException except){
+            System.out.println(except);
+        }
+
         List<Business> businessList = new ArrayList<>();
+        System.out.println(businessLoggedin.getID());
         try{
             //set up FileReader
             FileReader fileReaderAccount = new FileReader("businessList.csv");
@@ -306,6 +354,7 @@ public class EditProfilePageBusiness {
    
                 //keep note if email is found
                 if(businessLoggedin.getID() != tempBusiness.getID()){
+                    System.out.println(tempBusiness.getID());
                     businessList.add(tempBusiness);
                 }
 
@@ -355,45 +404,6 @@ public class EditProfilePageBusiness {
 
             for(String[] s : accountList){
                 fileWriterUser.write(s[0] + "," + s[1] + "\n");
-            }
-
-            fileWriterUser.close();
-
-        }catch(IOException except){
-            System.out.println(except);
-        }
-
-        System.out.println(businessLoggedin.getID());
-        List<Appointment> totalAppointmentList = new ArrayList<>();
-        try{
-            //set up FileReader
-            FileReader fileReaderAccount = new FileReader("appointmentList.csv");
-            BufferedReader br = new BufferedReader(fileReaderAccount);
-            String line = "";
-            String[] tempArr;
-            Appointment tempAppointment;
-   
-            //read in data and determine if appointment already exists
-            while((line = br.readLine()) != null){
-                tempArr = line.split(",");
-                tempAppointment = new Appointment(tempArr[0], tempArr[1], tempArr[2], Boolean.parseBoolean(tempArr[3]), Integer.parseInt(tempArr[4]), Integer.parseInt(tempArr[5]), tempArr[6], Integer.parseInt(tempArr[7]));
-   
-                //keep note if email is found
-                if(businessLoggedin.getID() != tempAppointment.getProvider().getID()){
-                    totalAppointmentList.add(tempAppointment);
-                }
-
-            }
-            br.close();
-        }catch(IOException except){
-            System.out.println(except);
-        }
-
-        try{              
-            FileWriter fileWriterUser = new FileWriter("appointmentList.csv", false);
-
-            for(Appointment a : totalAppointmentList){
-                fileWriterUser.write(a.getType() + "," + a.getStartDate() + "," + a.getEndDate() + "," + a.getAvailability() + "," + a.getProvider().getID() + "," + a.getCustomer().getID() + "," + a.getCost() + "," + a.getID() + "\n");
             }
 
             fileWriterUser.close();
