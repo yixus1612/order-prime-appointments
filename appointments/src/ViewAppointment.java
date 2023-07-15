@@ -40,6 +40,7 @@ public class ViewAppointment {
 
         switcher = new SceneSwitcher(primaryStage);
 
+        // get the appointment and the user it belongs to
         this.appointment = userAppointment;
 
         userLoggedin = (User) primaryStage.getUserData();
@@ -132,6 +133,7 @@ public class ViewAppointment {
         Button cancelButton = new Button("Cancel");
         Button backButton = new Button("Back");
 
+        // set up appointment info and put it on the page
         Label typeLabel = new Label("Appointment Name: " + appointment.getType());
 
         String date = appointment.getStartDate().substring(0,11);
@@ -149,12 +151,13 @@ public class ViewAppointment {
 
         Label costLabel = new Label("Cost: " + appointment.getCost());
 
+        // button event handlers
         backButton.setOnAction(e->{
             switcher.switchToCalendarPage(viewAppointmentPage.getWindow(), primaryStage);
         });
 
         cancelButton.setOnAction(e->{
-            editAppointment(appointment, primaryStage);
+            cancelAppointment(appointment, primaryStage);
         });
         
         Label spacingBuffer1 = new Label(" ");
@@ -170,7 +173,7 @@ public class ViewAppointment {
 
     }
 
-    public void editAppointment(Appointment appointment, Stage primaryStage){
+    public void cancelAppointment(Appointment appointment, Stage primaryStage){
 
         List<Appointment> totalAppointmentList = new ArrayList<>();
         try{
@@ -181,12 +184,12 @@ public class ViewAppointment {
             String[] tempArr;
             Appointment tempAppointment;
    
-            //read in data and determine if appointment already exists
+            // parse all the lines of appointmentsList.csv, find the appointment we're looking for
             while((line = br.readLine()) != null){
                 tempArr = line.split(",");
                 tempAppointment = new Appointment(tempArr[0], tempArr[1], tempArr[2], Boolean.parseBoolean(tempArr[3]), Integer.parseInt(tempArr[4]), Integer.parseInt(tempArr[5]), tempArr[6], Integer.parseInt(tempArr[7]));
    
-                //keep note if email is found
+                // set the availability to true, and get rid of the user's ID that was attached to the appointment
                 if(appointment.getID() == tempAppointment.getID()){
                     tempAppointment.setAvailability(true);
                     tempAppointment.getCustomer().setID(0);
@@ -200,6 +203,7 @@ public class ViewAppointment {
             System.out.println(except);
         }
 
+        // write the changes back to the file
         try{              
             FileWriter fileWriterUser = new FileWriter("appointmentList.csv", false);
 

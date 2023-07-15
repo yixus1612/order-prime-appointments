@@ -122,6 +122,7 @@ public class SettingsPage {
         Button editButton = new Button("Edit");
         Button signOutButton = new Button("Sign Out");
 
+        // user info
         ImageView imageView = new ImageView();
         imageView.setImage(userLoggedin.getProfilePic());
         imageView.setFitHeight(100);
@@ -131,6 +132,7 @@ public class SettingsPage {
 
         Label emailLabel = new Label("Email: " + userLoggedin.getEmail());
 
+        // event handlers
         editButton.setOnAction(e->{
             Label label = new Label();
             switcher.switchToEditProfilePage(settingsPage.getWindow(), primaryStage, label);

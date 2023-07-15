@@ -120,6 +120,7 @@ public class SettingsPageBusiness {
         Button editButton = new Button("Edit");
         Button signOutButton = new Button("Sign Out");
 
+        // get the business info
         ImageView imageView = new ImageView();
         imageView.setImage(businessLoggedin.getProfilePic());
         imageView.setFitHeight(100);
@@ -131,6 +132,7 @@ public class SettingsPageBusiness {
 
         Label typeLabel = new Label("Business Name: " + businessLoggedin.getType());
 
+        // event handlers
         editButton.setOnAction(e->{
             Label label = new Label();
             switcher.switchToEditProfilePageBusiness(settingsPage.getWindow(), primaryStage, label);
@@ -141,6 +143,7 @@ public class SettingsPageBusiness {
             switcher.switchToLoginPage(settingsPage.getWindow(), primaryStage);
         });
         
+        // formatting stuff
         Label spacingBuffer1 = new Label(" ");
         Label spacingBuffer2 = new Label(" ");
         Label title = new Label("Profile");
